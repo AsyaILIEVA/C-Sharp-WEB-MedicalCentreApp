@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MedicalCentreApp.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static MedicalCentreApp.Common.EntityValidation;
 
@@ -15,7 +16,9 @@ namespace MedicalCentreApp.Models
         [Required]
         [MaxLength(AppointmentReasonMaxLength)]
         public string Reason { get; set; } = null!;
-               
+
+        public AppointmentStatus AppointmentStatus { get; set; }
+
         [ForeignKey(nameof(Patient))]
         public int PatientId { get; set; }
         public virtual Patient Patient { get; set; } = null!;
