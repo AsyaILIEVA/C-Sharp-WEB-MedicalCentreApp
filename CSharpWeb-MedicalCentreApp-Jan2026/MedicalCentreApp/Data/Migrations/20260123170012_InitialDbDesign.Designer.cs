@@ -4,6 +4,7 @@ using MedicalCentreApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedicalCentreApp.Data.Migrations
 {
     [DbContext(typeof(MedicalCentreAppDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260123170012_InitialDbDesign")]
+    partial class InitialDbDesign
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,38 +80,6 @@ namespace MedicalCentreApp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Doctors");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            FullName = "Dr. Ivan Petrov",
-                            Specialty = "General Practitioner"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            FullName = "Dr. Maria Ivanova",
-                            Specialty = "Cardiologist"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            FullName = "Dr. Georgi Dimitrov",
-                            Specialty = "Dermatologist"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            FullName = "Dr. Elena Stoyanova",
-                            Specialty = "Pediatrician"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            FullName = "Dr. Nikolay Hristov",
-                            Specialty = "Neurologist"
-                        });
                 });
 
             modelBuilder.Entity("MedicalCentreApp.Models.MedicalRecord", b =>
@@ -172,98 +143,6 @@ namespace MedicalCentreApp.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Patients");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DateOfBirth = new DateTime(1989, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EGN = "8902141234",
-                            FirstName = "Alexander",
-                            LastName = "Krastev",
-                            PhoneNumber = "0897123456"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DateOfBirth = new DateTime(1994, 6, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EGN = "9406232345",
-                            FirstName = "Milena",
-                            LastName = "Zlateva",
-                            PhoneNumber = "0897234567"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DateOfBirth = new DateTime(1986, 9, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EGN = "8609113456",
-                            FirstName = "Todor",
-                            LastName = "Angelov",
-                            PhoneNumber = "0897345678"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            DateOfBirth = new DateTime(1997, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EGN = "9704024567",
-                            FirstName = "Radostina",
-                            LastName = "Ilieva",
-                            PhoneNumber = "0897456789"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            DateOfBirth = new DateTime(1988, 7, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EGN = "8807195678",
-                            FirstName = "Borislav",
-                            LastName = "Naydenov",
-                            PhoneNumber = "0897567890"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            DateOfBirth = new DateTime(1995, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EGN = "9501286789",
-                            FirstName = "Yana",
-                            LastName = "Kostova",
-                            PhoneNumber = "0897678901"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            DateOfBirth = new DateTime(1987, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EGN = "8706107890",
-                            FirstName = "Plamen",
-                            LastName = "Vasilev",
-                            PhoneNumber = "0897789012"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            DateOfBirth = new DateTime(1993, 9, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EGN = "9309248901",
-                            FirstName = "Kristina",
-                            LastName = "Marinova",
-                            PhoneNumber = "0897890123"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            DateOfBirth = new DateTime(1991, 3, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EGN = "9103179012",
-                            FirstName = "Stanislav",
-                            LastName = "Rusev",
-                            PhoneNumber = "0897901234"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            DateOfBirth = new DateTime(1998, 12, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EGN = "9812050123",
-                            FirstName = "Gabriela",
-                            LastName = "Tsvetkova",
-                            PhoneNumber = "0897012345"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
