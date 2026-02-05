@@ -69,6 +69,9 @@ namespace MedicalCentreApp.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Specialty")
                         .IsRequired()
                         .HasMaxLength(50)

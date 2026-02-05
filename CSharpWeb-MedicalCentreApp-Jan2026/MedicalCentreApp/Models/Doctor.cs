@@ -16,6 +16,8 @@ namespace MedicalCentreApp.Models
         [MaxLength(DoctorSpecialtyMaxLength)]
         public string Specialty { get; set; } = null!;
 
+        public string? ImageUrl { get; set; }
+
         public virtual ICollection<Appointment> Appointments { get; set; } 
             = new HashSet<Appointment>();
     }

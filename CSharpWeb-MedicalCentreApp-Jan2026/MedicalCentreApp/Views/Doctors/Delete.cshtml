@@ -1,0 +1,45 @@
+﻿@model MedicalCentreApp.Models.Doctor
+
+@{
+    ViewData["Title"] = "Delete Doctor";
+    bool hasAppointments = Model.Appointments.Any();
+}
+
+<h2>Delete Doctor</h2>
+
+@if (hasAppointments)
+{
+    <div class="alert alert-warning">
+        This doctor has scheduled appointments and cannot be deleted.
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        Are you sure you want to delete this doctor?
+    </div>
+}
+
+<hr />
+
+<p>
+    <strong>Full Name:</strong> @Model.FullName
+</p>
+
+<p>
+    <strong>Specialty:</strong> @Model.Specialty
+</p>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+
+    <button type="submit"
+            class="btn btn-danger"
+            disabled="@(hasAppointments)">
+        Delete
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary ms-2">
+        Cancel
+    </a>
+</form>

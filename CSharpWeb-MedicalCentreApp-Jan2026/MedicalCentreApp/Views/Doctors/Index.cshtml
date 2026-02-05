@@ -1,0 +1,81 @@
+﻿@model IEnumerable<MedicalCentreApp.Models.Doctor>
+
+@{
+    ViewData["Title"] = "Doctors";
+}
+
+<h2>Doctors</h2>
+
+<form method="get" class="mb-3">
+    <div class="input-group">
+        <input type="text"
+               name="specialty"
+               value="@ViewData["CurrentFilter"]"
+               class="form-control"
+               placeholder="Search by specialty..." />
+
+        <button class="btn btn-outline-primary">
+            Search
+        </button>
+    </div>
+</form>
+
+
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">
+            Add Doctor
+        </a>
+    </p>
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning">
+        No doctors found for the given specialty.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Specialty</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var doctor in Model)
+            {
+                <tr>
+                    <td>@doctor.FullName</td>
+                    <td>@doctor.Specialty</td>
+                    <td>
+                        <a asp-action="Details"
+                           asp-route-id="@doctor.Id"
+                           class="btn btn-info btn-sm">
+                            Details
+                        </a>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Edit"
+                               asp-route-id="@doctor.Id"
+                               class="btn btn-warning btn-sm">
+                                Edit
+                            </a>
+
+                            <a asp-action="Delete"
+                               asp-route-id="@doctor.Id"
+                               class="btn btn-danger btn-sm">
+                                Delete
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
