@@ -1,8 +1,49 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div class="home-page">
+
+    <div class="home-cards-wrapper">
+
+        
+        <div class="home-card about-card">
+            <h2>About Us</h2>
+
+            <p>
+                Medical Centre is a modern healthcare facility providing
+                professional medical services with care and responsibility.
+            </p>
+
+            <p>
+                Our mission is to deliver accurate diagnosis, effective treatment,
+                and patient-focused healthcare.
+            </p>
+
+            <a asp-controller="Doctors"
+               asp-action="Index"
+               class="btn btn-success btn-sm mt-auto">
+                Our Doctors
+            </a>
+        </div>
+
+       
+        <div class="home-card image-card">
+            <img src="/images/home/medical-centre.png"
+                 alt="Medical Centre" />
+        </div>
+
+    </div>
+
 </div>
+
+
+<footer class="site-footer">
+    <h5>Contact Us</h5>
+    <p>
+        📍 123 Health Street, Sofia |
+        📞 +359 888 123 456 |
+        ✉ contact@medicalcentre.com
+    </p>
+</footer>
