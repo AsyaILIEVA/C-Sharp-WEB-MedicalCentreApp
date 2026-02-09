@@ -1,0 +1,44 @@
+﻿@model MedicalCentreApp.ViewModels.Patients.PatientDetailsViewModel
+
+@{
+    ViewData["Title"] = "Patient Details";
+}
+
+<h2>@Model.FullName</h2>
+
+<ul class="list-group">
+    <li class="list-group-item"><strong>EGN:</strong> @Model.EGN</li>
+    <li class="list-group-item"><strong>Date of Birth:</strong> @Model.DateOfBirth.ToShortDateString()</li>
+    <li class="list-group-item"><strong>Phone:</strong> @Model.PhoneNumber</li>
+</ul>
+
+<h4 class="mt-4">Appointments</h4>
+
+@if (!Model.Appointments.Any())
+{
+    <p>No appointments.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Doctor</th>
+                <th>Reason</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model.Appointments)
+            {
+                <tr>
+                    <td>@a.Date</td>
+                    <td>@a.DoctorName</td>
+                    <td>@a.Reason</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-action="Index" class="btn btn-secondary">Back</a>

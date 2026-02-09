@@ -1,0 +1,39 @@
+﻿@model IEnumerable<MedicalCentreApp.ViewModels.Patients.PatientListViewModel>
+
+@{
+    ViewData["Title"] = "Patients";
+}
+
+<h2>Patients</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Patient</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>EGN</th>
+            <th>Phone</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var patient in Model)
+        {
+            <tr>
+                <td>@patient.FirstName</td>
+                <td>@patient.LastName</td>
+                <td>@patient.EGN</td>
+                <td>@patient.PhoneNumber</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@patient.Id">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@patient.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@patient.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

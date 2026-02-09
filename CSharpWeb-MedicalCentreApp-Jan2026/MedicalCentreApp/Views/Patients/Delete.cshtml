@@ -1,0 +1,32 @@
+﻿@model MedicalCentreApp.ViewModels.Patients.PatientListViewModel
+
+@{
+    ViewData["Title"] = "Delete Patient";
+}
+
+<h2 class="text-danger">Delete Patient</h2>
+
+<div class="alert alert-warning">
+    <strong>Warning:</strong> This action cannot be undone.
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <p><strong>First Name:</strong> @Model.FirstName</p>
+        <p><strong>Last Name:</strong> @Model.LastName</p>
+        <p><strong>EGN:</strong> @Model.EGN</p>
+        <p><strong>Phone Number:</strong> @Model.PhoneNumber</p>
+    </div>
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+
+    <button type="submit" class="btn btn-danger">
+        Yes, delete
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary ms-2">
+        Cancel
+    </a>
+</form>
