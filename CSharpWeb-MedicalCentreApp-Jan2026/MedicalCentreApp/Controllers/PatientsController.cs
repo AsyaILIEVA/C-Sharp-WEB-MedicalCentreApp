@@ -26,11 +26,11 @@ namespace MedicalCentreApp.Controllers
                     Id = p.Id,
                     FirstName = p.FirstName,
                     MiddleName = p.MiddleName,
-                    LastName = p.LastName,
-                    EGN = p.EGN,
-                    PhoneNumber = p.PhoneNumber,
-                    Email = p.Email,
-                    Address = p.Address
+                    LastName = p.LastName
+                    //EGN = p.EGN,
+                    //PhoneNumber = p.PhoneNumber,
+                    //Email = p.Email,
+                    //Address = p.Address
                 })
                 .ToListAsync();
 
@@ -44,6 +44,7 @@ namespace MedicalCentreApp.Controllers
                 .Where(p => p.Id == id)
                 .Select(p => new PatientDetailsViewModel
                 {
+                    Id = p.Id,
                     FirstName = p.FirstName,
                     MiddleName = p.MiddleName,
                     LastName = p.LastName,

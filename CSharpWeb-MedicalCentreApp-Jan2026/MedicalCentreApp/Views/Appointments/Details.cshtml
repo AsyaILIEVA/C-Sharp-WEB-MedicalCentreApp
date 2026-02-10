@@ -1,0 +1,18 @@
+﻿@model MedicalCentreApp.ViewModels.Appointments.AppointmentDetailsViewModel
+
+<h2>Appointment Details</h2>
+
+<p>@Model.Date.ToString("dd MMM yyyy, HH:mm")</p>
+<p><strong>Patient:</strong> @Model.PatientName</p>
+<p><strong>Doctor:</strong> @Model.DoctorName</p>
+<p><strong>Status:</strong> @Model.Status</p>
+<p><strong>Reason:</strong> @Model.Reason</p>
+
+@if (Model.HasMedicalRecord)
+{
+    <span class="badge bg-success">Medical record available</span>
+}
+else
+{
+    <span class="badge bg-warning">No medical record yet</span>
+}

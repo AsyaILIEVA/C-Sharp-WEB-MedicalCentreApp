@@ -6,13 +6,24 @@
 
 <h2>@Model.FullName</h2>
 
-<ul class="list-group">
+<ul class="list-group mb-4">
     <li class="list-group-item"><strong>EGN:</strong> @Model.EGN</li>
     <li class="list-group-item"><strong>Date of Birth:</strong> @Model.DateOfBirth.ToShortDateString()</li>
     <li class="list-group-item"><strong>Phone:</strong> @Model.PhoneNumber</li>
+    <li class="list-group-item"><strong>Email:</strong> @Model.Email</li>
+    <li class="list-group-item"><strong>Address:</strong> @Model.Address</li>
 </ul>
 
-<h4 class="mt-4">Appointments</h4>
+<div class="d-flex justify-content-between align-items-center mt-4 mb-2">
+    <h4 class="mb-0">Appointments</h4>
+
+    <a asp-controller="Appointments"
+       asp-action="CreateForPatient"
+       asp-route-patientId="@Model.Id"
+       class="btn btn-primary">
+        Create Appointment
+    </a>
+</div>
 
 @if (!Model.Appointments.Any())
 {
@@ -20,7 +31,7 @@
 }
 else
 {
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Date</th>
@@ -32,7 +43,7 @@ else
             @foreach (var a in Model.Appointments)
             {
                 <tr>
-                    <td>@a.Date</td>
+                    <td>@a.Date.ToString("dd.MM.yyyy HH:mm")</td>
                     <td>@a.DoctorName</td>
                     <td>@a.Reason</td>
                 </tr>
@@ -41,4 +52,4 @@ else
     </table>
 }
 
-<a asp-action="Index" class="btn btn-secondary">Back</a>
+<a asp-action="Index" class="btn btn-secondary mt-3">Back</a>

@@ -1,8 +1,8 @@
 ﻿namespace MedicalCentreApp.ViewModels.Patients
-{
-    
+{    
         public class PatientDetailsViewModel
         {
+            public int Id { get; set; }
             public string FullName => $"{FirstName} {LastName}";
 
             public string FirstName { get; set; } = null!;

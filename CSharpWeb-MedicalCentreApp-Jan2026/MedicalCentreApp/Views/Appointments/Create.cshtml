@@ -1,0 +1,158 @@
+﻿@model MedicalCentreApp.ViewModels.Appointments.CreateAppointmentViewModel
+
+@{
+    ViewData["Title"] = "Create Appointment";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <h3 class="text-center mb-4">Create Appointment</h3>
+
+                    <form asp-action="Create" method="post">
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Date" class="form-label"></label>
+                                <input asp-for="Date" type="date" class="form-control" />
+                                <span asp-validation-for="Date" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Time" class="form-label"></label>
+                                <input asp-for="Time"
+                                       type="time"
+                                       class="form-control"
+                                       min="08:00"
+                                       max="18:00"
+                                       step="1800" />
+                                <span asp-validation-for="Time" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Patient Autocomplete -->
+                        @* <div class="mb-3">
+                            <label class="form-label">Patient</label>
+
+                            <input type="text"
+                                   id="patientInput"
+                                   class="form-control"
+                                   list="patientsList"
+                                   placeholder="Start typing patient name..."
+                                   autocomplete="off" />
+
+                            <datalist id="patientsList">
+                                @foreach (var p in Model.Patients)
+                                {
+                                    <option value="@p.Text" data-id="@p.Value"></option>
+                                }
+                            </datalist>
+
+                            <input type="hidden" asp-for="PatientId" />
+                            <span asp-validation-for="PatientId" class="text-danger"></span>
+                        </div> *@
+                        <div class="mb-3">
+                            <label asp-for="PatientId" class="form-label">Patient</label>
+                            <select asp-for="PatientId"
+                                    asp-items="Model.Patients"
+                                    class="form-select searchable">
+                                <option value="">Select patient...</option>
+                            </select>
+                            <span asp-validation-for="PatientId" class="text-danger"></span>
+                        </div>
+
+
+                        <!-- Doctor Autocomplete -->
+                        @* <div class="mb-3">
+                            <label class="form-label">Doctor</label>
+
+                            <input type="text"
+                                   id="doctorInput"
+                                   class="form-control"
+                                   list="doctorsList"
+                                   placeholder="Start typing doctor name..."
+                                   autocomplete="off" />
+
+                            <datalist id="doctorsList">
+                                @foreach (var d in Model.Doctors)
+                                {
+                                    <option value="@d.Text" data-id="@d.Value"></option>
+                                }
+                            </datalist>
+
+                            <input type="hidden" asp-for="DoctorId" />
+                            <span asp-validation-for="DoctorId" class="text-danger"></span>
+                        </div> *@
+                        <div class="mb-3">
+                            <label asp-for="DoctorId" class="form-label">Doctor</label>
+                            <select asp-for="DoctorId"
+                                    asp-items="Model.Doctors"
+                                    class="form-select searchable">
+                                <option value="">Select doctor...</option>
+                            </select>
+                            <span asp-validation-for="DoctorId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Reason" class="form-label"></label>
+                            <textarea asp-for="Reason"
+                                      class="form-control"
+                                      rows="3"></textarea>
+                            <span asp-validation-for="Reason" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                Cancel
+                            </a>
+
+                            <button type="submit" class="btn btn-success">
+                                Save Appointment
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            $('.searchable').select2({
+                theme: 'bootstrap-5',
+                width: '100%',
+                placeholder: 'Start typing...',
+                allowClear: true
+            });
+        });
+    </script>
+
+    <script>
+        function bindAutocomplete(inputId, hiddenInputName, dataListId) {
+            const input = document.getElementById(inputId);
+            const hiddenInput = document.querySelector(`input[name='${hiddenInputName}']`);
+            const dataList = document.getElementById(dataListId);
+
+            input.addEventListener('change', () => {
+                const option = Array.from(dataList.options)
+                    .find(o => o.value === input.value);
+
+                hiddenInput.value = option ? option.dataset.id : '';
+            });
+        }
+
+        bindAutocomplete('patientInput', 'PatientId', 'patientsList');
+        bindAutocomplete('doctorInput', 'DoctorId', 'doctorsList');
+    </script>
+}
