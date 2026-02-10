@@ -25,9 +25,12 @@ namespace MedicalCentreApp.Controllers
                 {
                     Id = p.Id,
                     FirstName = p.FirstName,
+                    MiddleName = p.MiddleName,
                     LastName = p.LastName,
                     EGN = p.EGN,
-                    PhoneNumber = p.PhoneNumber
+                    PhoneNumber = p.PhoneNumber,
+                    Email = p.Email,
+                    Address = p.Address
                 })
                 .ToListAsync();
 
@@ -42,10 +45,12 @@ namespace MedicalCentreApp.Controllers
                 .Select(p => new PatientDetailsViewModel
                 {
                     FirstName = p.FirstName,
+                    MiddleName = p.MiddleName,
                     LastName = p.LastName,
                     EGN = p.EGN,
-                    DateOfBirth = p.DateOfBirth,
                     PhoneNumber = p.PhoneNumber,
+                    Email = p.Email,
+                    Address = p.Address,
                     Appointments = p.Appointments
                         .Select(a => new AppointmentInfoViewModel
                         {
@@ -85,10 +90,13 @@ namespace MedicalCentreApp.Controllers
             var patient = new Patient
             {
                 FirstName = model.FirstName,
+                MiddleName = model.MiddleName,
                 LastName = model.LastName,
                 EGN = model.EGN,
                 DateOfBirth = model.DateOfBirth,
-                PhoneNumber = model.PhoneNumber
+                PhoneNumber = model.PhoneNumber,
+                Email= model.Email,
+                Address = model.Address
             };
 
             dbContext.Patients.Add(patient);
@@ -106,10 +114,12 @@ namespace MedicalCentreApp.Controllers
                 {
                     Id = p.Id,
                     FirstName = p.FirstName,
+                    MiddleName = p.MiddleName,
                     LastName = p.LastName,
                     EGN = p.EGN,
-                    DateOfBirth = p.DateOfBirth,
-                    PhoneNumber = p.PhoneNumber
+                    PhoneNumber = p.PhoneNumber,
+                    Email = p.Email,
+                    Address = p.Address
                 })
                 .FirstOrDefaultAsync();
 
@@ -142,10 +152,13 @@ namespace MedicalCentreApp.Controllers
             }
 
             patient.FirstName = model.FirstName;
+            patient.MiddleName = model.MiddleName;
             patient.LastName = model.LastName;
             patient.EGN = model.EGN;
             patient.DateOfBirth = model.DateOfBirth;
             patient.PhoneNumber = model.PhoneNumber;
+            patient.Email = model.Email;
+            patient.Address = model.Address;
 
             await dbContext.SaveChangesAsync();
 
@@ -162,9 +175,12 @@ namespace MedicalCentreApp.Controllers
                 {
                     Id = p.Id,
                     FirstName = p.FirstName,
+                    MiddleName = p.MiddleName,
                     LastName = p.LastName,
                     EGN = p.EGN,
-                    PhoneNumber = p.PhoneNumber
+                    PhoneNumber = p.PhoneNumber,
+                    Email = p.Email,
+                    Address = p.Address
                 })
                 .FirstOrDefaultAsync();
 

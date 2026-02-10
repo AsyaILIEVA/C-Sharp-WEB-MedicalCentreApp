@@ -7,7 +7,7 @@
 
             public string FirstName { get; set; } = null!;
 
-        // Middle Name
+            public string MiddleName { get; set; } = null!;
 
             public string LastName { get; set; } = null!;
 
@@ -16,6 +16,10 @@
             public DateTime DateOfBirth { get; set; }
 
             public string PhoneNumber { get; set; } = null!;
+
+            public string? Email { get; set; }
+
+            public string? Address { get; set; }
 
             public ICollection<AppointmentInfoViewModel> Appointments { get; set; }
                 = new List<AppointmentInfoViewModel>();

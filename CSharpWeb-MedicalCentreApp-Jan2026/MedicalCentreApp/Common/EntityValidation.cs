@@ -16,6 +16,9 @@
         public const int PatientFirstNameMinLength = 2;
         public const int PatientFirstNameMaxLength = 50;
 
+        public const int PatientMiddleNameMinLength = 2;
+        public const int PatientMiddleNameMaxLength = 50;
+
         public const int PatientLastNameMinLength = 2;
         public const int PatientLastNameMaxLength = 50;
 
@@ -24,6 +27,12 @@
 
         public const int PatientPhoneNumberMinLength = 10;
         public const int PatientPhoneNumberMaxLength = 15; // for international numbers
+
+        public const int PatientEmailMinLength = 5;
+        public const int PatientEmailMaxLength = 100;
+
+        public const int PatientAddressMinLength = 10;
+        public const int PatientAddressMaxLength = 250;
 
         // Appointment
         public const int AppointmentReasonMinLength = 5;

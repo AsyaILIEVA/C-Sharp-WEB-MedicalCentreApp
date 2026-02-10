@@ -151,12 +151,21 @@ namespace MedicalCentreApp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Address")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EGN")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -168,9 +177,15 @@ namespace MedicalCentreApp.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("MiddleName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.HasKey("Id");
 
@@ -182,8 +197,10 @@ namespace MedicalCentreApp.Data.Migrations
                             Id = 1,
                             DateOfBirth = new DateTime(1989, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EGN = "8902141234",
+                            Email = "a.krastev@example.com",
                             FirstName = "Alexander",
                             LastName = "Krastev",
+                            MiddleName = "Petrov",
                             PhoneNumber = "0897123456"
                         },
                         new
@@ -191,8 +208,10 @@ namespace MedicalCentreApp.Data.Migrations
                             Id = 2,
                             DateOfBirth = new DateTime(1994, 6, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EGN = "9406232345",
+                            Email = "zlateva548@example.com",
                             FirstName = "Milena",
                             LastName = "Zlateva",
+                            MiddleName = "Georgieva",
                             PhoneNumber = "0897234567"
                         },
                         new
@@ -200,8 +219,10 @@ namespace MedicalCentreApp.Data.Migrations
                             Id = 3,
                             DateOfBirth = new DateTime(1986, 9, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EGN = "8609113456",
+                            Email = "angelov.todor@example.com",
                             FirstName = "Todor",
                             LastName = "Angelov",
+                            MiddleName = "Angelov",
                             PhoneNumber = "0897345678"
                         },
                         new
@@ -209,8 +230,10 @@ namespace MedicalCentreApp.Data.Migrations
                             Id = 4,
                             DateOfBirth = new DateTime(1997, 4, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EGN = "9704024567",
+                            Email = "radostina97@example.com",
                             FirstName = "Radostina",
                             LastName = "Ilieva",
+                            MiddleName = "Radeva",
                             PhoneNumber = "0897456789"
                         },
                         new
@@ -218,8 +241,10 @@ namespace MedicalCentreApp.Data.Migrations
                             Id = 5,
                             DateOfBirth = new DateTime(1988, 7, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EGN = "8807195678",
+                            Email = "parvanov_bn@example.com",
                             FirstName = "Borislav",
                             LastName = "Naydenov",
+                            MiddleName = "Parvanov",
                             PhoneNumber = "0897567890"
                         },
                         new
@@ -227,8 +252,10 @@ namespace MedicalCentreApp.Data.Migrations
                             Id = 6,
                             DateOfBirth = new DateTime(1995, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EGN = "9501286789",
+                            Email = "kostova@example.com",
                             FirstName = "Yana",
                             LastName = "Kostova",
+                            MiddleName = "Dimitrova",
                             PhoneNumber = "0897678901"
                         },
                         new
@@ -236,8 +263,10 @@ namespace MedicalCentreApp.Data.Migrations
                             Id = 7,
                             DateOfBirth = new DateTime(1987, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EGN = "8706107890",
+                            Email = "p_vasilev@example.com",
                             FirstName = "Plamen",
                             LastName = "Vasilev",
+                            MiddleName = "Atanasov",
                             PhoneNumber = "0897789012"
                         },
                         new
@@ -245,8 +274,10 @@ namespace MedicalCentreApp.Data.Migrations
                             Id = 8,
                             DateOfBirth = new DateTime(1993, 9, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EGN = "9309248901",
+                            Email = "k.marinova@example.com",
                             FirstName = "Kristina",
                             LastName = "Marinova",
+                            MiddleName = "Petrova",
                             PhoneNumber = "0897890123"
                         },
                         new
@@ -254,8 +285,10 @@ namespace MedicalCentreApp.Data.Migrations
                             Id = 9,
                             DateOfBirth = new DateTime(1991, 3, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EGN = "9103179012",
+                            Email = "rusev@example.com",
                             FirstName = "Stanislav",
                             LastName = "Rusev",
+                            MiddleName = "Tomov",
                             PhoneNumber = "0897901234"
                         },
                         new
@@ -263,8 +296,10 @@ namespace MedicalCentreApp.Data.Migrations
                             Id = 10,
                             DateOfBirth = new DateTime(1998, 12, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EGN = "9812050123",
+                            Email = "gabi123@example.com",
                             FirstName = "Gabriela",
                             LastName = "Tsvetkova",
+                            MiddleName = "Danova",
                             PhoneNumber = "0897012345"
                         });
                 });

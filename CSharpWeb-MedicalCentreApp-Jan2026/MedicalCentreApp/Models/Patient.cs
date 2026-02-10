@@ -13,6 +13,10 @@ namespace MedicalCentreApp.Models
         public string FirstName { get; set; } = null!;
 
         [Required]
+        [MaxLength(PatientMiddleNameMaxLength)]
+        public string MiddleName { get; set; } = null!;
+
+        [Required]
         [MaxLength(PatientLastNameMaxLength)]
         public string LastName { get; set; } = null!;
 
@@ -25,6 +29,14 @@ namespace MedicalCentreApp.Models
         [Required]
         [MaxLength(PatientPhoneNumberMaxLength)]
         public string PhoneNumber { get; set; } = null!;
+        
+        
+        [MaxLength(PatientEmailMaxLength)]
+        public string? Email { get; set; } 
+
+        
+        [MaxLength(PatientAddressMaxLength)]
+        public string? Address { get; set; }
 
         public virtual ICollection<Appointment> Appointments { get; set; }
         = new HashSet<Appointment>();
