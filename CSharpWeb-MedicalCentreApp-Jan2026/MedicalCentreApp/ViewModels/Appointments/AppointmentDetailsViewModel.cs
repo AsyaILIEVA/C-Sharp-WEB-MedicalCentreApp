@@ -2,6 +2,7 @@
 {
     public class AppointmentDetailsViewModel
     {
+        public int Id { get; set; }
         public DateTime Date { get; set; }
 
         public string Reason { get; set; } = null!;
@@ -13,5 +14,11 @@
         public string DoctorName { get; set; } = null!;
 
         public bool HasMedicalRecord { get; set; }
+
+        public Guid? MedicalRecordId { get; set; }
+
+        public string? Diagnosis { get; set; }
+
+        public string? Prescription { get; set; }
     }
 }

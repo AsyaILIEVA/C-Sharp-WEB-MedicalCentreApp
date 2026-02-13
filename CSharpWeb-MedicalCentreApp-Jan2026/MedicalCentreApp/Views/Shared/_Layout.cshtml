@@ -49,15 +49,38 @@
             @RenderBody()
         </main>
     </div>
-
-    @* <footer class="border-top footer text-muted">
+    
+    <footer class="site-footer mt-5">
         <div class="container">
-            &copy; 2026 - MedicalCentreApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row text-center text-md-start">
+
+                <div class="col-md-4 mb-3">
+                    <h5>Medical Centre</h5>
+                    <p class="mb-1">Professional care you can trust.</p>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <h6>Working Hours</h6>
+                    <p class="mb-1">Mon - Fri: 08:00 - 18:00</p>
+                    <p class="mb-0">Saturday: 09:00 - 13:00</p>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <h6>Contact</h6>
+                    <p class="mb-1">Phone: +359 XXX XXX XXX</p>
+                    <p class="mb-0">Email: info@medicalcentre.bg</p>
+                </div>
+
+            </div>
+
+            <hr class="bg-light" />
+
+            <p class="mb-0 text-center">
+                © @DateTime.Now.Year Medical Centre. All rights reserved.
+            </p>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>*@
+
     @await RenderSectionAsync("Scripts", required: false) 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>

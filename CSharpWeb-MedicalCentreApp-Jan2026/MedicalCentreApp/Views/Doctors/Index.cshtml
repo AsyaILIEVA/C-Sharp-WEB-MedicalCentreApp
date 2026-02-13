@@ -52,12 +52,13 @@ else
                 <tr>
                     <td>@doctor.FullName</td>
                     <td>@doctor.Specialty</td>
-                    <td>
+                    <td>                        
                         <a asp-action="Details"
                            asp-route-id="@doctor.Id"
-                           class="btn btn-info btn-sm">
+                           class="btn btn-sm btn-primary">
                             Details
                         </a>
+
 
                         @if (User.IsInRole("Admin"))
                         {

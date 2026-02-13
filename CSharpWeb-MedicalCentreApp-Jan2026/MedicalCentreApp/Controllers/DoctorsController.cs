@@ -19,7 +19,7 @@ namespace MedicalCentreApp.Controllers
         }
                 
         [HttpGet]
-        public IActionResult Index(string? specialty)
+        public async Task<IActionResult> Index(string? specialty)
         {            
             var doctorsQuery = dbContext
                 .Doctors
@@ -32,25 +32,24 @@ namespace MedicalCentreApp.Controllers
                     .Contains(specialty));
             }
             
-            var doctors = doctorsQuery
+            var doctors = await doctorsQuery
                 .OrderBy(d => d.FullName)
-                .ToList();
+                .ToListAsync();
             
             ViewData["CurrentFilter"] = specialty;
 
             return View(doctors);
         }
 
-
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public IActionResult Create(CreateDoctorInputModel model)
         {
             if (!ModelState.IsValid)
@@ -107,7 +106,7 @@ namespace MedicalCentreApp.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
             var doctor = dbContext.Doctors.Find(id);
@@ -129,7 +128,7 @@ namespace MedicalCentreApp.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public IActionResult Edit(EditDoctorInputModel model)
         {
             if (!ModelState.IsValid)
@@ -190,9 +189,8 @@ namespace MedicalCentreApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var doctor = dbContext
@@ -209,7 +207,7 @@ namespace MedicalCentreApp.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public IActionResult DeleteConfirmed(int id)
         {
             var doctor = dbContext
@@ -232,15 +230,23 @@ namespace MedicalCentreApp.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+                
 
         [HttpGet]
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var doctor = dbContext
-                .Doctors
+            var doctor = await dbContext.Doctors
                 .AsNoTracking()
-                .Include(d => d.Appointments)
-                .FirstOrDefault(d => d.Id == id);
+                .Where(d => d.Id == id)
+                .Select(d => new DoctorDetailsViewModel
+                {
+                    Id = d.Id,
+                    FullName = d.FullName,
+                    Specialty = d.Specialty,
+                    ImageUrl = d.ImageUrl,
+                    //AppointmentsCount = d.Appointments.Count()
+                })
+                .FirstOrDefaultAsync();
 
             if (doctor == null)
             {
@@ -249,6 +255,5 @@ namespace MedicalCentreApp.Controllers
 
             return View(doctor);
         }
-
     }
 }

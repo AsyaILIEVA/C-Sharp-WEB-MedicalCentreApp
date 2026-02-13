@@ -1,4 +1,16 @@
 
+:root {
+    --primary-color: #1f7a6e;
+    --primary-dark: #17665c;
+    --primary-light: #2e8b83;
+    --background-main: #E9F1E8;
+    --background-soft: #e8f3f2;
+    --text-dark: #1f2d2c;
+    --text-muted: #5f7a78;
+    --card-radius: 18px;
+}
+
+
 html, body {
     margin: 0;
     padding: 0;
@@ -6,8 +18,11 @@ html, body {
 }
 
 body {
-    background-color: #f4f7f6;
+    background: linear-gradient(180deg, var(--background-main) 0%, var(--background-soft) 100%);
+    color: var(--text-dark);
 }
+
+
 
 
 .home-page {
@@ -70,12 +85,70 @@ body {
     }
 
 
+/*.hero-section {
+    padding: 100px 20px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: #ffffff;
+    border-bottom-left-radius: 60px;
+    border-bottom-right-radius: 60px;
+}
+
+    .hero-section .btn-outline-light {
+        border-color: #ffffff;
+        color: #ffffff;
+    }
+
+        .hero-section .btn-outline-light:hover {
+            background-color: #ffffff;
+            color: var(--primary-color);
+        }
+
+.review-card {
+    background-color: #ffffff;
+    padding: 30px;
+    max-width: 600px;
+    border-radius: var(--card-radius);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    font-style: italic;
+}*/
+
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+    .btn-primary:hover {
+        background-color: var(--primary-dark);
+        border-color: var(--primary-dark);
+    }
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+    .btn-outline-primary:hover {
+        background-color: var(--primary-color);
+        color: #ffffff;
+    }
+
+
 .site-footer {
     background: linear-gradient(90deg, #1f7a6e, #2e8b83);
     color: #ffffff;
-    text-align: center;
-    padding: 20px 10px;
+    padding: 40px 10px 20px 10px;
 }
+
+    .site-footer h5,
+    .site-footer h6 {
+        font-weight: 600;
+    }
+
+    .site-footer hr {
+        opacity: 0.3;
+    }
+
 
 
 @media (max-width: 768px) {
@@ -94,3 +167,25 @@ body {
     .navbar .navbar-brand {
         color: #ffffff !important;
     }
+
+
+/*.navbar {
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+    padding: 12px 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+    .navbar .navbar-brand {
+        font-weight: 600;
+        font-size: 1.2rem;
+    }
+
+    .navbar .nav-link {
+        color: #ffffff !important;
+        margin-left: 15px;
+        transition: opacity 0.2s ease;
+    }
+
+        .navbar .nav-link:hover {
+            opacity: 0.8;
+        }*/

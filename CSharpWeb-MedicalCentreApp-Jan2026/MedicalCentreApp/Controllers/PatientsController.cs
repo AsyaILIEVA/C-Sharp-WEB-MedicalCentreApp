@@ -53,13 +53,16 @@ namespace MedicalCentreApp.Controllers
                     Email = p.Email,
                     Address = p.Address,
                     Appointments = p.Appointments
-                        .Select(a => new AppointmentInfoViewModel
-                        {
-                            Date = a.Date,
-                            DoctorName = a.Doctor.FullName,
-                            Reason = a.Reason
-                        })
-                        .ToList()
+                            .Where(a => a.Date >= DateTime.Now)
+                            .OrderBy(a => a.Date)
+                            .Select(a => new AppointmentInfoViewModel
+                            {
+                                   Id = a.Id,
+                                   Date = a.Date,
+                                   DoctorName = a.Doctor.FullName,
+                                   Reason = a.Reason
+                            })
+                            .ToList()
                 })
                 .FirstOrDefaultAsync();
 
@@ -90,6 +93,7 @@ namespace MedicalCentreApp.Controllers
 
             var patient = new Patient
             {
+                Id = model.Id,
                 FirstName = model.FirstName,
                 MiddleName = model.MiddleName,
                 LastName = model.LastName,
@@ -152,6 +156,7 @@ namespace MedicalCentreApp.Controllers
                 return NotFound();
             }
 
+            patient.Id = model.Id;
             patient.FirstName = model.FirstName;
             patient.MiddleName = model.MiddleName;
             patient.LastName = model.LastName;
@@ -208,5 +213,25 @@ namespace MedicalCentreApp.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> MedicalRecords(int id)
+        {
+            var records = await dbContext.MedicalRecords
+                .Where(m => m.Appointment.PatientId == id)
+                .OrderByDescending(m => m.CreatedOn)
+                .Select(m => new PatientMedicalRecordViewModel
+                {
+                    AppointmentDate = m.Appointment.Date,
+                    DoctorName = m.Appointment.Doctor.FullName,
+                    Diagnosis = m.Diagnosis,
+                    Prescription = m.Prescription
+                })
+                .ToListAsync();
+
+            ViewBag.PatientId = id;
+
+            return View(records);
+        }
+
     }
 }

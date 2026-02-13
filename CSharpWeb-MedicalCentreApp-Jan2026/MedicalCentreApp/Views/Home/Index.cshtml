@@ -2,33 +2,62 @@
     ViewData["Title"] = "Home";
 }
 
+@* 
+
+<section class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-3">
+            Professional Medical Care You Can Trust
+        </h1>
+        <p class="lead mb-4">
+            Modern equipment. Experienced doctors. Compassionate service.
+        </p>
+
+        <a asp-controller="Appointments"
+           asp-action="Create"
+           class="btn btn-primary btn-lg me-2">
+            Book Appointment
+        </a>
+
+        <a asp-controller="Doctors"
+           asp-action="Index"
+           class="btn btn-outline-light btn-lg">
+            Our Doctors
+        </a>
+    </div>
+</section> *@
+
 
 <div class="home-page">
 
     <div class="home-cards-wrapper">
 
-        
         <div class="home-card about-card">
             <h2>About Us</h2>
 
             <p>
-                Medical Centre is a modern healthcare facility providing
-                professional medical services with care and responsibility.
+                Medical Centre is a modern healthcare facility committed to delivering
+                high-quality medical services with professionalism and compassion.
             </p>
 
             <p>
-                Our mission is to deliver accurate diagnosis, effective treatment,
-                and patient-focused healthcare.
+                Our team of experienced doctors and healthcare specialists work together
+                to provide accurate diagnosis, effective treatment, and personalized care
+                for every patient.
             </p>
+
+            <p>
+                We combine advanced medical technology with a patient-centered approach,
+                ensuring comfort, safety, and trust at every step of your healthcare journey.
+            </p>            
 
             <a asp-controller="Doctors"
                asp-action="Index"
-               class="btn btn-success btn-sm mt-auto">
-                Our Doctors
+               class="btn btn-primary btn-sm mt-auto">
+                Meet Our Doctors
             </a>
         </div>
 
-       
         <div class="home-card image-card">
             <img src="/images/home/medical-centre.png"
                  alt="Medical Centre" />
@@ -38,12 +67,49 @@
 
 </div>
 
+<section class="container my-5">
+    <h2 class="text-center mb-4">What Our Patients Say</h2>
 
-<footer class="site-footer">
-    <h5>Contact Us</h5>
-    <p>
-        📍 123 Health Street, Sofia |
-        📞 +359 888 123 456 |
-        ✉ contact@medicalcentre.com
-    </p>
-</footer>
+    <div id="reviewCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+
+            <div class="carousel-item active text-center">
+                <div class="review-card mx-auto">
+                    <p class="mb-3">
+                        "Excellent doctors and very professional staff!"
+                    </p>
+                    <small>— Maria Ivanova ⭐⭐⭐⭐⭐</small>
+                </div>
+            </div>
+
+            <div class="carousel-item text-center">
+                <div class="review-card mx-auto">
+                    <p class="mb-3">
+                        "Fast service and very caring medical team."
+                    </p>
+                    <small>— Ivan Petrov ⭐⭐⭐⭐⭐</small>
+                </div>
+            </div>
+
+            <div class="carousel-item text-center">
+                <div class="review-card mx-auto">
+                    <p class="mb-3">
+                        "Modern clinic and great experience overall."
+                    </p>
+                    <small>— Elena Georgieva ⭐⭐⭐⭐⭐</small>
+                </div>
+            </div>
+
+        </div>
+
+        <button class="carousel-control-prev" type="button"
+                data-bs-target="#reviewCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+
+        <button class="carousel-control-next" type="button"
+                data-bs-target="#reviewCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+</section>

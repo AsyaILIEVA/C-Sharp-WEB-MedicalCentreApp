@@ -22,7 +22,8 @@ namespace MedicalCentreApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var appointments = await dbContext.Appointments
+            var appointments = await dbContext
+                .Appointments
                 .AsNoTracking()
                 .Select(a => new AppointmentListViewModel
                 {
@@ -45,7 +46,8 @@ namespace MedicalCentreApp.Controllers
             {
                 Date = DateTime.Now.AddDays(1),
 
-                Patients = await dbContext.Patients
+                Patients = await dbContext
+                    .Patients
                     .AsNoTracking()
                     .Select(p => new SelectListItem
                     {
@@ -54,7 +56,8 @@ namespace MedicalCentreApp.Controllers
                     })
                     .ToListAsync(),
 
-                Doctors = await dbContext.Doctors
+                Doctors = await dbContext
+                    .Doctors
                     .AsNoTracking()
                     .Select(d => new SelectListItem
                     {
@@ -88,28 +91,57 @@ namespace MedicalCentreApp.Controllers
             var model = new CreateAppointmentViewModel
             {
                 PatientId = patient.Id,
-                PatientName = patient.FullName,
                 Date = DateTime.Today.AddDays(1),
 
-                Doctors = await dbContext.Doctors
-                    .Select(d => new SelectListItem
+                Patients = new List<SelectListItem>
+                {
+                    new SelectListItem
                     {
-                        Value = d.Id.ToString(),
-                        Text = d.FullName
-                    })
-                    .ToListAsync()
+                        Value = patient.Id.ToString(),
+                        Text = patient.FullName
+                    }
+                },
+
+                Doctors = await dbContext.Doctors
+                .AsNoTracking()
+                .Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.FullName
+                })
+                .ToListAsync()
             };
 
             return View("Create", model);
         }
-
-
+        
         [HttpPost]
         public async Task<IActionResult> Create(CreateAppointmentViewModel model)
         {
+            if (model.Time < TimeSpan.FromHours(8) ||
+                model.Time > TimeSpan.FromHours(18))
+            {
+                ModelState.AddModelError(nameof(model.Time),
+                    "Appointments are available between 08:00 and 18:00.");
+            }
+
+            var appointmentDateTime = model.Date.Date + model.Time;
+                        
+            var isDoctorBusy = await dbContext
+                .Appointments
+                .AnyAsync(a => a.DoctorId == model.DoctorId
+                            && a.Date == appointmentDateTime);
+
+            if (isDoctorBusy)
+            {
+                ModelState.AddModelError("",
+                    "This doctor already has an appointment at this time.");
+            }
+
             if (!ModelState.IsValid)
             {
-                model.Patients = await dbContext.Patients
+                model.Patients = await dbContext
+                    .Patients
                     .AsNoTracking()
                     .Select(p => new SelectListItem
                     {
@@ -118,7 +150,8 @@ namespace MedicalCentreApp.Controllers
                     })
                     .ToListAsync();
 
-                model.Doctors = await dbContext.Doctors
+                model.Doctors = await dbContext
+                    .Doctors
                     .AsNoTracking()
                     .Select(d => new SelectListItem
                     {
@@ -129,15 +162,6 @@ namespace MedicalCentreApp.Controllers
 
                 return View(model);
             }
-
-            if (model.Time < TimeSpan.FromHours(8) ||
-                model.Time > TimeSpan.FromHours(18))
-            {
-                ModelState.AddModelError(nameof(model.Time),
-                    "Appointments are available between 08:00 and 18:00.");
-            }
-
-            var appointmentDateTime = model.Date.Date + model.Time;
 
             var appointment = new Appointment
             {
@@ -151,22 +175,30 @@ namespace MedicalCentreApp.Controllers
             dbContext.Appointments.Add(appointment);
             await dbContext.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Patients",
+                new { id = model.PatientId });
         }
 
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var appointment = await dbContext.Appointments
+            var appointment = await dbContext
+                .Appointments
                 .AsNoTracking()
                 .Where(a => a.Id == id)
                 .Select(a => new AppointmentDetailsViewModel
                 {
+                    Id = a.Id,
                     Date = a.Date,
                     Reason = a.Reason,
                     Status = a.AppointmentStatus.ToString(),
                     PatientName = a.Patient.FirstName + " " + a.Patient.LastName,
                     DoctorName = a.Doctor.FullName,
-                    HasMedicalRecord = a.MedicalRecord != null
+
+                    HasMedicalRecord = a.MedicalRecord != null,
+                    MedicalRecordId = a.MedicalRecord != null ? a.MedicalRecord.Id : null,
+                    Diagnosis = a.MedicalRecord != null ? a.MedicalRecord.Diagnosis : null,
+                    Prescription = a.MedicalRecord != null ? a.MedicalRecord.Prescription : null
                 })
                 .FirstOrDefaultAsync();
 
@@ -176,6 +208,45 @@ namespace MedicalCentreApp.Controllers
             }
 
             return View(appointment);
+        }
+
+        [HttpGet]
+        public IActionResult CreateMedicalRecord(int appointmentId)
+        {
+            var model = new CreateMedicalRecordViewModel
+            {
+                AppointmentId = appointmentId
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateMedicalRecord(CreateMedicalRecordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var record = new MedicalRecord
+            {
+                Id = Guid.NewGuid(),
+                AppointmentId = model.AppointmentId,
+                Diagnosis = model.Diagnosis,
+                Prescription = model.Prescription,
+                CreatedOn = DateTime.UtcNow
+            };
+
+            dbContext.MedicalRecords.Add(record);
+                        
+            var appointment = await dbContext.Appointments.FindAsync(model.AppointmentId);
+            if (appointment != null)
+            {
+                appointment.AppointmentStatus = AppointmentStatus.Completed;
+            }
+
+            await dbContext.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = model.AppointmentId });
         }
     }
 }

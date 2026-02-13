@@ -1,0 +1,50 @@
+﻿@model IEnumerable<MedicalCentreApp.ViewModels.Patients.PatientMedicalRecordViewModel>
+
+@{
+    ViewData["Title"] = "My Medical Records";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <h3 class="mb-4">My Medical Records</h3>
+
+            @if (!Model.Any())
+            {
+                <p class="text-muted">No medical records found.</p>
+            }
+            else
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Doctor</th>
+                            <th>Diagnosis</th>
+                            <th>Prescription</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in Model)
+                        {
+                            <tr>
+                                <td>@r.AppointmentDate.ToString("dd.MM.yyyy")</td>
+                                <td>@r.DoctorName</td>
+                                <td>@r.Diagnosis</td>
+                                <td>@r.Prescription</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            <a asp-action="Details"
+               asp-route-id="@ViewBag.PatientId"
+               class="btn btn-secondary mt-3">
+                Back to Patient
+            </a>
+
+        </div>
+    </div>
+</div>

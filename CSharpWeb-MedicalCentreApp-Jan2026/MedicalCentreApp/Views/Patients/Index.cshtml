@@ -27,6 +27,7 @@
         @foreach (var patient in Model)
         {
             <tr>
+                
                 <td>@patient.FirstName</td>
                 <td>@patient.MiddleName</td>
                 <td>@patient.LastName</td>
@@ -34,11 +35,26 @@
                 <td>@patient.PhoneNumber</td>
                 <td>@patient.Email</td>
                 <td>@patient.Address</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@patient.Id">Details</a> |
-                    <a asp-action="Edit" asp-route-id="@patient.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@patient.Id">Delete</a>
+                <td>                    
+                        <a asp-action="Details"
+                           asp-route-id="@patient.Id"
+                           class="btn btn-sm btn-primary">
+                            Details
+                        </a>
+
+                        <a asp-action="Edit"
+                           asp-route-id="@patient.Id"
+                           class="btn btn-sm btn-outline-primary">
+                            Edit
+                        </a>
+
+                        <a asp-action="Delete"
+                           asp-route-id="@patient.Id"
+                           class="btn btn-sm btn-outline-danger">
+                            Delete
+                        </a>                    
                 </td>
+
             </tr>
         }
     </tbody>

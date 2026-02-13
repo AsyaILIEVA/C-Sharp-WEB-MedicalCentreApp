@@ -16,3 +16,26 @@ else
 {
     <span class="badge bg-warning">No medical record yet</span>
 }
+
+<hr />
+
+<h4>Medical Record</h4>
+
+@if (!Model.HasMedicalRecord)
+{
+    <a asp-action="CreateMedicalRecord"
+       asp-route-appointmentId="@Model.Id"
+       class="btn btn-success">
+        Create Medical Record
+    </a>
+}
+else
+{
+    <div class="card mt-3 shadow-sm">
+        <div class="card-body">
+            <p><strong>Diagnosis:</strong> @Model.Diagnosis</p>
+            <p><strong>Prescription:</strong> @Model.Prescription</p>
+        </div>
+    </div>
+}
+

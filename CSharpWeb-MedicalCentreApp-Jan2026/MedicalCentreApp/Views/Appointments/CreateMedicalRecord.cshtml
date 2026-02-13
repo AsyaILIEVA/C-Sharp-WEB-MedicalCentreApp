@@ -1,0 +1,21 @@
+﻿@model MedicalCentreApp.ViewModels.Appointments.CreateMedicalRecordViewModel
+
+<h3>Create Medical Record</h3>
+
+<form asp-action="CreateMedicalRecord" method="post">
+    <input type="hidden" asp-for="AppointmentId" />
+
+    <div class="mb-3">
+        <label asp-for="Diagnosis" class="form-label"></label>
+        <textarea asp-for="Diagnosis" class="form-control"></textarea>
+        <span asp-validation-for="Diagnosis" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Prescription" class="form-label"></label>
+        <textarea asp-for="Prescription" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Details" asp-route-id="@Model.AppointmentId" class="btn btn-secondary">Cancel</a>
+</form>
