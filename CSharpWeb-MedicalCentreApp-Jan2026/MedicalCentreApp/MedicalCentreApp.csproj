@@ -19,6 +19,7 @@
     <ProjectReference Include="..\MedicalCentreApp.Data.Models\MedicalCentreApp.Data.Models.csproj" />
     <ProjectReference Include="..\MedicalCentreApp.Data\MedicalCentreApp.Data.csproj" />
     <ProjectReference Include="..\MedicalCentreApp.GCommon\MedicalCentreApp.GCommon.csproj" />
+    <ProjectReference Include="..\MedicalCentreApp.Services.Core\MedicalCentreApp.Services.Core.csproj" />
     <ProjectReference Include="..\MedicalCentreApp.ViewModels\MedicalCentreApp.ViewModels.csproj" />
   </ItemGroup>
 

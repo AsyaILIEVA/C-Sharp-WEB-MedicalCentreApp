@@ -1,43 +1,24 @@
-﻿using MedicalCentreApp.GCommon;
-using MedicalCentreApp.Data;
-using MedicalCentreApp.Data.Models;
+﻿using MedicalCentreApp.Services.Core.Interfaces;
 using MedicalCentreApp.ViewModels.Doctors;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
 
 namespace MedicalCentreApp.Controllers
 {
     public class DoctorsController : Controller
     {
-        private readonly MedicalCentreAppDbContext dbContext;
+        private readonly IDoctorService doctorService;
 
-        public DoctorsController(MedicalCentreAppDbContext dbContext)
+        public DoctorsController(IDoctorService doctorService)
         {
-            this.dbContext = dbContext;
+            this.doctorService = doctorService;
         }
-                
+
         [HttpGet]
         public async Task<IActionResult> Index(string? specialty)
-        {            
-            var doctorsQuery = dbContext
-                .Doctors
-                .AsNoTracking();
-            
-            if (!string.IsNullOrWhiteSpace(specialty))
-            {
-                doctorsQuery = doctorsQuery
-                    .Where(d => d.Specialty
-                    .Contains(specialty));
-            }
-            
-            var doctors = await doctorsQuery
-                .OrderBy(d => d.FullName)
-                .ToListAsync();
-            
+        {
+            var doctors = await doctorService.GetAllAsync(specialty);
+
             ViewData["CurrentFilter"] = specialty;
 
             return View(doctors);
@@ -52,208 +33,70 @@ namespace MedicalCentreApp.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult Create(CreateDoctorInputModel model)
+        public async Task<IActionResult> Create(CreateDoctorInputModel model)
         {
             if (!ModelState.IsValid)
-            {
                 return View(model);
-            }
 
-            string? imageUrl = null;
-
-            if (model.Image != null)
-            {
-                
-                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
-                var extension = Path.GetExtension(model.Image.FileName).ToLower();
-
-                if (!allowedExtensions.Contains(extension))
-                {
-                    ModelState.AddModelError("Image", "Only JPG and PNG images are allowed.");
-                    return View(model);
-                }
-
-                if (model.Image.Length > EntityValidation.MaxImageSizeInBytes)
-                {
-                    ModelState.AddModelError("Image", "Image size must be less than 2 MB.");
-                    return View(model);
-                }
-                
-                string uploadsFolder = Path.Combine(
-                    Directory.GetCurrentDirectory(),
-                    "wwwroot/images/doctors");
-
-                Directory.CreateDirectory(uploadsFolder);
-
-                string fileName = Guid.NewGuid() + extension;
-                string filePath = Path.Combine(uploadsFolder, fileName);
-
-                using var stream = new FileStream(filePath, FileMode.Create);
-                model.Image.CopyTo(stream);
-
-                imageUrl = "/images/doctors/" + fileName;
-            }
-
-            Doctor doctor = new Doctor
-            {
-                FullName = model.FullName,
-                Specialty = model.Specialty,
-                ImageUrl = imageUrl
-            };
-
-            dbContext.Doctors.Add(doctor);
-            dbContext.SaveChanges();
+            await doctorService.CreateAsync(model);
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var doctor = dbContext.Doctors.Find(id);
+            var model = await doctorService.GetForEditAsync(id);
 
-            if (doctor == null)
-            {
+            if (model == null)
                 return NotFound();
-            }
-
-            var model = new EditDoctorInputModel
-            {
-                Id = doctor.Id,
-                FullName = doctor.FullName,
-                Specialty = doctor.Specialty,
-                ExistingImageUrl = doctor.ImageUrl
-            };
 
             return View(model);
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
-        public IActionResult Edit(EditDoctorInputModel model)
+        public async Task<IActionResult> Edit(EditDoctorInputModel model)
         {
             if (!ModelState.IsValid)
-            {
                 return View(model);
-            }
 
-            var doctor = dbContext.Doctors.Find(model.Id);
+            var success = await doctorService.UpdateAsync(model);
 
-            if (doctor == null)
-            {
+            if (!success)
                 return NotFound();
-            }
-
-            doctor.FullName = model.FullName;
-            doctor.Specialty = model.Specialty;
-
-            if (model.Image != null)
-            {
-                
-                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
-                var extension = Path.GetExtension(model.Image.FileName).ToLower();
-
-                if (!allowedExtensions.Contains(extension))
-                {
-                    ModelState.AddModelError("Image", "Only JPG and PNG images are allowed.");
-                    model.ExistingImageUrl = doctor.ImageUrl;
-                    return View(model);
-                }
-
-                if (model.Image.Length > EntityValidation.MaxImageSizeInBytes)
-                {
-                    ModelState.AddModelError(
-                        "Image",
-                        $"Image size must be less than {EntityValidation.MaxImageSizeInBytes / (1024 * 1024)} MB.");
-
-                    model.ExistingImageUrl = doctor.ImageUrl;
-                    return View(model);
-                }
-                
-                string uploadsFolder = Path.Combine(
-                    Directory.GetCurrentDirectory(),
-                    "wwwroot/images/doctors");
-
-                Directory.CreateDirectory(uploadsFolder);
-
-                string fileName = Guid.NewGuid() + extension;
-                string filePath = Path.Combine(uploadsFolder, fileName);
-
-                using var stream = new FileStream(filePath, FileMode.Create);
-                model.Image.CopyTo(stream);                
-
-                doctor.ImageUrl = "/images/doctors/" + fileName;
-            }
-
-            dbContext.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var doctor = dbContext
-                .Doctors
-                .AsNoTracking()
-                .FirstOrDefault(d => d.Id == id);
+            var doctor = await doctorService.GetForDeleteAsync(id);
 
             if (doctor == null)
-            {
                 return NotFound();
-            }
 
             return View(doctor);
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var doctor = dbContext
-                .Doctors
-                .Include(d => d.Appointments)
-                .FirstOrDefault(d => d.Id == id);
+            var success = await doctorService.DeleteAsync(id);
 
-            if (doctor == null)
-            {
-                return NotFound();
-            }
-
-            if (doctor.Appointments.Any())
-            {                
+            if (!success)
                 return BadRequest("Doctor has appointments and cannot be deleted.");
-            }
-
-            dbContext.Doctors.Remove(doctor);
-            dbContext.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
-                
 
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var doctor = await dbContext.Doctors
-                .AsNoTracking()
-                .Where(d => d.Id == id)
-                .Select(d => new DoctorDetailsViewModel
-                {
-                    Id = d.Id,
-                    FullName = d.FullName,
-                    Specialty = d.Specialty,
-                    ImageUrl = d.ImageUrl,
-                    //AppointmentsCount = d.Appointments.Count()
-                })
-                .FirstOrDefaultAsync();
+            var doctor = await doctorService.GetDetailsAsync(id);
 
             if (doctor == null)
-            {
                 return NotFound();
-            }
 
             return View(doctor);
         }

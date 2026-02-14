@@ -1,4 +1,6 @@
 using MedicalCentreApp.Data;
+using MedicalCentreApp.Services.Core;
+using MedicalCentreApp.Services.Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +24,9 @@ namespace MedicalCentreApp
                 .AddEntityFrameworkStores<MedicalCentreAppDbContext>();
 
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<IDoctorService, DoctorService>();
+
 
             var app = builder.Build();
 
