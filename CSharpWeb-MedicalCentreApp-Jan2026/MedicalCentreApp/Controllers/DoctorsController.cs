@@ -1,11 +1,13 @@
-﻿using MedicalCentreApp.Common;
+﻿using MedicalCentreApp.GCommon;
 using MedicalCentreApp.Data;
-using MedicalCentreApp.Models;
+using MedicalCentreApp.Data.Models;
 using MedicalCentreApp.ViewModels.Doctors;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 
 namespace MedicalCentreApp.Controllers
 {
@@ -42,14 +44,14 @@ namespace MedicalCentreApp.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create(CreateDoctorInputModel model)
         {
             if (!ModelState.IsValid)

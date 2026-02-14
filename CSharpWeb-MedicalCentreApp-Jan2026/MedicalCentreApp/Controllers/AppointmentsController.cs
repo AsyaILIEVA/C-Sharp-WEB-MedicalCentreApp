@@ -1,6 +1,6 @@
 ﻿using MedicalCentreApp.Data;
-using MedicalCentreApp.Models;
-using MedicalCentreApp.Models.Enums;
+using MedicalCentreApp.Data.Models;
+using MedicalCentreApp.Data.Models.Enums;
 using MedicalCentreApp.ViewModels.Appointments;
 
 using Microsoft.AspNetCore.Authorization;
@@ -46,8 +46,7 @@ namespace MedicalCentreApp.Controllers
             {
                 Date = DateTime.Now.AddDays(1),
 
-                Patients = await dbContext
-                    .Patients
+                Patients = await dbContext.Patients
                     .AsNoTracking()
                     .Select(p => new SelectListItem
                     {

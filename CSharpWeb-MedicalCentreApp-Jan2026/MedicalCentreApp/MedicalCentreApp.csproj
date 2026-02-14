@@ -15,4 +15,11 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.21" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MedicalCentreApp.Data.Models\MedicalCentreApp.Data.Models.csproj" />
+    <ProjectReference Include="..\MedicalCentreApp.Data\MedicalCentreApp.Data.csproj" />
+    <ProjectReference Include="..\MedicalCentreApp.GCommon\MedicalCentreApp.GCommon.csproj" />
+    <ProjectReference Include="..\MedicalCentreApp.ViewModels\MedicalCentreApp.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>

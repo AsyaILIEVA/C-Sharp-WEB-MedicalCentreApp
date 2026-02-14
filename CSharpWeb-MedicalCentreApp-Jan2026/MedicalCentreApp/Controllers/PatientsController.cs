@@ -1,7 +1,8 @@
 ﻿using MedicalCentreApp.Data;
-using MedicalCentreApp.Models;
+using MedicalCentreApp.Data.Models;
 
 using MedicalCentreApp.ViewModels.Patients;
+using MedicalCentreApp.ViewModels.Appointments;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
