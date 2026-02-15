@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MedicalCentreApp.Data
 {
-    public class MedicalCentreAppDbContext : IdentityDbContext
+    public class MedicalCentreAppDbContext : IdentityDbContext<ApplicationUser>
     {
         public MedicalCentreAppDbContext(DbContextOptions<MedicalCentreAppDbContext> dbContextOptions)
                     : base(dbContextOptions)
