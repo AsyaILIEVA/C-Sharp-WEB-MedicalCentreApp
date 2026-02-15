@@ -29,6 +29,9 @@ namespace MedicalCentreApp
 
             builder.Services.AddScoped<IPatientService, PatientService>();
 
+            builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+
+
 
 
 
