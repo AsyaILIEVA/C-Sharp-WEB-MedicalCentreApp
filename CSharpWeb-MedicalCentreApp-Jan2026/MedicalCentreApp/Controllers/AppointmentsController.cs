@@ -44,10 +44,14 @@ namespace MedicalCentreApp.Controllers
             if (!result.IsSuccess)
             {
                 ModelState.AddModelError("", result.Error!);
+                                
+                var dropdowns = await appointmentService.GetCreateModelAsync();
+                model.Patients = dropdowns.Patients;
+                model.Doctors = dropdowns.Doctors;
 
-                model = await appointmentService.GetCreateModelAsync();
                 return View(model);
             }
+
 
             return RedirectToAction("Details", "Patients",
                 new { id = model.PatientId });

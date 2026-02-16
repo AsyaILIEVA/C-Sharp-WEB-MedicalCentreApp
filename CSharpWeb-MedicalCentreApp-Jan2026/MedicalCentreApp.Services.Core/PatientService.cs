@@ -15,10 +15,10 @@ namespace MedicalCentreApp.Services.Core
         {
             this.dbContext = dbContext;
         }
-
+        
         public async Task<IEnumerable<PatientListViewModel>> GetAllAsync()
         {
-            return await dbContext.Patients
+            IEnumerable<PatientListViewModel> patients = await dbContext.Patients
                 .AsNoTracking()
                 .Select(p => new PatientListViewModel
                 {
@@ -28,11 +28,13 @@ namespace MedicalCentreApp.Services.Core
                     LastName = p.LastName
                 })
                 .ToListAsync();
-        }
 
+            return patients;
+        }
+                
         public async Task<PatientDetailsViewModel?> GetDetailsAsync(int id)
         {
-            return await dbContext.Patients
+            PatientDetailsViewModel? detailsViewModel = await dbContext.Patients
                 .AsNoTracking()
                 .Where(p => p.Id == id)
                 .Select(p => new PatientDetailsViewModel
@@ -59,6 +61,8 @@ namespace MedicalCentreApp.Services.Core
                         .ToList()
                 })
                 .FirstOrDefaultAsync();
+
+            return detailsViewModel;
         }
 
         public async Task CreateAsync(CreateEditPatientViewModel model)
@@ -78,10 +82,10 @@ namespace MedicalCentreApp.Services.Core
             dbContext.Patients.Add(patient);
             await dbContext.SaveChangesAsync();
         }
-
+                
         public async Task<CreateEditPatientViewModel?> GetForEditAsync(int id)
         {
-            return await dbContext.Patients
+            CreateEditPatientViewModel? editViewModel = await dbContext.Patients
                 .AsNoTracking()
                 .Where(p => p.Id == id)
                 .Select(p => new CreateEditPatientViewModel
@@ -97,16 +101,16 @@ namespace MedicalCentreApp.Services.Core
                     Address = p.Address
                 })
                 .FirstOrDefaultAsync();
+
+            return editViewModel;
         }
 
         public async Task<bool> UpdateAsync(int id, CreateEditPatientViewModel model)
         {
-            if (id != model.Id)
-                return false;
+            if (id != model.Id) return false;
 
             var patient = await dbContext.Patients.FindAsync(id);
-            if (patient == null)
-                return false;
+            if (patient == null) return false;
 
             patient.FirstName = model.FirstName;
             patient.MiddleName = model.MiddleName;
@@ -120,10 +124,10 @@ namespace MedicalCentreApp.Services.Core
             await dbContext.SaveChangesAsync();
             return true;
         }
-
+                
         public async Task<PatientListViewModel?> GetForDeleteAsync(int id)
         {
-            return await dbContext.Patients
+            PatientListViewModel? deleteViewModel = await dbContext.Patients
                 .AsNoTracking()
                 .Where(p => p.Id == id)
                 .Select(p => new PatientListViewModel
@@ -138,22 +142,23 @@ namespace MedicalCentreApp.Services.Core
                     Address = p.Address
                 })
                 .FirstOrDefaultAsync();
-        }
 
+            return deleteViewModel;
+        }
+                
         public async Task<bool> DeleteAsync(int id)
         {
             var patient = await dbContext.Patients.FindAsync(id);
-            if (patient == null)
-                return false;
+            if (patient == null) return false;
 
             dbContext.Patients.Remove(patient);
             await dbContext.SaveChangesAsync();
             return true;
         }
-
+                
         public async Task<IEnumerable<PatientMedicalRecordViewModel>> GetMedicalRecordsAsync(int patientId)
         {
-            return await dbContext.MedicalRecords
+            IEnumerable<PatientMedicalRecordViewModel> records = await dbContext.MedicalRecords
                 .Where(m => m.Appointment.PatientId == patientId)
                 .OrderByDescending(m => m.CreatedOn)
                 .Select(m => new PatientMedicalRecordViewModel
@@ -164,6 +169,8 @@ namespace MedicalCentreApp.Services.Core
                     Prescription = m.Prescription
                 })
                 .ToListAsync();
+
+            return records;
         }
     }
 }

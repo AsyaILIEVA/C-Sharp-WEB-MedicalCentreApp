@@ -19,7 +19,7 @@ namespace MedicalCentreApp.Services.Core
 
         public async Task<IEnumerable<AppointmentListViewModel>> GetAllAsync()
         {
-            return await dbContext.Appointments
+            IEnumerable<AppointmentListViewModel> appointments = await dbContext.Appointments
                 .AsNoTracking()
                 .Select(a => new AppointmentListViewModel
                 {
@@ -31,11 +31,13 @@ namespace MedicalCentreApp.Services.Core
                 })
                 .OrderBy(a => a.Date)
                 .ToListAsync();
+
+            return appointments;
         }
 
         public async Task<CreateAppointmentViewModel> GetCreateModelAsync()
         {
-            return new CreateAppointmentViewModel
+            CreateAppointmentViewModel model = new CreateAppointmentViewModel
             {
                 Date = DateTime.Now.AddDays(1),
 
@@ -57,6 +59,8 @@ namespace MedicalCentreApp.Services.Core
                     })
                     .ToListAsync()
             };
+
+            return model;
         }
 
         public async Task<CreateAppointmentViewModel?> GetCreateForPatientModelAsync(int patientId)
@@ -64,61 +68,45 @@ namespace MedicalCentreApp.Services.Core
             var patient = await dbContext.Patients
                 .AsNoTracking()
                 .Where(p => p.Id == patientId)
-                .Select(p => new
-                {
-                    p.Id,
-                    FullName = p.FirstName + " " + p.LastName
-                })
+                .Select(p => new { p.Id, FullName = p.FirstName + " " + p.LastName })
                 .FirstOrDefaultAsync();
 
             if (patient == null)
                 return null;
 
-            return new CreateAppointmentViewModel
+            CreateAppointmentViewModel model = new CreateAppointmentViewModel
             {
                 PatientId = patient.Id,
                 Date = DateTime.Today.AddDays(1),
 
                 Patients = new List<SelectListItem>
                 {
-                    new SelectListItem
-                    {
-                        Value = patient.Id.ToString(),
-                        Text = patient.FullName
-                    }
+                    new SelectListItem { Value = patient.Id.ToString(), Text = patient.FullName }
                 },
 
                 Doctors = await dbContext.Doctors
                     .AsNoTracking()
-                    .Select(d => new SelectListItem
-                    {
-                        Value = d.Id.ToString(),
-                        Text = d.FullName
-                    })
+                    .Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.FullName })
                     .ToListAsync()
             };
+
+            return model;
         }
 
         public async Task<(bool IsSuccess, string? Error)> CreateAsync(CreateAppointmentViewModel model)
         {
-            if (model.Time < TimeSpan.FromHours(8) ||
-                model.Time > TimeSpan.FromHours(18))
-            {
+            if (model.Time < TimeSpan.FromHours(8) || model.Time > TimeSpan.FromHours(18))
                 return (false, "Appointments are available between 08:00 and 18:00.");
-            }
 
             var appointmentDateTime = model.Date.Date + model.Time;
 
-            var isDoctorBusy = await dbContext.Appointments
-                .AnyAsync(a => a.DoctorId == model.DoctorId &&
-                               a.Date == appointmentDateTime);
+            bool isDoctorBusy = await dbContext.Appointments
+                .AnyAsync(a => a.DoctorId == model.DoctorId && a.Date == appointmentDateTime);
 
             if (isDoctorBusy)
-            {
                 return (false, "This doctor already has an appointment at this time.");
-            }
 
-            var appointment = new Appointment
+            Appointment appointment = new Appointment
             {
                 Date = appointmentDateTime,
                 Reason = model.Reason,
@@ -135,7 +123,7 @@ namespace MedicalCentreApp.Services.Core
 
         public async Task<AppointmentDetailsViewModel?> GetDetailsAsync(int id)
         {
-            return await dbContext.Appointments
+            AppointmentDetailsViewModel? details = await dbContext.Appointments
                 .AsNoTracking()
                 .Where(a => a.Id == id)
                 .Select(a => new AppointmentDetailsViewModel
@@ -152,6 +140,8 @@ namespace MedicalCentreApp.Services.Core
                     Prescription = a.MedicalRecord != null ? a.MedicalRecord.Prescription : null
                 })
                 .FirstOrDefaultAsync();
+
+            return details;
         }
 
         public async Task CreateMedicalRecordAsync(CreateMedicalRecordViewModel model)
@@ -167,9 +157,7 @@ namespace MedicalCentreApp.Services.Core
 
             dbContext.MedicalRecords.Add(record);
 
-            var appointment = await dbContext.Appointments
-                .FindAsync(model.AppointmentId);
-
+            var appointment = await dbContext.Appointments.FindAsync(model.AppointmentId);
             if (appointment != null)
             {
                 appointment.AppointmentStatus = AppointmentStatus.Completed;

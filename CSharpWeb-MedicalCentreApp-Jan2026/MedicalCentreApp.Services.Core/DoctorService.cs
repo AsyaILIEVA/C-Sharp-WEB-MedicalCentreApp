@@ -1,5 +1,4 @@
-﻿
-using MedicalCentreApp.Data;
+﻿using MedicalCentreApp.Data;
 using MedicalCentreApp.Data.Models;
 using MedicalCentreApp.GCommon;
 using MedicalCentreApp.Services.Core.Interfaces;
@@ -18,19 +17,27 @@ namespace MedicalCentreApp.Services.Core
             this.dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<Doctor>> GetAllAsync(string? specialty)
+        public async Task<IEnumerable<DoctorListViewModel>> GetAllAsync(string? specialty)
         {
             var query = dbContext.Doctors.AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(specialty))
             {
-                query = query
-                    .Where(d => d.Specialty.Contains(specialty));
+                query = query.Where(d => d.Specialty.Contains(specialty));
             }
 
-            return await query
+            IEnumerable<DoctorListViewModel> doctors = await query
                 .OrderBy(d => d.FullName)
+                .Select(d => new DoctorListViewModel
+                {
+                    Id = d.Id,
+                    FullName = d.FullName,
+                    Specialty = d.Specialty,
+                    ImageUrl = d.ImageUrl
+                })
                 .ToListAsync();
+
+            return doctors;
         }
 
         public async Task CreateAsync(CreateDoctorInputModel model)
@@ -51,19 +58,17 @@ namespace MedicalCentreApp.Services.Core
         public async Task<EditDoctorInputModel?> GetForEditAsync(int id)
         {
             var doctor = await dbContext.Doctors.FindAsync(id);
+            if (doctor == null) return null;
 
-            if (doctor == null) 
-            {
-                return null; 
-            }
-
-            return new EditDoctorInputModel
+            EditDoctorInputModel editModel = new EditDoctorInputModel
             {
                 Id = doctor.Id,
                 FullName = doctor.FullName,
                 Specialty = doctor.Specialty,
                 ExistingImageUrl = doctor.ImageUrl
             };
+
+            return editModel;
         }
 
         public async Task<bool> UpdateAsync(EditDoctorInputModel model)
@@ -83,32 +88,9 @@ namespace MedicalCentreApp.Services.Core
             return true;
         }
 
-        public async Task<Doctor?> GetForDeleteAsync(int id)
+        public async Task<DoctorDetailsViewModel?> GetForDeleteAsync(int id)
         {
-            return await dbContext.Doctors
-                .AsNoTracking()
-                .FirstOrDefaultAsync(d => d.Id == id);
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var doctor = await dbContext.Doctors
-                .Include(d => d.Appointments)
-                .FirstOrDefaultAsync(d => d.Id == id);
-
-            if (doctor == null) return false;
-
-            if (doctor.Appointments.Any())
-                return false;
-
-            dbContext.Doctors.Remove(doctor);
-            await dbContext.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<DoctorDetailsViewModel?> GetDetailsAsync(int id)
-        {
-            return await dbContext.Doctors
+            DoctorDetailsViewModel? deleteViewModel = await dbContext.Doctors
                 .AsNoTracking()
                 .Where(d => d.Id == id)
                 .Select(d => new DoctorDetailsViewModel
@@ -119,6 +101,42 @@ namespace MedicalCentreApp.Services.Core
                     ImageUrl = d.ImageUrl
                 })
                 .FirstOrDefaultAsync();
+
+            return deleteViewModel;
+        }
+
+
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var doctor = await dbContext.Doctors
+                .Include(d => d.Appointments)
+                .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (doctor == null) return false;
+
+            if (doctor.Appointments.Any()) return false;
+
+            dbContext.Doctors.Remove(doctor);
+            await dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<DoctorDetailsViewModel?> GetDetailsAsync(int id)
+        {
+            DoctorDetailsViewModel? detailsViewModel = await dbContext.Doctors
+                .AsNoTracking()
+                .Where(d => d.Id == id)
+                .Select(d => new DoctorDetailsViewModel
+                {
+                    Id = d.Id,
+                    FullName = d.FullName,
+                    Specialty = d.Specialty,
+                    ImageUrl = d.ImageUrl
+                })
+                .FirstOrDefaultAsync();
+
+            return detailsViewModel;
         }
 
         private async Task<string?> SaveImageAsync(IFormFile? image)
@@ -128,13 +146,9 @@ namespace MedicalCentreApp.Services.Core
             var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
             var extension = Path.GetExtension(image.FileName).ToLower();
 
-            if (!allowedExtensions.Contains(extension))
-                //throw new InvalidOperationException("Invalid image format.");
-                return null;
+            if (!allowedExtensions.Contains(extension)) return null;
 
-            if (image.Length > EntityValidation.MaxImageSizeInBytes)
-                //throw new InvalidOperationException("Image too large.");
-                return null;
+            if (image.Length > EntityValidation.MaxImageSizeInBytes) return null;
 
             string uploadsFolder = Path.Combine(
                 Directory.GetCurrentDirectory(),

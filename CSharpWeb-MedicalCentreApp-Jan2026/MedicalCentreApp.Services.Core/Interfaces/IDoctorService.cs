@@ -1,12 +1,11 @@
-﻿
-using MedicalCentreApp.Data.Models;
-using MedicalCentreApp.ViewModels.Doctors;
+﻿using MedicalCentreApp.ViewModels.Doctors;
 
 namespace MedicalCentreApp.Services.Core.Interfaces
 {
     public interface IDoctorService
     {
-        Task<IEnumerable<Doctor>> GetAllAsync(string? specialty);
+        
+        Task<IEnumerable<DoctorListViewModel>> GetAllAsync(string? specialty);
 
         Task CreateAsync(CreateDoctorInputModel model);
 
@@ -14,7 +13,7 @@ namespace MedicalCentreApp.Services.Core.Interfaces
 
         Task<bool> UpdateAsync(EditDoctorInputModel model);
 
-        Task<Doctor?> GetForDeleteAsync(int id);
+        Task<DoctorDetailsViewModel?> GetForDeleteAsync(int id);
 
         Task<bool> DeleteAsync(int id);
 
