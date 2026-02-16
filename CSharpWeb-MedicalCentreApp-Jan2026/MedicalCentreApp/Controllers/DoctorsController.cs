@@ -24,15 +24,15 @@ namespace MedicalCentreApp.Controllers
             return View(doctors);
         }
 
-        [HttpGet]
         [Authorize(Roles = "Admin")]
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
-
-        [HttpPost]
+                
         [Authorize(Roles = "Admin")]
+        [HttpPost]
         public async Task<IActionResult> Create(CreateDoctorInputModel model)
         {
             if (!ModelState.IsValid)
