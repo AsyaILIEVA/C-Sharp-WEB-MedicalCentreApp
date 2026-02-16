@@ -155,7 +155,7 @@ Maintainable and scalable codebase
 
 ▶️ How to Run the Project
 1️⃣ Clone the Repository
-git clone https://github.com/yourusername/MedicalCentreApp.git
+git clone https://github.com/AsyaILIEVA/C-Sharp-WEB-MedicalCentreApp
 cd MedicalCentreApp
 
 2️⃣ Restore NuGet Packages
