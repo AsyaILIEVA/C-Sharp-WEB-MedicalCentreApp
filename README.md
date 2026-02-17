@@ -1,207 +1,220 @@
-C-Sharp-WEB-MedicalCentreApp
-MedicalCentreApp
+### MedicalCentreApp
 
 
 
 
 
+###### MedicalCentreApp is an ASP.NET Core MVC web application for managing patients, doctors, appointments, and medical records in a medical centre environment.
+
+###### This project was developed as part of the SoftUni C# Web ASP.NET Fundamentals course - January 2026 and follows modern ASP.NET Core architectural practices, including layered structure and separation of concerns.
 
 
 
-MedicalCentreApp is an ASP.NET Core MVC web application for managing patients, doctors, appointments, and medical records in a medical centre environment.
+###### 🚀 **Technologies \& Tools**
 
-This project was developed as part of the SoftUni Web Fundamentals course and follows modern ASP.NET Core architectural practices, including layered structure and separation of concerns.
+* ASP.NET Core MVC (.NET 8)
+* Entity Framework Core
+* SQL Server
+* ASP.NET Core Identity (Authentication \& Roles)
+* Razor Views
+* Data Annotations (Validation)
+* Visual Studio 2022
+* 
 
-🚀 Technologies & Tools
+###### ✨ **Application Features**
 
-ASP.NET Core MVC (.NET 8)
 
-Entity Framework Core
 
-SQL Server
+* Patient management (Create, Read (Index, Details), Update (Edit), Delete)
+* Doctor management (Create, Read (Index, Details), Update (Edit), Delete)
+* Appointment scheduling system
+* Automatic appointment status handling
+* Medical record creation per appointment
+* Role-based access (Admin, Doctor, Patient)
+* Server-side validation using Data Annotations
+* Seeded test data for easier demonstration
 
-ASP.NET Core Identity (Authentication & Roles)
 
-Razor Views
 
-Data Annotations (Validation)
+###### 🗄 **Database Design**
 
-Visual Studio 2022
 
-✨ Application Features
+**Entities**
 
-🔹 Patient management (Create, Read, Update, Delete)
+* Doctor
+* Patient
+* Appointment
+* MedicalRecord
 
-🔹 Doctor management (Create, Read, Update, Delete)
 
-🔹 Appointment scheduling system
 
-🔹 Automatic appointment status handling
+**Enum**
 
-🔹 Medical record creation per appointment
+* AppointmentStatus
 
-🔹 Role-based access (Admin, Doctor, Patient)
 
-🔹 Server-side validation using Data Annotations
 
-🔹 Seeded test data for easier demonstration
+**Relationships**
 
-🗄 Database Design
-Entities
+* One Patient → Many Appointments
+* One Doctor → Many Appointments
+* One Appointment → One MedicalRecord
+* One MedicalRecord → One Appointment
 
-Doctor
 
-Patient
 
-Appointment
-
-MedicalRecord
-
-Enum
-
-AppointmentStatus
-
-Relationships
-
-One Patient → Many Appointments
-
-One Doctor → Many Appointments
-
-One Appointment → One MedicalRecord
-
-One MedicalRecord → One Appointment
-
-The database design follows:
-
-Explicit foreign keys
-
-One-to-many and one-to-one relationships
+*The database design follows:*
 
 Data validation through Data Annotations
 
-Clear separation between entities and view models
+One-to-many and one-to-one relationships
 
-🏗 Architecture & Project Structure
+
+
+###### 🏗 **Architecture \& Project Structure**
 
 The solution follows a layered architecture pattern:
 
-🌐 Web Layer
 
-MedicalCentreApp
 
-Controllers
+🌐 **Web Layer**
 
-Razor Views
+*MedicalCentreApp*
 
-Areas
+* Controllers
+* Razor Views
+* Areas
+* wwwroot
+* Program.cs
+* appsettings.json
 
-wwwroot
 
-Program.cs
 
-appsettings.json
+📦 **ViewModels Layer**
 
-📦 ViewModels Layer
+*MedicalCentreApp.ViewModels*
 
-MedicalCentreApp.ViewModels
 
-🗄 Data Layer
 
-MedicalCentreApp.Data
+🗄 **Data Layer**
 
-Configuration
+*MedicalCentreApp.Data*
 
-Migrations
+* Configuration
+* Migrations
+* MedicalCentreAppDbContext
 
-MedicalCentreDbContext
 
-MedicalCentreApp.Data.Models
 
-Entities
+*MedicalCentreApp.Data.Models*
 
-Enums
+* Entities
+* Enums
 
-⚙️ Services Layer
 
-MedicalCentreApp.Services.Core
 
-AppointmentService
+⚙️ **Services Layer**
 
-DoctorService
+*MedicalCentreApp.Services.Core*
 
-PatientService
+* AppointmentService
+* DoctorService
+* PatientService
 
-MedicalCentreApp.Services.Core.Interfaces
 
-IAppointmentService
 
-IDoctorService
+*MedicalCentreApp.Services.Core.Interfaces*
 
-IPatientService
+* IAppointmentService
+* IDoctorService
+* IPatientService
 
-🔎 Common Utilities
 
-MedicalCentreApp.GCommon
 
-EntityValidation
+🔎 **Common Utilities**
 
-This structure ensures:
+*MedicalCentreApp.GCommon*
 
-Separation of concerns
+* EntityValidation
 
-Clean service abstraction
 
-Maintainable and scalable codebase
 
-▶️ How to Run the Project
-1️⃣ Clone the Repository
-git clone https://github.com/AsyaILIEVA/C-Sharp-WEB-MedicalCentreApp
-cd MedicalCentreApp
+###### ***This structure ensures:***
 
-2️⃣ Restore NuGet Packages
+###### Separation of concerns
+
+###### Clean service abstraction
+
+###### Maintainable and scalable codebase
+
+
+
+
+
+###### ▶️ **How to Run the Project**
+
+
+1️⃣ **Clone the Repository**
+
+
+git clone *https://github.com/AsyaILIEVA/C-Sharp-WEB-MedicalCentreApp*
+---
+
+
+2️⃣ **Restore NuGet Packages**
 dotnet restore
 
-3️⃣ Configure Database Connection
+
+
+3️⃣ **Configure Database Connection**
 
 Update your connection string in:
 
-appsettings.Development.json
+
+
+###### appsettings.Development.json
 
 "ConnectionStrings": {
-  "DevConnection": "Server=.;Database=MedicalCentreApp2026;Trusted_Connection=True;Encrypted=False;"
+"DevConnection": *"Server=.;Database=MedicalCentreApp2026;Trusted\_Connection=True;Encrypted=False;"*
 }
+---
 
-4️⃣ Apply Migrations & Update Database
+4️⃣ **Apply Migrations \& Update Database**
 
 Using Package Manager Console:
 
-Update-Database
 
 
-Or using CLI:
+###### Update-Database
 
-dotnet ef database update
 
-5️⃣ Run the Application
+
+5️⃣ **Run the Application**
 dotnet run
+
 
 
 The application will be available at:
 
 https://localhost:7172
 
-🌱 Seed Data
+
+
+###### 🌱 **Seed Data**
 
 On application startup, the database is seeded with:
 
-5 sample doctors
 
-10 sample patients
 
-Default user roles (Admin, Doctor, Patient)
+* 5 sample doctors
+* 10 sample patients
+* Default user roles (Admin, Patient)
 
 This allows quick testing and demonstration of the system.
 
-👤 Author
+
+
+###### 👤 Author
 
 Asya Ilieva – SoftUni Student
+
