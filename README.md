@@ -10,7 +10,9 @@
 
 
 
-###### 🚀 **Technologies \& Tools**
+#### 🚀 **Technologies \& Tools**
+
+
 
 * ASP.NET Core MVC (.NET 8)
 * Entity Framework Core
@@ -19,9 +21,10 @@
 * Razor Views
 * Data Annotations (Validation)
 * Visual Studio 2022
-* 
 
-###### ✨ **Application Features**
+
+
+#### ✨ **Application Features**
 
 
 
@@ -36,7 +39,8 @@
 
 
 
-###### 🗄 **Database Design**
+#### 🗄 **Database Design**
+
 
 
 **Entities**
@@ -71,13 +75,13 @@ One-to-many and one-to-one relationships
 
 
 
-###### 🏗 **Architecture \& Project Structure**
+#### 🏗 **Architecture \& Project Structure**
 
 The solution follows a layered architecture pattern:
 
 
 
-🌐 **Web Layer**
+###### 🌐 **Web Layer**
 
 *MedicalCentreApp*
 
@@ -90,13 +94,13 @@ The solution follows a layered architecture pattern:
 
 
 
-📦 **ViewModels Layer**
+###### 📦 **ViewModels Layer**
 
 *MedicalCentreApp.ViewModels*
 
 
 
-🗄 **Data Layer**
+###### 🗄 **Data Layer**
 
 *MedicalCentreApp.Data*
 
@@ -113,7 +117,7 @@ The solution follows a layered architecture pattern:
 
 
 
-⚙️ **Services Layer**
+###### ⚙️ **Services Layer**
 
 *MedicalCentreApp.Services.Core*
 
@@ -131,7 +135,7 @@ The solution follows a layered architecture pattern:
 
 
 
-🔎 **Common Utilities**
+###### 🔎 **Common Utilities**
 
 *MedicalCentreApp.GCommon*
 
@@ -151,15 +155,17 @@ The solution follows a layered architecture pattern:
 
 
 
-###### ▶️ **How to Run the Project**
+#### ▶️ **How to Run the Project**
+
 
 
 1️⃣ **Clone the Repository**
 
 
-git clone *https://github.com/AsyaILIEVA/C-Sharp-WEB-MedicalCentreApp*
----
 
+###### git clone *https://github.com/AsyaILIEVA/C-Sharp-WEB-MedicalCentreApp*
+
+###### 
 
 2️⃣ **Restore NuGet Packages**
 dotnet restore
@@ -200,7 +206,7 @@ https://localhost:7172
 
 
 
-###### 🌱 **Seed Data**
+#### 🌱 **Seed Data**
 
 On application startup, the database is seeded with:
 
@@ -214,7 +220,7 @@ This allows quick testing and demonstration of the system.
 
 
 
-###### 👤 Author
+#### 👤 Author
 
 Asya Ilieva – SoftUni Student
 
