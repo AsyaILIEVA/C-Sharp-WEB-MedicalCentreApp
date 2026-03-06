@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static MedicalCentreApp.GCommon.EntityValidation;
+using System.ComponentModel.DataAnnotations.Schema;
+using static MedicalCentreApp.GCommon.EntityValidation.Doctor;
 
 namespace MedicalCentreApp.Data.Models
 {
@@ -18,7 +19,13 @@ namespace MedicalCentreApp.Data.Models
 
         public string? ImageUrl { get; set; }
 
-        public virtual ICollection<Appointment> Appointments { get; set; } 
+
+        [ForeignKey(nameof(Department))]
+        public int DepartmentId { get; set; }
+
+        public virtual Department Department { get; set; } = null!;
+
+        public virtual ICollection<Appointment> Appointments { get; set; }
             = new HashSet<Appointment>();
     }
 }

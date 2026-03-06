@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MedicalCentreApp.Data.Models.Enums;
+using System;
 
 namespace MedicalCentreApp.ViewModels.Appointments
 {
@@ -14,7 +15,7 @@ namespace MedicalCentreApp.ViewModels.Appointments
 
         public string Reason { get; set; } = null!;
 
-        public string AppointmentStatus { get; set; } = null!;
+        public AppointmentStatus AppointmentStatus { get; set; }
 
         // Medical Record Info
         public bool HasMedicalRecord { get; set; }

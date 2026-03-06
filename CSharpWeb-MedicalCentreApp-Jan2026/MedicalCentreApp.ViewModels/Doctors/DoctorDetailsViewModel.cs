@@ -1,6 +1,6 @@
 ﻿using MedicalCentreApp.ViewModels.Appointments;
 using System.ComponentModel.DataAnnotations;
-using static MedicalCentreApp.GCommon.EntityValidation;
+using static MedicalCentreApp.GCommon.EntityValidation.Doctor;
 
 namespace MedicalCentreApp.ViewModels.Doctors
 {

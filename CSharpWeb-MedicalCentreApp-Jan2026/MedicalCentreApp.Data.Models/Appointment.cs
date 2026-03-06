@@ -1,7 +1,7 @@
 ﻿using MedicalCentreApp.Data.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static MedicalCentreApp.GCommon.EntityValidation;
+using static MedicalCentreApp.GCommon.EntityValidation.Appointment;
 
 namespace MedicalCentreApp.Data.Models
 {
@@ -22,11 +22,13 @@ namespace MedicalCentreApp.Data.Models
         [ForeignKey(nameof(Patient))]
         public int PatientId { get; set; }
         public virtual Patient Patient { get; set; } = null!;
-               
+
         [ForeignKey(nameof(Doctor))]
         public int DoctorId { get; set; }
         public virtual Doctor Doctor { get; set; } = null!;
 
-        public MedicalRecord? MedicalRecord { get; set; } 
+        public MedicalRecord? MedicalRecord { get; set; }
+
+        public virtual Invoice? Invoice { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using MedicalCentreApp.Data.Models;
 using MedicalCentreApp.Services.Core.Interfaces;
 using MedicalCentreApp.ViewModels.Appointments;
 using MedicalCentreApp.ViewModels.Patients;
+using MedicalCentreApp.ViewModels.Prescriptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedicalCentreApp.Services.Core
@@ -166,7 +167,13 @@ namespace MedicalCentreApp.Services.Core
                     AppointmentDate = m.Appointment.Date,
                     DoctorName = m.Appointment.Doctor.FullName,
                     Diagnosis = m.Diagnosis,
-                    Prescription = m.Prescription
+                    Prescriptions = m.Prescriptions
+                .Select(p => new PrescriptionViewModel
+                {
+                MedicationName = p.MedicationName,
+                Dosage = p.Dosage
+                })
+                .ToList()
                 })
                 .ToListAsync();
 

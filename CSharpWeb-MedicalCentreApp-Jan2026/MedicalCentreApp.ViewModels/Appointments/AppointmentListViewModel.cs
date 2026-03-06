@@ -1,4 +1,6 @@
-﻿namespace MedicalCentreApp.ViewModels.Appointments
+﻿using MedicalCentreApp.Data.Models.Enums;
+
+namespace MedicalCentreApp.ViewModels.Appointments
 {
     public class AppointmentListViewModel
     {        
@@ -10,7 +12,7 @@
 
             public string DoctorName { get; set; } = null!;
 
-            public string Status { get; set; } = null!;
+            public AppointmentStatus Status { get; set; }
         
     }
 

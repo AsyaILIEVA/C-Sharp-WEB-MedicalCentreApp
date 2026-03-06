@@ -1,4 +1,6 @@
-﻿namespace MedicalCentreApp.ViewModels.Patients
+﻿using MedicalCentreApp.ViewModels.Prescriptions;
+
+namespace MedicalCentreApp.ViewModels.Patients
 {
     public class PatientMedicalRecordViewModel
     {
@@ -8,7 +10,7 @@
 
             public string Diagnosis { get; set; } = null!;
 
-            public string? Prescription { get; set; }        
+        public List<PrescriptionViewModel> Prescriptions { get; set; } = new();
 
     }
 }

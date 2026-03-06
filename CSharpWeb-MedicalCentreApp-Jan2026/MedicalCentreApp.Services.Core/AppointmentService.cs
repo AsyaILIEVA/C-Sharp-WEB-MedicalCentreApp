@@ -27,7 +27,7 @@ namespace MedicalCentreApp.Services.Core
                     Date = a.Date,
                     PatientName = a.Patient.FirstName + " " + a.Patient.LastName,
                     DoctorName = a.Doctor.FullName,
-                    Status = a.AppointmentStatus.ToString()
+                    Status = a.AppointmentStatus
                 })
                 .OrderBy(a => a.Date)
                 .ToListAsync();
@@ -131,13 +131,18 @@ namespace MedicalCentreApp.Services.Core
                     Id = a.Id,
                     Date = a.Date,
                     Reason = a.Reason,
-                    Status = a.AppointmentStatus.ToString(),
+                    Status = a.AppointmentStatus,
                     PatientName = a.Patient.FirstName + " " + a.Patient.LastName,
                     DoctorName = a.Doctor.FullName,
                     HasMedicalRecord = a.MedicalRecord != null,
                     MedicalRecordId = a.MedicalRecord != null ? a.MedicalRecord.Id : null,
                     Diagnosis = a.MedicalRecord != null ? a.MedicalRecord.Diagnosis : null,
-                    Prescription = a.MedicalRecord != null ? a.MedicalRecord.Prescription : null
+
+                    Prescriptions = a.MedicalRecord != null
+                        ? a.MedicalRecord.Prescriptions
+                            .Select(p => p.MedicationName) 
+                            .ToList()
+                        : new List<string>()
                 })
                 .FirstOrDefaultAsync();
 
@@ -151,10 +156,9 @@ namespace MedicalCentreApp.Services.Core
                 Id = Guid.NewGuid(),
                 AppointmentId = model.AppointmentId,
                 Diagnosis = model.Diagnosis,
-                Prescription = model.Prescription,
                 CreatedOn = DateTime.UtcNow
             };
-
+            
             dbContext.MedicalRecords.Add(record);
 
             var appointment = await dbContext.Appointments.FindAsync(model.AppointmentId);

@@ -148,7 +148,7 @@ namespace MedicalCentreApp.Services.Core
 
             if (!allowedExtensions.Contains(extension)) return null;
 
-            if (image.Length > EntityValidation.MaxImageSizeInBytes) return null;
+            if (image.Length > EntityValidation.Doctor.MaxImageSizeInBytes) return null;
 
             string uploadsFolder = Path.Combine(
                 Directory.GetCurrentDirectory(),
