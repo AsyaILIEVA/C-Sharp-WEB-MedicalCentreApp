@@ -10,7 +10,7 @@ namespace MedicalCentreApp.ViewModels.Patients
 
             public string Diagnosis { get; set; } = null!;
 
-        public List<PrescriptionViewModel> Prescriptions { get; set; } = new();
+        public List<PrescriptionListViewModel> Prescriptions { get; set; } = new();
 
     }
 }

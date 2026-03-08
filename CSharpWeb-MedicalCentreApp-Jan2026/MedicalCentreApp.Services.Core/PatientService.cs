@@ -156,25 +156,26 @@ namespace MedicalCentreApp.Services.Core
             await dbContext.SaveChangesAsync();
             return true;
         }
-                
+
         public async Task<IEnumerable<PatientMedicalRecordViewModel>> GetMedicalRecordsAsync(int patientId)
         {
             IEnumerable<PatientMedicalRecordViewModel> records = await dbContext.MedicalRecords
-                .Where(m => m.Appointment.PatientId == patientId)
-                .OrderByDescending(m => m.CreatedOn)
-                .Select(m => new PatientMedicalRecordViewModel
+                .AsNoTracking()
+                .Where(r => r.Appointment.PatientId == patientId)
+                .Select(r => new PatientMedicalRecordViewModel
                 {
-                    AppointmentDate = m.Appointment.Date,
-                    DoctorName = m.Appointment.Doctor.FullName,
-                    Diagnosis = m.Diagnosis,
-                    Prescriptions = m.Prescriptions
-                .Select(p => new PrescriptionViewModel
-                {
-                MedicationName = p.MedicationName,
-                Dosage = p.Dosage
+                    AppointmentDate = r.Appointment.Date,
+                    DoctorName = r.Appointment.Doctor.FullName,
+                    Diagnosis = r.Diagnosis,
+                    Prescriptions = r.Prescriptions
+                        .Select(p => new PrescriptionListViewModel
+                        {
+                            MedicationName = p.MedicationName,
+                            Dosage = p.Dosage
+                        })
+                        .ToList()
                 })
-                .ToList()
-                })
+                .OrderByDescending(r => r.AppointmentDate)
                 .ToListAsync();
 
             return records;

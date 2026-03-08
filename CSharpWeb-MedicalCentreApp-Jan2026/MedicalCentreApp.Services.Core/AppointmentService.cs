@@ -3,6 +3,7 @@ using MedicalCentreApp.Data.Models;
 using MedicalCentreApp.Data.Models.Enums;
 using MedicalCentreApp.Services.Core.Interfaces;
 using MedicalCentreApp.ViewModels.Appointments;
+using MedicalCentreApp.ViewModels.MedicalRecords;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 

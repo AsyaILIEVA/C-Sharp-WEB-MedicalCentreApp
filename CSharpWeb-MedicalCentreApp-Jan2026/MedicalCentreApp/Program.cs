@@ -38,6 +38,14 @@ namespace MedicalCentreApp
 
             builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 
+            builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
+
+            builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+
+            builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
+
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())

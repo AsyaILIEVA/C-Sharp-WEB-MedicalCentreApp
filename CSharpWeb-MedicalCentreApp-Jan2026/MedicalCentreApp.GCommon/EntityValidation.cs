@@ -67,6 +67,8 @@
         public static class Invoice
         {
             public const string InvoiceAmountColumnType = "decimal(18,2)";
+            public const double InvoiceAmountMinValue = 0;
+            public const double InvoiceAmountMaxValue = 10000;
         }
     }
 }

@@ -65,26 +65,6 @@ namespace MedicalCentreApp.Controllers
 
             return View(appointment);
         }
-
-        [HttpGet]
-        public IActionResult CreateMedicalRecord(int appointmentId)
-        {
-            return View(new CreateMedicalRecordViewModel
-            {
-                AppointmentId = appointmentId
-            });
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateMedicalRecord(CreateMedicalRecordViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            await appointmentService.CreateMedicalRecordAsync(model);
-
-            return RedirectToAction(nameof(Details),
-                new { id = model.AppointmentId });
-        }
+        
     }
 }

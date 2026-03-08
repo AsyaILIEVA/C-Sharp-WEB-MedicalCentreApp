@@ -1,4 +1,5 @@
 ﻿using MedicalCentreApp.ViewModels.Appointments;
+using MedicalCentreApp.ViewModels.MedicalRecords;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MedicalCentreApp.Services.Core.Interfaces

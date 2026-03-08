@@ -1,7 +1,7 @@
 ﻿using MedicalCentreApp.ViewModels.Prescriptions;
 using System.ComponentModel.DataAnnotations;
 
-namespace MedicalCentreApp.ViewModels.Appointments
+namespace MedicalCentreApp.ViewModels.MedicalRecords
 {
     public class CreateMedicalRecordViewModel
     {
@@ -10,6 +10,6 @@ namespace MedicalCentreApp.ViewModels.Appointments
         [Required]
         public string Diagnosis { get; set; } = null!;
 
-        public List<PrescriptionViewModel> Prescriptions { get; set; } = new();
+        public List<PrescriptionListViewModel> Prescriptions { get; set; } = new();
     }
 }
