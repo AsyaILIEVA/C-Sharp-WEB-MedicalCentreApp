@@ -1,5 +1,5 @@
-﻿using MedicalCentreApp.Data;
-using MedicalCentreApp.Data.Models;
+﻿using MedicalCentreApp.Data.Models;
+using MedicalCentreApp.Data.Repositories.Interfaces;
 using MedicalCentreApp.Services.Core.Interfaces;
 using MedicalCentreApp.ViewModels.Appointments;
 using MedicalCentreApp.ViewModels.Patients;
@@ -10,17 +10,17 @@ namespace MedicalCentreApp.Services.Core
 {
     public class PatientService : IPatientService
     {
-        private readonly MedicalCentreAppDbContext dbContext;
+        private readonly IPatientRepository patientRepository;
 
-        public PatientService(MedicalCentreAppDbContext dbContext)
+        public PatientService(IPatientRepository patientRepository)
         {
-            this.dbContext = dbContext;
+            this.patientRepository = patientRepository;
         }
-        
+
         public async Task<IEnumerable<PatientListViewModel>> GetAllAsync()
         {
-            IEnumerable<PatientListViewModel> patients = await dbContext.Patients
-                .AsNoTracking()
+            IEnumerable<PatientListViewModel> patients = await patientRepository
+                .AllAsNoTracking()
                 .Select(p => new PatientListViewModel
                 {
                     Id = p.Id,
@@ -32,11 +32,11 @@ namespace MedicalCentreApp.Services.Core
 
             return patients;
         }
-                
+
         public async Task<PatientDetailsViewModel?> GetDetailsAsync(int id)
         {
-            PatientDetailsViewModel? detailsViewModel = await dbContext.Patients
-                .AsNoTracking()
+            PatientDetailsViewModel? detailsViewModel = await patientRepository
+                .AllAsNoTracking()
                 .Where(p => p.Id == id)
                 .Select(p => new PatientDetailsViewModel
                 {
@@ -80,14 +80,14 @@ namespace MedicalCentreApp.Services.Core
                 Address = model.Address
             };
 
-            dbContext.Patients.Add(patient);
-            await dbContext.SaveChangesAsync();
+            await patientRepository.AddAsync(patient);
+            await patientRepository.SaveChangesAsync();
         }
-                
+
         public async Task<CreateEditPatientViewModel?> GetForEditAsync(int id)
         {
-            CreateEditPatientViewModel? editViewModel = await dbContext.Patients
-                .AsNoTracking()
+            CreateEditPatientViewModel? editViewModel = await patientRepository
+                .AllAsNoTracking()
                 .Where(p => p.Id == id)
                 .Select(p => new CreateEditPatientViewModel
                 {
@@ -110,7 +110,7 @@ namespace MedicalCentreApp.Services.Core
         {
             if (id != model.Id) return false;
 
-            var patient = await dbContext.Patients.FindAsync(id);
+            var patient = await patientRepository.GetByIdAsync(id);
             if (patient == null) return false;
 
             patient.FirstName = model.FirstName;
@@ -122,14 +122,16 @@ namespace MedicalCentreApp.Services.Core
             patient.Email = model.Email;
             patient.Address = model.Address;
 
-            await dbContext.SaveChangesAsync();
+            patientRepository.Update(patient);
+            await patientRepository.SaveChangesAsync();
+
             return true;
         }
-                
+
         public async Task<PatientListViewModel?> GetForDeleteAsync(int id)
         {
-            PatientListViewModel? deleteViewModel = await dbContext.Patients
-                .AsNoTracking()
+            PatientListViewModel? deleteViewModel = await patientRepository
+                .AllAsNoTracking()
                 .Where(p => p.Id == id)
                 .Select(p => new PatientListViewModel
                 {
@@ -146,28 +148,31 @@ namespace MedicalCentreApp.Services.Core
 
             return deleteViewModel;
         }
-                
+
         public async Task<bool> DeleteAsync(int id)
         {
-            var patient = await dbContext.Patients.FindAsync(id);
+            var patient = await patientRepository.GetByIdAsync(id);
             if (patient == null) return false;
 
-            dbContext.Patients.Remove(patient);
-            await dbContext.SaveChangesAsync();
+            patientRepository.Delete(patient);
+            await patientRepository.SaveChangesAsync();
+
             return true;
         }
 
         public async Task<IEnumerable<PatientMedicalRecordViewModel>> GetMedicalRecordsAsync(int patientId)
         {
-            IEnumerable<PatientMedicalRecordViewModel> records = await dbContext.MedicalRecords
-                .AsNoTracking()
-                .Where(r => r.Appointment.PatientId == patientId)
-                .Select(r => new PatientMedicalRecordViewModel
+            IEnumerable<PatientMedicalRecordViewModel> records = await patientRepository
+                .AllAsNoTracking()
+                .Where(p => p.Id == patientId)
+                .SelectMany(p => p.Appointments)
+                .Where(a => a.MedicalRecord != null)
+                .Select(a => new PatientMedicalRecordViewModel
                 {
-                    AppointmentDate = r.Appointment.Date,
-                    DoctorName = r.Appointment.Doctor.FullName,
-                    Diagnosis = r.Diagnosis,
-                    Prescriptions = r.Prescriptions
+                    AppointmentDate = a.Date,
+                    DoctorName = a.Doctor.FullName,
+                    Diagnosis = a.MedicalRecord.Diagnosis,
+                    Prescriptions = a.MedicalRecord.Prescriptions
                         .Select(p => new PrescriptionListViewModel
                         {
                             MedicationName = p.MedicationName,
