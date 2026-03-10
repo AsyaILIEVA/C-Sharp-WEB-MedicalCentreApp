@@ -1,20 +1,19 @@
-﻿using MedicalCentreApp.Data;
-using MedicalCentreApp.Data.Models;
+﻿using MedicalCentreApp.Data.Models;
+using MedicalCentreApp.Data.Repositories.Interfaces;
 using MedicalCentreApp.Services.Core.Interfaces;
 using MedicalCentreApp.ViewModels.MedicalRecords;
 using MedicalCentreApp.ViewModels.Prescriptions;
-
 using Microsoft.EntityFrameworkCore;
 
 namespace MedicalCentreApp.Services.Core
 {
     public class MedicalRecordService : IMedicalRecordService
     {
-        private readonly MedicalCentreAppDbContext dbContext;
+        private readonly IMedicalRecordRepository medicalRecordRepository;
 
-        public MedicalRecordService(MedicalCentreAppDbContext dbContext)
+        public MedicalRecordService(IMedicalRecordRepository medicalRecordRepository)
         {
-            this.dbContext = dbContext;
+            this.medicalRecordRepository = medicalRecordRepository;
         }
 
         public async Task CreateAsync(CreateMedicalRecordViewModel model)
@@ -27,14 +26,14 @@ namespace MedicalCentreApp.Services.Core
                 CreatedOn = DateTime.UtcNow
             };
 
-            await dbContext.MedicalRecords.AddAsync(record);
-            await dbContext.SaveChangesAsync();
+            await medicalRecordRepository.AddAsync(record);
+            await medicalRecordRepository.SaveChangesAsync();
         }
 
         public async Task<MedicalRecordDetailsViewModel?> GetDetailsAsync(Guid id)
         {
-            MedicalRecordDetailsViewModel? record = await dbContext.MedicalRecords
-                .AsNoTracking()
+            MedicalRecordDetailsViewModel? record = await medicalRecordRepository
+                .AllAsNoTracking()
                 .Where(r => r.Id == id)
                 .Select(r => new MedicalRecordDetailsViewModel
                 {
@@ -59,7 +58,8 @@ namespace MedicalCentreApp.Services.Core
 
         public async Task<bool> ExistsAsync(Guid id)
         {
-            bool exists = await dbContext.MedicalRecords
+            bool exists = await medicalRecordRepository
+                .All()
                 .AnyAsync(r => r.Id == id);
 
             return exists;

@@ -41,6 +41,7 @@ namespace MedicalCentreApp
             builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 
             builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+            builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 
             builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
 
@@ -49,8 +50,9 @@ namespace MedicalCentreApp
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 
             builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
+            builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
 
-            
+
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())

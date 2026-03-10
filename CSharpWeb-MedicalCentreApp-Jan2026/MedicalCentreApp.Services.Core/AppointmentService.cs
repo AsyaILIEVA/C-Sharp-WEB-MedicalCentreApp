@@ -1,6 +1,6 @@
-﻿using MedicalCentreApp.Data;
-using MedicalCentreApp.Data.Models;
+﻿using MedicalCentreApp.Data.Models;
 using MedicalCentreApp.Data.Models.Enums;
+using MedicalCentreApp.Data.Repositories.Interfaces;
 using MedicalCentreApp.Services.Core.Interfaces;
 using MedicalCentreApp.ViewModels.Appointments;
 using MedicalCentreApp.ViewModels.MedicalRecords;
@@ -11,17 +11,27 @@ namespace MedicalCentreApp.Services.Core
 {
     public class AppointmentService : IAppointmentService
     {
-        private readonly MedicalCentreAppDbContext dbContext;
+        private readonly IAppointmentRepository appointmentRepository;
+        private readonly IPatientRepository patientRepository;
+        private readonly IDoctorRepository doctorRepository;
+        private readonly IMedicalRecordRepository medicalRecordRepository;
 
-        public AppointmentService(MedicalCentreAppDbContext dbContext)
+        public AppointmentService(
+            IAppointmentRepository appointmentRepository,
+            IPatientRepository patientRepository,
+            IDoctorRepository doctorRepository,
+            IMedicalRecordRepository medicalRecordRepository)
         {
-            this.dbContext = dbContext;
+            this.appointmentRepository = appointmentRepository;
+            this.patientRepository = patientRepository;
+            this.doctorRepository = doctorRepository;
+            this.medicalRecordRepository = medicalRecordRepository;
         }
 
         public async Task<IEnumerable<AppointmentListViewModel>> GetAllAsync()
         {
-            IEnumerable<AppointmentListViewModel> appointments = await dbContext.Appointments
-                .AsNoTracking()
+            IEnumerable<AppointmentListViewModel> appointments = await appointmentRepository
+                .AllAsNoTracking()
                 .Select(a => new AppointmentListViewModel
                 {
                     Id = a.Id,
@@ -42,8 +52,8 @@ namespace MedicalCentreApp.Services.Core
             {
                 Date = DateTime.Now.AddDays(1),
 
-                Patients = await dbContext.Patients
-                    .AsNoTracking()
+                Patients = await patientRepository
+                    .AllAsNoTracking()
                     .Select(p => new SelectListItem
                     {
                         Value = p.Id.ToString(),
@@ -51,8 +61,8 @@ namespace MedicalCentreApp.Services.Core
                     })
                     .ToListAsync(),
 
-                Doctors = await dbContext.Doctors
-                    .AsNoTracking()
+                Doctors = await doctorRepository
+                    .AllAsNoTracking()
                     .Select(d => new SelectListItem
                     {
                         Value = d.Id.ToString(),
@@ -66,8 +76,8 @@ namespace MedicalCentreApp.Services.Core
 
         public async Task<CreateAppointmentViewModel?> GetCreateForPatientModelAsync(int patientId)
         {
-            var patient = await dbContext.Patients
-                .AsNoTracking()
+            var patient = await patientRepository
+                .AllAsNoTracking()
                 .Where(p => p.Id == patientId)
                 .Select(p => new { p.Id, FullName = p.FirstName + " " + p.LastName })
                 .FirstOrDefaultAsync();
@@ -82,12 +92,20 @@ namespace MedicalCentreApp.Services.Core
 
                 Patients = new List<SelectListItem>
                 {
-                    new SelectListItem { Value = patient.Id.ToString(), Text = patient.FullName }
+                    new SelectListItem
+                    {
+                        Value = patient.Id.ToString(),
+                        Text = patient.FullName
+                    }
                 },
 
-                Doctors = await dbContext.Doctors
-                    .AsNoTracking()
-                    .Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.FullName })
+                Doctors = await doctorRepository
+                    .AllAsNoTracking()
+                    .Select(d => new SelectListItem
+                    {
+                        Value = d.Id.ToString(),
+                        Text = d.FullName
+                    })
                     .ToListAsync()
             };
 
@@ -101,7 +119,8 @@ namespace MedicalCentreApp.Services.Core
 
             var appointmentDateTime = model.Date.Date + model.Time;
 
-            bool isDoctorBusy = await dbContext.Appointments
+            bool isDoctorBusy = await appointmentRepository
+                .All()
                 .AnyAsync(a => a.DoctorId == model.DoctorId && a.Date == appointmentDateTime);
 
             if (isDoctorBusy)
@@ -116,16 +135,16 @@ namespace MedicalCentreApp.Services.Core
                 AppointmentStatus = AppointmentStatus.Scheduled
             };
 
-            dbContext.Appointments.Add(appointment);
-            await dbContext.SaveChangesAsync();
+            await appointmentRepository.AddAsync(appointment);
+            await appointmentRepository.SaveChangesAsync();
 
             return (true, null);
         }
 
         public async Task<AppointmentDetailsViewModel?> GetDetailsAsync(int id)
         {
-            AppointmentDetailsViewModel? details = await dbContext.Appointments
-                .AsNoTracking()
+            AppointmentDetailsViewModel? details = await appointmentRepository
+                .AllAsNoTracking()
                 .Where(a => a.Id == id)
                 .Select(a => new AppointmentDetailsViewModel
                 {
@@ -141,7 +160,7 @@ namespace MedicalCentreApp.Services.Core
 
                     Prescriptions = a.MedicalRecord != null
                         ? a.MedicalRecord.Prescriptions
-                            .Select(p => p.MedicationName) 
+                            .Select(p => p.MedicationName)
                             .ToList()
                         : new List<string>()
                 })
@@ -159,16 +178,18 @@ namespace MedicalCentreApp.Services.Core
                 Diagnosis = model.Diagnosis,
                 CreatedOn = DateTime.UtcNow
             };
-            
-            dbContext.MedicalRecords.Add(record);
 
-            var appointment = await dbContext.Appointments.FindAsync(model.AppointmentId);
+            await medicalRecordRepository.AddAsync(record);
+
+            var appointment = await appointmentRepository.GetByIdAsync(model.AppointmentId);
             if (appointment != null)
             {
                 appointment.AppointmentStatus = AppointmentStatus.Completed;
+                appointmentRepository.Update(appointment);
             }
 
-            await dbContext.SaveChangesAsync();
+            await medicalRecordRepository.SaveChangesAsync();
+            await appointmentRepository.SaveChangesAsync();
         }
     }
 }
