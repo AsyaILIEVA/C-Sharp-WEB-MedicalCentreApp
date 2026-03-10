@@ -1,5 +1,7 @@
 using MedicalCentreApp.Data;
 using MedicalCentreApp.Data.Models;
+using MedicalCentreApp.Data.Repositories;
+using MedicalCentreApp.Data.Repositories.Interfaces;
 using MedicalCentreApp.Services.Core;
 using MedicalCentreApp.Services.Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -33,6 +35,7 @@ namespace MedicalCentreApp
             builder.Services.AddRazorPages();
 
             builder.Services.AddScoped<IDoctorService, DoctorService>();
+            builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 
             builder.Services.AddScoped<IPatientService, PatientService>();
 
@@ -46,6 +49,7 @@ namespace MedicalCentreApp
 
             builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
 
+            
             var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())

@@ -1,5 +1,5 @@
-﻿using MedicalCentreApp.Data;
-using MedicalCentreApp.Data.Models;
+﻿using MedicalCentreApp.Data.Models;
+using MedicalCentreApp.Data.Repositories.Interfaces;
 using MedicalCentreApp.GCommon;
 using MedicalCentreApp.Services.Core.Interfaces;
 using MedicalCentreApp.ViewModels.Doctors;
@@ -10,16 +10,16 @@ namespace MedicalCentreApp.Services.Core
 {
     public class DoctorService : IDoctorService
     {
-        private readonly MedicalCentreAppDbContext dbContext;
+        private readonly IDoctorRepository doctorRepository;
 
-        public DoctorService(MedicalCentreAppDbContext dbContext)
+        public DoctorService(IDoctorRepository doctorRepository)
         {
-            this.dbContext = dbContext;
+            this.doctorRepository = doctorRepository;
         }
 
         public async Task<IEnumerable<DoctorListViewModel>> GetAllAsync(string? specialty)
         {
-            var query = dbContext.Doctors.AsNoTracking();
+            var query = doctorRepository.AllAsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(specialty))
             {
@@ -51,13 +51,14 @@ namespace MedicalCentreApp.Services.Core
                 ImageUrl = imageUrl
             };
 
-            dbContext.Doctors.Add(doctor);
-            await dbContext.SaveChangesAsync();
+            await doctorRepository.AddAsync(doctor);
+            await doctorRepository.SaveChangesAsync();
         }
 
         public async Task<EditDoctorInputModel?> GetForEditAsync(int id)
         {
-            var doctor = await dbContext.Doctors.FindAsync(id);
+            var doctor = await doctorRepository.GetByIdAsync(id);
+
             if (doctor == null) return null;
 
             EditDoctorInputModel editModel = new EditDoctorInputModel
@@ -73,7 +74,8 @@ namespace MedicalCentreApp.Services.Core
 
         public async Task<bool> UpdateAsync(EditDoctorInputModel model)
         {
-            var doctor = await dbContext.Doctors.FindAsync(model.Id);
+            var doctor = await doctorRepository.GetByIdAsync(model.Id);
+
             if (doctor == null) return false;
 
             doctor.FullName = model.FullName;
@@ -84,14 +86,16 @@ namespace MedicalCentreApp.Services.Core
                 doctor.ImageUrl = await SaveImageAsync(model.Image);
             }
 
-            await dbContext.SaveChangesAsync();
+            doctorRepository.Update(doctor);
+            await doctorRepository.SaveChangesAsync();
+
             return true;
         }
 
         public async Task<DoctorDetailsViewModel?> GetForDeleteAsync(int id)
         {
-            DoctorDetailsViewModel? deleteViewModel = await dbContext.Doctors
-                .AsNoTracking()
+            DoctorDetailsViewModel? deleteViewModel = await doctorRepository
+                .AllAsNoTracking()
                 .Where(d => d.Id == id)
                 .Select(d => new DoctorDetailsViewModel
                 {
@@ -105,27 +109,24 @@ namespace MedicalCentreApp.Services.Core
             return deleteViewModel;
         }
 
-
-
         public async Task<bool> DeleteAsync(int id)
         {
-            var doctor = await dbContext.Doctors
-                .Include(d => d.Appointments)
-                .FirstOrDefaultAsync(d => d.Id == id);
+            var doctor = await doctorRepository.GetDoctorWithAppointmentsAsync(id);
 
             if (doctor == null) return false;
 
             if (doctor.Appointments.Any()) return false;
 
-            dbContext.Doctors.Remove(doctor);
-            await dbContext.SaveChangesAsync();
+            doctorRepository.Delete(doctor);
+            await doctorRepository.SaveChangesAsync();
+
             return true;
         }
 
         public async Task<DoctorDetailsViewModel?> GetDetailsAsync(int id)
         {
-            DoctorDetailsViewModel? detailsViewModel = await dbContext.Doctors
-                .AsNoTracking()
+            DoctorDetailsViewModel? detailsViewModel = await doctorRepository
+                .AllAsNoTracking()
                 .Where(d => d.Id == id)
                 .Select(d => new DoctorDetailsViewModel
                 {
