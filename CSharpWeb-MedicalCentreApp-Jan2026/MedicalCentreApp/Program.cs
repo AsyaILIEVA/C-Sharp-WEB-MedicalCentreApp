@@ -50,6 +50,7 @@ namespace MedicalCentreApp
             builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 
             builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
             builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();

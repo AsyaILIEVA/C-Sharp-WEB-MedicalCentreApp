@@ -1,5 +1,5 @@
-﻿using MedicalCentreApp.Data;
-using MedicalCentreApp.Data.Models;
+﻿using MedicalCentreApp.Data.Models;
+using MedicalCentreApp.Data.Repositories.Interfaces;
 using MedicalCentreApp.Services.Core.Interfaces;
 using MedicalCentreApp.ViewModels.Departments;
 using Microsoft.EntityFrameworkCore;
@@ -8,17 +8,17 @@ namespace MedicalCentreApp.Services.Core
 {
     public class DepartmentService : IDepartmentService
     {
-        private readonly MedicalCentreAppDbContext dbContext;
+        private readonly IDepartmentRepository departmentRepository;
 
-        public DepartmentService(MedicalCentreAppDbContext dbContext)
+        public DepartmentService(IDepartmentRepository departmentRepository)
         {
-            this.dbContext = dbContext;
+            this.departmentRepository = departmentRepository;
         }
 
         public async Task<IEnumerable<DepartmentViewModel>> GetAllAsync()
         {
-            IEnumerable<DepartmentViewModel> departments = await dbContext.Departments
-                .AsNoTracking()
+            IEnumerable<DepartmentViewModel> departments = await departmentRepository
+                .AllAsNoTracking()
                 .Select(d => new DepartmentViewModel
                 {
                     Id = d.Id,
@@ -37,14 +37,15 @@ namespace MedicalCentreApp.Services.Core
                 Name = model.Name
             };
 
-            await dbContext.Departments.AddAsync(department);
-            await dbContext.SaveChangesAsync();
+            await departmentRepository.AddAsync(department);
+
+            await departmentRepository.SaveChangesAsync();
         }
 
         public async Task<DepartmentViewModel?> GetForDeleteAsync(int id)
         {
-            DepartmentViewModel? department = await dbContext.Departments
-                .AsNoTracking()
+            DepartmentViewModel? department = await departmentRepository
+                .AllAsNoTracking()
                 .Where(d => d.Id == id)
                 .Select(d => new DepartmentViewModel
                 {
@@ -58,19 +59,20 @@ namespace MedicalCentreApp.Services.Core
 
         public async Task DeleteAsync(int id)
         {
-            Department? department = await dbContext.Departments
-                .FirstOrDefaultAsync(d => d.Id == id);
+            Department? department = await departmentRepository.GetByIdAsync(id);
 
             if (department != null)
             {
-                dbContext.Departments.Remove(department);
-                await dbContext.SaveChangesAsync();
+                departmentRepository.Delete(department);
+
+                await departmentRepository.SaveChangesAsync();
             }
         }
 
         public async Task<bool> ExistsAsync(int id)
         {
-            bool exists = await dbContext.Departments
+            bool exists = await departmentRepository
+                .AllAsNoTracking()
                 .AnyAsync(d => d.Id == id);
 
             return exists;
