@@ -1,5 +1,5 @@
-﻿using MedicalCentreApp.Data;
-using MedicalCentreApp.Data.Models;
+﻿using MedicalCentreApp.Data.Models;
+using MedicalCentreApp.Data.Repositories.Interfaces;
 using MedicalCentreApp.Services.Core.Interfaces;
 using MedicalCentreApp.ViewModels.Invoices;
 using Microsoft.EntityFrameworkCore;
@@ -8,17 +8,17 @@ namespace MedicalCentreApp.Services.Core
 {
     public class InvoiceService : IInvoiceService
     {
-        private readonly MedicalCentreAppDbContext dbContext;
+        private readonly IInvoiceRepository invoiceRepository;
 
-        public InvoiceService(MedicalCentreAppDbContext dbContext)
+        public InvoiceService(IInvoiceRepository invoiceRepository)
         {
-            this.dbContext = dbContext;
+            this.invoiceRepository = invoiceRepository;
         }
 
         public async Task<InvoiceDetailsViewModel?> GetDetailsAsync(int id)
         {
-            InvoiceDetailsViewModel? invoice = await dbContext.Invoices
-                .AsNoTracking()
+            InvoiceDetailsViewModel? invoice = await invoiceRepository
+                .AllAsNoTracking()
                 .Where(i => i.Id == id)
                 .Select(i => new InvoiceDetailsViewModel
                 {
@@ -36,28 +36,32 @@ namespace MedicalCentreApp.Services.Core
         public async Task CreateAsync(CreateInvoiceViewModel model)
         {
             Invoice invoice = new Invoice
-            {                
+            {
                 AppointmentId = model.AppointmentId,
                 Amount = model.Amount,
                 IssuedOn = DateTime.UtcNow,
                 IsPaid = false
             };
 
-            await dbContext.Invoices.AddAsync(invoice);
-            await dbContext.SaveChangesAsync();
+            await invoiceRepository.AddAsync(invoice);
+
+            await invoiceRepository.SaveChangesAsync();
         }
 
         public async Task MarkAsPaidAsync(int id)
         {
-            Invoice? invoice = await dbContext.Invoices
-                .FirstOrDefaultAsync(i => i.Id == id);
+            Invoice? invoice = await invoiceRepository.GetByIdAsync(id);
 
             if (invoice == null)
+            {
                 return;
+            }
 
             invoice.IsPaid = true;
 
-            await dbContext.SaveChangesAsync();
+            invoiceRepository.Update(invoice);
+
+            await invoiceRepository.SaveChangesAsync();
         }
     }
 }

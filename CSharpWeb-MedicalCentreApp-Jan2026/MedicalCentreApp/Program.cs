@@ -47,6 +47,7 @@ namespace MedicalCentreApp
             builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
 
             builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+            builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 
             builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 
