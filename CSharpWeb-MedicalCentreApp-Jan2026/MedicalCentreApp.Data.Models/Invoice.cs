@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static MedicalCentreApp.GCommon.EntityValidation.Invoice;
+using static MedicalCentreApp.Data.Common.EntityValidation.Invoice;
 
 namespace MedicalCentreApp.Data.Models
 {

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MedicalCentreApp.Data.Common\MedicalCentreApp.Data.Common.csproj" />
     <ProjectReference Include="..\MedicalCentreApp.Data.Models\MedicalCentreApp.Data.Models.csproj" />
     <ProjectReference Include="..\MedicalCentreApp.GCommon\MedicalCentreApp.GCommon.csproj" />
   </ItemGroup>

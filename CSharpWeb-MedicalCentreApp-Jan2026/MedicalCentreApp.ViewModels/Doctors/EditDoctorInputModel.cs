@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static MedicalCentreApp.GCommon.EntityValidation.Doctor;
+using static MedicalCentreApp.GCommon.ViewModelValidation.DoctorViewModels;
 
 using Microsoft.AspNetCore.Http;
 

@@ -1,7 +1,7 @@
 ﻿using MedicalCentreApp.Data.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static MedicalCentreApp.GCommon.EntityValidation.Appointment;
+using static MedicalCentreApp.Data.Common.EntityValidation.Appointment;
 
 namespace MedicalCentreApp.Data.Models
 {

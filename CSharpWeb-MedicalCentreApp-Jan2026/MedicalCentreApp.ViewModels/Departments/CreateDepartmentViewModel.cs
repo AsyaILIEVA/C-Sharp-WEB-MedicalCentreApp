@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static MedicalCentreApp.GCommon.EntityValidation.Department;
+using static MedicalCentreApp.Data.Common.EntityValidation.Department;
 
 namespace MedicalCentreApp.ViewModels.Departments
 {

@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MedicalCentreApp.Data.Common\MedicalCentreApp.Data.Common.csproj" />
     <ProjectReference Include="..\MedicalCentreApp.GCommon\MedicalCentreApp.GCommon.csproj" />
   </ItemGroup>
 

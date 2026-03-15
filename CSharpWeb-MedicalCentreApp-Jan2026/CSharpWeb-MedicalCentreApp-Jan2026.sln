@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{1E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalCentreApp.Services.Core", "MedicalCentreApp.Services.Core\MedicalCentreApp.Services.Core.csproj", "{BAE87D8B-CA0D-4FEB-8EB4-D57D2069C034}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicalCentreApp.Data.Common", "MedicalCentreApp.Data.Common\MedicalCentreApp.Data.Common.csproj", "{DB4C54DA-CD7E-4B82-A7B1-BFCA8003E3BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{BAE87D8B-CA0D-4FEB-8EB4-D57D2069C034}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAE87D8B-CA0D-4FEB-8EB4-D57D2069C034}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAE87D8B-CA0D-4FEB-8EB4-D57D2069C034}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB4C54DA-CD7E-4B82-A7B1-BFCA8003E3BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB4C54DA-CD7E-4B82-A7B1-BFCA8003E3BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB4C54DA-CD7E-4B82-A7B1-BFCA8003E3BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB4C54DA-CD7E-4B82-A7B1-BFCA8003E3BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +67,7 @@ Global
 		{D47711EA-14F6-4015-9780-9F6D981AB1B4} = {006B5467-E5D3-4070-B3C7-579DA0E5B009}
 		{685BBD87-396E-445F-ADF5-4864225C2387} = {006B5467-E5D3-4070-B3C7-579DA0E5B009}
 		{BAE87D8B-CA0D-4FEB-8EB4-D57D2069C034} = {1ED705FA-AA61-46EA-BC6C-03E6A8BB6DEB}
+		{DB4C54DA-CD7E-4B82-A7B1-BFCA8003E3BF} = {006B5467-E5D3-4070-B3C7-579DA0E5B009}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B6A46BBF-A30E-47F2-B412-59B5957C8A1A}

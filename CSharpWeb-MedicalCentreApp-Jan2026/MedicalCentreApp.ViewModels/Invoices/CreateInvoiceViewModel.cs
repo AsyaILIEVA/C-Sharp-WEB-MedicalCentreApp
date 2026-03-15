@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static MedicalCentreApp.GCommon.EntityValidation.Invoice;
+using static MedicalCentreApp.GCommon.ViewModelValidation.InvoiceViewModels;
 
 namespace MedicalCentreApp.ViewModels.Invoices
 {
