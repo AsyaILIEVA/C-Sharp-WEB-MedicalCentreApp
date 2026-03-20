@@ -185,5 +185,47 @@ namespace MedicalCentreApp.Services.Core
 
             return records;
         }
+
+        public async Task<PatientDetailsViewModel?> GetDetailsByUserIdAsync(string userId)
+        {
+            return await patientRepository
+                 .AllAsNoTracking()
+                 .Where(p => p.UserId == userId)
+                 .Select(p => new PatientDetailsViewModel {
+                            Id = p.Id,
+                            FirstName = p.FirstName,
+                            MiddleName = p.MiddleName,
+                            LastName = p.LastName,
+                            EGN = p.EGN,
+                            DateOfBirth = p.DateOfBirth,
+                            PhoneNumber = p.PhoneNumber,
+                            Email = p.Email,
+                            Address = p.Address,
+                            Appointments = p.Appointments
+                .Where(a => a.Date >= DateTime.Now)
+                .OrderBy(a => a.Date)
+                .Select(a => new AppointmentInfoViewModel
+                    {
+                    Id = a.Id,
+                    Date = a.Date,
+                    DoctorName = a.Doctor.FullName,
+                    Reason = a.Reason
+                    })
+                .ToList()
+        })
+        .FirstOrDefaultAsync();
+        }
+
+        public async Task CreateFromUserAsync(string userId, string email)
+        {
+            var patient = new Patient
+            {
+                UserId = userId,
+                Email = email
+            };
+
+            await patientRepository.AddAsync(patient);
+            await patientRepository.SaveChangesAsync();
+        }
     }
 }

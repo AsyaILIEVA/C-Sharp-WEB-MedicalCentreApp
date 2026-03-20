@@ -69,6 +69,17 @@ namespace MedicalCentreApp
                 await SeedAdminAsync(userManager);
             }
 
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //    var services = scope.ServiceProvider;
+
+            //    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+            //    var exists = await roleManager.RoleExistsAsync("Patient");
+
+            //    Console.WriteLine($"Patient role exists: {exists}");
+            //}
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

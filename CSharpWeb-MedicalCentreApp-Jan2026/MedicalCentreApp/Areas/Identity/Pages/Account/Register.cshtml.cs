@@ -3,6 +3,7 @@
 #nullable disable
 
 using MedicalCentreApp.Data.Models;
+using MedicalCentreApp.Services.Core.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -10,6 +11,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -29,13 +32,15 @@ namespace MedicalCentreApp.Areas.Identity.Pages.Account
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
+        private readonly IPatientService _patientService;
         //private readonly IEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<RegisterModel> logger
+            ILogger<RegisterModel> logger,
+            IPatientService patientService
             )
         {
             _userManager = userManager;
@@ -43,6 +48,7 @@ namespace MedicalCentreApp.Areas.Identity.Pages.Account
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
+            _patientService = patientService;
             //_emailSender = emailSender;
         }
 
@@ -117,6 +123,7 @@ namespace MedicalCentreApp.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -124,6 +131,24 @@ namespace MedicalCentreApp.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     await _userManager.AddToRoleAsync(user, "Patient");
+                                        
+                    var patient = new Patient
+                    {
+                        UserId = user.Id
+                    };
+                    
+                    await _patientService.CreateFromUserAsync(user.Id, user.Email);
+
+                    if (result.Succeeded)
+                    {
+                        await _userManager.AddToRoleAsync(user, "Patient");
+
+                        await _patientService.CreateFromUserAsync(user.Id, user.Email);
+
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+
+                        return RedirectToAction("MyDetails", "Patients");
+                    }
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -144,7 +169,7 @@ namespace MedicalCentreApp.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        return RedirectToAction("MyDetails", "Patients");
                     }
                 }
                 foreach (var error in result.Errors)

@@ -1,6 +1,10 @@
 ﻿using MedicalCentreApp.Services.Core.Interfaces;
 using MedicalCentreApp.ViewModels.Patients;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using System.Security.Claims;
 
 namespace MedicalCentreApp.Controllers
 {
@@ -26,6 +30,19 @@ namespace MedicalCentreApp.Controllers
                 return NotFound();
 
             return View(patient);
+        }
+        
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> MyDetails()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var patient = await patientService.GetDetailsByUserIdAsync(userId);
+
+            if (patient == null)
+                return NotFound();
+
+            return View("Details", patient);
         }
 
         [HttpGet]

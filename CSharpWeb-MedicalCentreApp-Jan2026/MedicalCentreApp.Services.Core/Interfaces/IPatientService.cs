@@ -6,9 +6,13 @@ namespace MedicalCentreApp.Services.Core.Interfaces
     {
         Task<IEnumerable<PatientListViewModel>> GetAllAsync();
 
+        Task<PatientDetailsViewModel?> GetDetailsByUserIdAsync(string userId);
+
         Task<PatientDetailsViewModel?> GetDetailsAsync(int id);
 
         Task CreateAsync(CreateEditPatientViewModel model);
+
+        Task CreateFromUserAsync(string userId, string email);
 
         Task<CreateEditPatientViewModel?> GetForEditAsync(int id);
 
