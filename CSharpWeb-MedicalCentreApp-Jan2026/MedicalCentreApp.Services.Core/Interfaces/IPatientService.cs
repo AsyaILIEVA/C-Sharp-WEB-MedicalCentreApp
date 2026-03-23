@@ -18,6 +18,10 @@ namespace MedicalCentreApp.Services.Core.Interfaces
 
         Task<bool> UpdateAsync(int id, CreateEditPatientViewModel model);
 
+        Task<PatientProfileViewModel?> GetProfileByUserIdAsync(string userId);
+
+        Task<bool> UpdateProfileAsync(string userId, PatientProfileViewModel model);
+
         Task<PatientListViewModel?> GetForDeleteAsync(int id);
 
         Task<bool> DeleteAsync(int id);

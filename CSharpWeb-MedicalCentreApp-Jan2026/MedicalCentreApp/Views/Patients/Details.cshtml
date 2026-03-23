@@ -29,12 +29,19 @@
                 </div>
 
                 <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                    <a asp-action="Edit"
+                    @* <a asp-action="Edit"
                        asp-route-id="@Model.Id"
                        class="btn btn-outline-primary mb-2 w-100">
                         Edit Patient
-                    </a>
-
+                    </a> *@
+                    @if (User.IsInRole("Doctor") || User.IsInRole("Patient"))
+                    {
+                        <a asp-action="Edit"
+                           asp-route-id="@Model.Id"
+                           class="btn btn-outline-primary mb-2 w-100">
+                            Edit Patient
+                        </a>
+                    }
                     <a asp-controller="Appointments"
                        asp-action="CreateForPatient"
                        asp-route-patientId="@Model.Id"

@@ -1,47 +1,39 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using static MedicalCentreApp.Data.Common.EntityValidation.Patient;
 
-namespace MedicalCentreApp.Data.Models
+namespace MedicalCentreApp.ViewModels.Patients
 {
-    public class Patient
+    public class PatientProfileViewModel
     {
-        [Key]
         public int Id { get; set; }
 
-       
+        [Required]
         [MaxLength(PatientFirstNameMaxLength)]
-        public string? FirstName { get; set; } 
+        public string FirstName { get; set; } = null!;
 
-        
+        [Required]
         [MaxLength(PatientMiddleNameMaxLength)]
-        public string? MiddleName { get; set; } 
+        public string MiddleName { get; set; } = null!;
 
-        
+        [Required]
         [MaxLength(PatientLastNameMaxLength)]
-        public string? LastName { get; set; } 
+        public string LastName { get; set; } = null!;
 
-        
+        [Required]
         [MaxLength(PatientEGNMaxLength)]
-        public string? EGN { get; set; } 
+        public string EGN { get; set; } = null!;
 
+        [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
 
-        
+        [Required]
         [MaxLength(PatientPhoneNumberMaxLength)]
-        public string? PhoneNumber { get; set; } 
-
+        public string PhoneNumber { get; set; } = null!;
 
         [MaxLength(PatientEmailMaxLength)]
         public string? Email { get; set; }
 
-
         [MaxLength(PatientAddressMaxLength)]
         public string? Address { get; set; }
-
-        public string UserId { get; set; } = null!;
-        public ApplicationUser User { get; set; } = null!;
-
-        public virtual ICollection<Appointment> Appointments { get; set; }
-        = new HashSet<Appointment>();
     }
 }

@@ -227,5 +227,47 @@ namespace MedicalCentreApp.Services.Core
             await patientRepository.AddAsync(patient);
             await patientRepository.SaveChangesAsync();
         }
+
+        public async Task<PatientProfileViewModel?> GetProfileByUserIdAsync(string userId)
+        {
+            return await patientRepository.AllAsNoTracking()
+                .Where(p => p.UserId == userId)
+                .Select(p => new PatientProfileViewModel
+                {
+                    Id = p.Id,
+                    FirstName = p.FirstName,
+                    MiddleName = p.MiddleName,
+                    LastName = p.LastName,
+                    EGN = p.EGN,
+                    DateOfBirth = p.DateOfBirth,
+                    PhoneNumber = p.PhoneNumber,
+                    Email = p.Email,
+                    Address = p.Address
+                })
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> UpdateProfileAsync(string userId, PatientProfileViewModel model)
+        {
+            var patient = await patientRepository
+                .All()
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+            if (patient == null) 
+                return false;
+
+            patient.FirstName = model.FirstName;
+            patient.MiddleName = model.MiddleName;
+            patient.LastName = model.LastName;
+            patient.EGN = model.EGN;
+            patient.DateOfBirth = model.DateOfBirth;
+            patient.PhoneNumber = model.PhoneNumber;
+            patient.Email = model.Email;
+            patient.Address = model.Address;
+
+            patientRepository.Update(patient);
+            await patientRepository.SaveChangesAsync();
+
+            return true;
+        }
     }
 }
