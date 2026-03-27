@@ -37,6 +37,7 @@ namespace MedicalCentreApp
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
             });
 
+
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
 
@@ -75,6 +76,11 @@ namespace MedicalCentreApp
                 await SeedAdminAsync(userManager);
             }
 
+            using (var scope = app.Services.CreateScope())
+            {
+                await RoleSeeder.SeedAsync(scope.ServiceProvider);
+            }
+
             //using (var scope = app.Services.CreateScope())
             //{
             //    var services = scope.ServiceProvider;
@@ -109,6 +115,7 @@ namespace MedicalCentreApp
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+                        
             app.MapRazorPages();
 
             app.Run();

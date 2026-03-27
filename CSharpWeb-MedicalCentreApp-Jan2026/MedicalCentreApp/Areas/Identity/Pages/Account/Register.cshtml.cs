@@ -104,6 +104,11 @@ namespace MedicalCentreApp.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name = "Register as")]
+            public string Role { get; set; }
+
         }
 
 
@@ -139,9 +144,24 @@ namespace MedicalCentreApp.Areas.Identity.Pages.Account
 
             _logger.LogInformation("User created a new account with password.");
 
-            await _userManager.AddToRoleAsync(user, "Patient");
+            //await _userManager.AddToRoleAsync(user, "Patient");
+                        
+            await _userManager.AddToRoleAsync(user, "User");
+                        
+            if (Input.Role == "Doctor")
+            {
+                await _userManager.AddToRoleAsync(user, "Doctor");
+            }
+            else
+            {
+                await _userManager.AddToRoleAsync(user, "Patient");
+            }
 
-            await _patientService.CreateFromUserAsync(user.Id, user.Email);
+            //await _patientService.CreateFromUserAsync(user.Id, user.Email);
+            if (Input.Role == "Patient")
+            {
+                await _patientService.CreateFromUserAsync(user.Id, user.Email);
+            }
 
             await _signInManager.SignInAsync(user, isPersistent: false);
 
