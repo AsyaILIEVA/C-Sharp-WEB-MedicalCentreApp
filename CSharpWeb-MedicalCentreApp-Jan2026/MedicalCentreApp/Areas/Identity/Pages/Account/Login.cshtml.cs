@@ -122,14 +122,12 @@ namespace MedicalCentreApp.Areas.Identity.Pages.Account
                     _logger.LogInformation("User logged in.");
 
                     var user = await _userManager.FindByEmailAsync(Input.Email);
-
-                    // ✅ If user was trying to access a protected page
+                                       
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl) && returnUrl != "/")
                     {
                         return LocalRedirect(returnUrl);
                     }
-
-                    // ✅ Role-based redirects
+                    
                     if (await _userManager.IsInRoleAsync(user, "Doctor"))
                     {
                         return RedirectToAction("Index", "Patients");
@@ -137,10 +135,10 @@ namespace MedicalCentreApp.Areas.Identity.Pages.Account
 
                     if (await _userManager.IsInRoleAsync(user, "Patient"))
                     {
-                        return RedirectToAction("MyDetails", "Patients");
+                        return RedirectToAction("Profile", "Patients");
                     }
 
-                    if (await _userManager.IsInRoleAsync(user, "Admin"))
+                    if (await _userManager.IsInRoleAsync(user, "Administrator"))
                     {
                         return RedirectToAction("Index", "Home");
                     }

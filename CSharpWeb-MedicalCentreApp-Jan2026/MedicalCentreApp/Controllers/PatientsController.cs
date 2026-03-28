@@ -8,6 +8,7 @@ using System.Security.Claims;
 
 namespace MedicalCentreApp.Controllers
 {
+    [Authorize]
     public class PatientsController : Controller
     {
         private readonly IPatientService patientService;
@@ -17,7 +18,7 @@ namespace MedicalCentreApp.Controllers
             this.patientService = patientService;
         }
 
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Doctor,Administrator")]
         public async Task<IActionResult> Index()
         {
             var patients = await patientService.GetAllAsync();
@@ -79,7 +80,19 @@ namespace MedicalCentreApp.Controllers
             return RedirectToAction("MyDetails");
         }
 
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> Profile()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var patient = await patientService.GetDetailsByUserIdAsync(userId);
+
+            if (patient == null)
+                return NotFound();
+
+            return View("Details", patient);
+        }
+
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public IActionResult Create()
         {
@@ -89,7 +102,7 @@ namespace MedicalCentreApp.Controllers
             });
         }
 
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateEditPatientViewModel model)
@@ -101,7 +114,7 @@ namespace MedicalCentreApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize]
+        [Authorize(Roles = "Doctor,Patient,Administrator")]
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -112,14 +125,14 @@ namespace MedicalCentreApp.Controllers
             return View(model);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Doctor,Patient,Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, CreateEditPatientViewModel model)
         {
             if (id != model.Id)
                 return BadRequest();
-
+            
             if (!await CanEditPatient(id))
                 return Forbid();
 
@@ -133,7 +146,7 @@ namespace MedicalCentreApp.Controllers
             return RedirectToAction(nameof(Details), new { id });
         }
 
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Doctor,Administrator")]
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
@@ -144,7 +157,7 @@ namespace MedicalCentreApp.Controllers
             return View(patient);
         }
 
-        [Authorize(Roles = "Doctor")]
+        [Authorize(Roles = "Doctor,Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -156,7 +169,7 @@ namespace MedicalCentreApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize]
+        [Authorize(Roles = "Doctor,Patient,Administrator")]
         public async Task<IActionResult> MedicalRecords(int id)
         {
             if (!await IsOwnerPatient(id))
@@ -170,7 +183,7 @@ namespace MedicalCentreApp.Controllers
 
         private async Task<bool> IsOwnerPatient(int patientId)
         {
-            if (!User.IsInRole("Patient"))
+            if (User.IsInRole("Doctor") || User.IsInRole("Administrator"))
                 return true;
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -180,10 +193,10 @@ namespace MedicalCentreApp.Controllers
         }
 
         private async Task<bool> CanEditPatient(int patientId)
-        {            
-            if (User.IsInRole("Doctor"))
+        {
+            if (User.IsInRole("Doctor") || User.IsInRole("Administrator"))
                 return true;
-                        
+
             if (User.IsInRole("Patient"))
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

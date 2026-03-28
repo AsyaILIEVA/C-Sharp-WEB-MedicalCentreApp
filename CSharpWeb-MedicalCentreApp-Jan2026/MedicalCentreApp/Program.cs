@@ -21,6 +21,8 @@ namespace MedicalCentreApp
             builder.Services.AddDbContext<MedicalCentreAppDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<MedicalCentreAppDbContext>();
+
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -72,13 +74,8 @@ namespace MedicalCentreApp
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                 var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
-                await SeedRolesAsync(roleManager);
+                await RoleSeeder.SeedAsync(services);
                 await SeedAdminAsync(userManager);
-            }
-
-            using (var scope = app.Services.CreateScope())
-            {
-                await RoleSeeder.SeedAsync(scope.ServiceProvider);
             }
 
             //using (var scope = app.Services.CreateScope())
@@ -113,8 +110,13 @@ namespace MedicalCentreApp
             app.UseAuthorization();
 
             app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}"
+                );
+            app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}"
+                );
                         
             app.MapRazorPages();
 
@@ -122,18 +124,18 @@ namespace MedicalCentreApp
         }
 
 
-        static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
-            {
-             string[] roles = { "Admin", "Doctor", "Patient" };
+        //static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
+        //    {
+        //     string[] roles = { "Admin", "Doctor", "Patient" };
 
-            foreach (var role in roles)
-                {
-                if (!await roleManager.RoleExistsAsync(role))
-                {
-                   await roleManager.CreateAsync(new IdentityRole(role));
-                }
-            }
-        }
+        //    foreach (var role in roles)
+        //        {
+        //        if (!await roleManager.RoleExistsAsync(role))
+        //        {
+        //           await roleManager.CreateAsync(new IdentityRole(role));
+        //        }
+        //    }
+        //}
 
         static async Task SeedAdminAsync(UserManager<ApplicationUser> userManager)
         {
@@ -152,7 +154,7 @@ namespace MedicalCentreApp
                 };
 
                 await userManager.CreateAsync(adminUser, adminPassword);
-                await userManager.AddToRoleAsync(adminUser, "Admin");
+                await userManager.AddToRoleAsync(adminUser, "Administrator");
             }
         }
 

@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MedicalCentreApp.styles.css" asp-append-version="true" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
 </head>
 <body>
     <header>
@@ -21,69 +20,88 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
+                        
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        @* <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li> *@
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Doctors" asp-action="Index">
-                                <i class="bi bi-person-badge"></i> Doctors
-                            </a>
+                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")"
+                               asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
+                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Doctors" ? "active" : "")"
+                               asp-area="" asp-controller="Doctors" asp-action="Index">Doctors</a>
                         </li>
-                        @* <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Appointments" asp-action="Index">Appointments</a>
-                        </li> *@
+                        <li class="nav-item">
+                            <a class="nav-link text-dark @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Patients" ? "active" : "")"
+                               asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
+                        </li>
+
+                        
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["Area"]?.ToString() == "Administrator" ? "active" : "")"
+                                       asp-area="Administrator" asp-controller="Dashboard" asp-action="Index">Admin Panel</a>
+                                </li>
+                            }
+
+                            @if (User.IsInRole("Doctor"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Doctors" ? "active" : "")"
+                                       asp-area="" asp-controller="Doctors" asp-action="Index">Doctor Panel</a>
+                                </li>
+                            }
+
+                            @if (User.IsInRole("Patient"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Patients" ? "active" : "")"
+                                       asp-area="" asp-controller="Patients" asp-action="Profile">Patients</a>
+                                </li>
+                            }
+                        }
                     </ul>
+
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-    
+
     <footer class="site-footer mt-5">
         <div class="container">
             <div class="row text-center text-md-start">
-
                 <div class="col-md-4 mb-3">
                     <h5>Medical Centre</h5>
                     <p class="mb-1">Professional care you can trust.</p>
                 </div>
-
                 <div class="col-md-4 mb-3">
                     <h6>Working Hours</h6>
                     <p class="mb-1">Mon - Fri: 08:00 - 18:00</p>
                     <p class="mb-0">Saturday: 09:00 - 13:00</p>
                 </div>
-
                 <div class="col-md-4 mb-3">
                     <h6>Contact</h6>
                     <p class="mb-1">Phone: +359 XXX XXX XXX</p>
                     <p class="mb-0">Email: info@medicalcentre.bg</p>
                 </div>
-
             </div>
-
             <hr class="bg-light" />
-
             <p class="mb-0 text-center">
                 © @DateTime.Now.Year Medical Centre. All rights reserved.
             </p>
         </div>
     </footer>
 
-    @await RenderSectionAsync("Scripts", required: false) 
+    @await RenderSectionAsync("Scripts", required: false)
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
 </body>
 </html>
