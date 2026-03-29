@@ -4,7 +4,8 @@ namespace MedicalCentreApp.Services.Core.Interfaces
 {
     public interface IDoctorService
     {
-        
+        Task<PagedList<DoctorListViewModel>> GetDoctorsWithPaginationAsync(string? specialty, int pageNumber, int pageSize);
+
         Task<IEnumerable<DoctorListViewModel>> GetAllAsync(string? specialty);
 
         Task CreateAsync(CreateDoctorInputModel model);

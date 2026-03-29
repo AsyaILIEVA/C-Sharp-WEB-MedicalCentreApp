@@ -1,4 +1,5 @@
-﻿using MedicalCentreApp.Services.Core.Interfaces;
+﻿using MedicalCentreApp.Services.Core;
+using MedicalCentreApp.Services.Core.Interfaces;
 using MedicalCentreApp.ViewModels.Doctors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,15 +16,17 @@ namespace MedicalCentreApp.Controllers
             this.doctorService = doctorService;
         }
 
+
         [Authorize(Roles = "Doctor,Patient,Administrator")]
         [HttpGet]
-        public async Task<IActionResult> Index(string? specialty)
+        public async Task<IActionResult> Index(string? specialty, int pageNumber = 1, int pageSize = 10)
         {
-            var doctors = await doctorService.GetAllAsync(specialty);
+            var pagedDoctors = await doctorService
+                .GetDoctorsWithPaginationAsync(specialty, pageNumber, pageSize);
 
             ViewData["CurrentFilter"] = specialty;
 
-            return View(doctors);
+            return View(pagedDoctors);
         }
 
         [Authorize(Roles = "Administrator")]

@@ -18,5 +18,7 @@ namespace MedicalCentreApp.Data.Repositories.Interfaces
         Task<int> SaveChangesAsync();
 
         Task<Doctor?> GetDoctorWithAppointmentsAsync(int id);
+
+        Task<PagedList<Doctor>> GetDoctorsAsync(int pageNumber, int pageSize);
     }
 }

@@ -17,5 +17,13 @@ namespace MedicalCentreApp.Data.Repositories
                 .Include(d => d.Appointments)
                 .FirstOrDefaultAsync(d => d.Id == id);
         }
+
+        public async Task<PagedList<Doctor>> GetDoctorsAsync(int pageNumber, int pageSize)
+        {
+            var query = dbContext.Doctors.AsQueryable();
+                        
+            var pagedDoctors = await PagedList<Doctor>.CreateAsync(query, pageNumber, pageSize);
+            return pagedDoctors;
+        }
     }
 }

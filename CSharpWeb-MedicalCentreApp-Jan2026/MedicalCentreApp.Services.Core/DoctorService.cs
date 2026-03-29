@@ -17,6 +17,31 @@ namespace MedicalCentreApp.Services.Core
             this.doctorRepository = doctorRepository;
         }
 
+        public async Task<PagedList<DoctorListViewModel>> GetDoctorsWithPaginationAsync(
+                string? specialty, int pageNumber, int pageSize)
+        {
+            var query = doctorRepository
+                .AllAsNoTracking();
+
+            if (!string.IsNullOrWhiteSpace(specialty))
+            {
+                query = query.Where(d => d.Specialty.Contains(specialty));
+            }
+
+            var projectedQuery = query
+                .OrderBy(d => d.FullName)
+                .Select(d => new DoctorListViewModel
+                {
+                    Id = d.Id,
+                    FullName = d.FullName,
+                    Specialty = d.Specialty,
+                    ImageUrl = d.ImageUrl
+                });
+
+            return await PagedList<DoctorListViewModel>
+                .CreateAsync(projectedQuery, pageNumber, pageSize);
+        }
+
         public async Task<IEnumerable<DoctorListViewModel>> GetAllAsync(string? specialty)
         {
             var query = doctorRepository.AllAsNoTracking();
