@@ -122,12 +122,12 @@ namespace MedicalCentreApp.Areas.Identity.Pages.Account
                     _logger.LogInformation("User logged in.");
 
                     var user = await _userManager.FindByEmailAsync(Input.Email);
-                                       
+
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl) && returnUrl != "/")
                     {
                         return LocalRedirect(returnUrl);
                     }
-                    
+
                     if (await _userManager.IsInRoleAsync(user, "Doctor"))
                     {
                         return RedirectToAction("Index", "Patients");
@@ -140,7 +140,7 @@ namespace MedicalCentreApp.Areas.Identity.Pages.Account
 
                     if (await _userManager.IsInRoleAsync(user, "Administrator"))
                     {
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Dashboard", new { area = "Administrator" });
                     }
 
                     return RedirectToAction("Index", "Home");

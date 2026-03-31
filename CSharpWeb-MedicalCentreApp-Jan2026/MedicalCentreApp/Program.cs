@@ -122,21 +122,7 @@ namespace MedicalCentreApp
 
             app.Run();
         }
-
-
-        //static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
-        //    {
-        //     string[] roles = { "Admin", "Doctor", "Patient" };
-
-        //    foreach (var role in roles)
-        //        {
-        //        if (!await roleManager.RoleExistsAsync(role))
-        //        {
-        //           await roleManager.CreateAsync(new IdentityRole(role));
-        //        }
-        //    }
-        //}
-
+                
         static async Task SeedAdminAsync(UserManager<ApplicationUser> userManager)
         {
             string adminEmail = "admin@medicalcentre.com";

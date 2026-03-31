@@ -21,7 +21,7 @@
 </form>
 
 
-@if (User.IsInRole("Admin"))
+@if (User.IsInRole("Administrator"))
 {
     <p>
         <a asp-action="Create" class="btn btn-primary">
@@ -60,7 +60,7 @@ else
                         </a>
 
 
-                        @if (User.IsInRole("Admin"))
+                        @if (User.IsInRole("Administrator"))
                         {
                             <a asp-action="Edit"
                                asp-route-id="@doctor.Id"

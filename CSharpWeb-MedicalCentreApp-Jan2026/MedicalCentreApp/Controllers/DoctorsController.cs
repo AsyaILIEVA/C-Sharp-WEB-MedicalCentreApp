@@ -5,8 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalCentreApp.Controllers
-{
-    [Authorize]
+{    
     public class DoctorsController : Controller
     {
         private readonly IDoctorService doctorService;
@@ -17,7 +16,7 @@ namespace MedicalCentreApp.Controllers
         }
 
 
-        [Authorize(Roles = "Doctor,Patient,Administrator")]
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Index(string? specialty, int pageNumber = 1, int pageSize = 10)
         {
@@ -79,7 +78,6 @@ namespace MedicalCentreApp.Controllers
 
         [Authorize(Roles = "Administrator")]
         [HttpGet]
-
         public async Task<IActionResult> Delete(int id)
         {
             var doctor = await doctorService.GetForDeleteAsync(id);
@@ -103,7 +101,7 @@ namespace MedicalCentreApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Doctor,Patient,Administrator")]
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
