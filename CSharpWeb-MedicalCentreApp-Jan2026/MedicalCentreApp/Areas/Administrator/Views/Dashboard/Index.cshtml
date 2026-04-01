@@ -1,3 +1,118 @@
-﻿<h2>Admin Dashboard</h2>
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
 
-<p>Welcome, Administrator!</p>
+<div class="container mt-4">
+
+    <h2 class="mb-4 text-center">Admin Dashboard</h2>
+
+    <div class="row g-4">
+
+        <!-- Doctors -->
+        <div class="col-md-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body text-center">
+                    <h4 class="card-title text-primary">Doctors</h4>
+                    <p class="card-text">Manage all doctors in the system.</p>
+
+                    <a asp-area=""
+                       asp-controller="Doctors"
+                       asp-action="Index"
+                       class="btn btn-outline-primary mb-2 w-100">
+                        View Doctors
+                    </a>
+
+                    <a asp-area=""
+                       asp-controller="Doctors"
+                       asp-action="Create"
+                       class="btn btn-primary w-100">
+                        Add Doctor
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patients -->
+        <div class="col-md-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body text-center">
+                    <h4 class="card-title text-success">Patients</h4>
+                    <p class="card-text">View and manage patients.</p>
+
+                    <a asp-area=""
+                       asp-controller="Patients"
+                       asp-action="Index"
+                       class="btn btn-outline-success mb-2 w-100">
+                        View Patients
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointments -->
+        <div class="col-md-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body text-center">
+                    <h4 class="card-title text-warning">Appointments</h4>
+                    <p class="card-text">Track all appointments.</p>
+
+                    <a asp-area=""
+                       asp-controller="Appointments"
+                       asp-action="Index"
+                       class="btn btn-outline-warning w-100">
+                        View Appointments
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prescriptions -->
+        <div class="col-md-6">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body text-center">
+                    <h4 class="card-title text-info">Prescriptions</h4>
+                    <p class="card-text">Manage prescriptions issued by doctors.</p>
+
+                    <a asp-area=""
+                       asp-controller="Prescriptions"
+                       asp-action="Index"
+                       class="btn btn-outline-info mb-2 w-100">
+                        View Prescriptions
+                    </a>
+
+                    <a asp-area=""
+                       asp-controller="Prescriptions"
+                       asp-action="Create"
+                       class="btn btn-info w-100">
+                        Create Prescription
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoices -->
+        <div class="col-md-6">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body text-center">
+                    <h4 class="card-title text-danger">Invoices</h4>
+                    <p class="card-text">Handle billing and invoices.</p>
+
+                    <a asp-area=""
+                       asp-controller="Invoices"
+                       asp-action="Index"
+                       class="btn btn-outline-danger mb-2 w-100">
+                        View Invoices
+                    </a>
+
+                    <a asp-area=""
+                       asp-controller="Invoices"
+                       asp-action="Create"
+                       class="btn btn-danger w-100">
+                        Create Invoice
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
