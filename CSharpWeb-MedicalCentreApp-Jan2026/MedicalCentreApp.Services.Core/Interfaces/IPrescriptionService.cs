@@ -9,5 +9,7 @@ namespace MedicalCentreApp.Services.Core.Interfaces
         Task<PrescriptionDetailsViewModel?> GetDetailsAsync(int id);
 
         Task CreateAsync(CreatePrescriptionViewModel model);
+
+        Task<IEnumerable<PrescriptionListViewModel>> GetAllAsync();
     }
 }

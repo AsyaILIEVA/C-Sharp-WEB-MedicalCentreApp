@@ -1,0 +1,67 @@
+﻿@model MedicalCentreApp.ViewModels.Invoices.InvoiceDetailsViewModel
+
+@{
+    ViewData["Title"] = "Invoice Details";
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">Invoice Details</h2>
+
+    <div class="card shadow border-0">
+        <div class="card-body">
+
+            <dl class="row">
+
+                <dt class="col-sm-3">Invoice ID</dt>
+                <dd class="col-sm-9">@Model.Id</dd>
+
+                <dt class="col-sm-3">Amount</dt>
+                <dd class="col-sm-9">@Model.Amount.ToString("C")</dd>
+
+                <dt class="col-sm-3">Status</dt>
+                <dd class="col-sm-9">
+                    @if (Model.IsPaid)
+                    {
+                        <span class="badge bg-success">Paid</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Unpaid</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Issued On</dt>
+                <dd class="col-sm-9">@Model.IssuedOn.ToString("dd MMM yyyy")</dd>
+
+                <dt class="col-sm-3">Appointment ID</dt>
+                <dd class="col-sm-9">@Model.AppointmentId</dd>
+
+            </dl>
+
+            <hr />
+
+            <div class="d-flex gap-2">
+
+                <!-- Back -->
+                <a asp-action="Index" class="btn btn-secondary">
+                    Back to List
+                </a>
+
+                <!-- Admin only: Pay -->
+                @if (User.IsInRole("Administrator") && !Model.IsPaid)
+                {
+                    <form asp-action="Pay" method="post">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <button type="submit" class="btn btn-success">
+                            Mark as Paid
+                        </button>
+                    </form>
+                }
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

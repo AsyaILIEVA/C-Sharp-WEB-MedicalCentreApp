@@ -15,6 +15,20 @@ namespace MedicalCentreApp.Services.Core
             this.invoiceRepository = invoiceRepository;
         }
 
+        public async Task<IEnumerable<InvoiceListViewModel>> GetAllAsync()
+        {
+            return await invoiceRepository
+                .AllAsNoTracking()
+                .Select(i => new InvoiceListViewModel
+                {
+                    Id = i.Id,
+                    Amount = i.Amount,
+                    IsPaid = i.IsPaid,
+                    IssuedOn = i.IssuedOn,
+                    AppointmentId = i.AppointmentId
+                })
+                .ToListAsync();
+        }
         public async Task<InvoiceDetailsViewModel?> GetDetailsAsync(int id)
         {
             InvoiceDetailsViewModel? invoice = await invoiceRepository

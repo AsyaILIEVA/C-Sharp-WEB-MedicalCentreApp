@@ -14,6 +14,13 @@ namespace MedicalCentreApp.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var prescriptions = await prescriptionService.GetAllAsync();
+            return View(prescriptions);
+        }
+
+        [HttpGet]
         public IActionResult Create(Guid medicalRecordId)
         {
             return View(new CreatePrescriptionViewModel

@@ -1,0 +1,46 @@
+﻿@model IEnumerable<MedicalCentreApp.ViewModels.Invoices.InvoiceListViewModel>
+
+<h2>Invoices</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create Invoice</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Issued On</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var invoice in Model)
+        {
+            <tr>
+                <td>@invoice.Id</td>
+                <td>@invoice.Amount</td>
+                <td>
+                    @if (invoice.IsPaid)
+                    {
+                        <span class="badge bg-success">Paid</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Unpaid</span>
+                    }
+                </td>
+                <td>@invoice.IssuedOn.ToShortDateString()</td>
+                <td>
+                    <a asp-action="Details"
+                       asp-route-id="@invoice.Id"
+                       class="btn btn-info btn-sm">
+                        Details
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -64,5 +64,20 @@ namespace MedicalCentreApp.Services.Core
             await prescriptionRepository.AddAsync(prescription);
             await prescriptionRepository.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<PrescriptionListViewModel>> GetAllAsync()
+        {
+            return await prescriptionRepository
+                .AllAsNoTracking()
+                .OrderByDescending(p => p.IssuedOn)
+                .Select(p => new PrescriptionListViewModel
+                {
+                    Id = p.Id,
+                    MedicationName = p.MedicationName,
+                    Dosage = p.Dosage,
+                    IssuedOn = p.IssuedOn
+                })
+                .ToListAsync();
+        }
     }
 }

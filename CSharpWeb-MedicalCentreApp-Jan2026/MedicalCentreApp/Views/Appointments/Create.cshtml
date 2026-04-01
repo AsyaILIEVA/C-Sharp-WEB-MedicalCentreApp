@@ -64,9 +64,15 @@
                         </div>
 
                         <div class="d-flex justify-content-between mt-4">
-                            <a asp-controller="Patients"
+                            @* <a asp-controller="Patients"
                                asp-action="Details"
                                asp-route-id="@Model.PatientId"
+                               class="btn btn-secondary">
+                                Cancel
+                            </a> *@
+
+                            <a asp-controller="Appointments"
+                               asp-action="Index"
                                class="btn btn-secondary">
                                 Cancel
                             </a>

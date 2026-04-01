@@ -1,5 +1,6 @@
 ﻿using MedicalCentreApp.Services.Core.Interfaces;
 using MedicalCentreApp.ViewModels.Appointments;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalCentreApp.Controllers
@@ -20,6 +21,7 @@ namespace MedicalCentreApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Administrator,Doctor")]
         public async Task<IActionResult> Create()
         {
             var model = await appointmentService.GetCreateModelAsync();
