@@ -4,6 +4,7 @@ using MedicalCentreApp.Data.Repositories.Interfaces;
 using MedicalCentreApp.Services.Core.Interfaces;
 using MedicalCentreApp.ViewModels.Appointments;
 using MedicalCentreApp.ViewModels.MedicalRecords;
+using MedicalCentreApp.ViewModels.Prescriptions;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
@@ -163,30 +164,51 @@ namespace MedicalCentreApp.Services.Core
 
         public async Task<AppointmentDetailsViewModel?> GetDetailsAsync(int id)
         {
-            AppointmentDetailsViewModel? details = await appointmentRepository
+            var appointment = await appointmentRepository
                 .AllAsNoTracking()
-                .Where(a => a.Id == id)
-                .Select(a => new AppointmentDetailsViewModel
-                {
-                    Id = a.Id,
-                    Date = a.Date,
-                    Reason = a.Reason,
-                    Status = a.AppointmentStatus,
-                    PatientName = a.Patient.FirstName + " " + a.Patient.LastName,
-                    DoctorName = a.Doctor.FullName,
-                    HasMedicalRecord = a.MedicalRecord != null,
-                    MedicalRecordId = a.MedicalRecord != null ? a.MedicalRecord.Id : null,
-                    Diagnosis = a.MedicalRecord != null ? a.MedicalRecord.Diagnosis : null,
+                .Include(a => a.Patient)
+                .Include(a => a.Doctor)
+                .Include(a => a.MedicalRecord)
+                    .ThenInclude(m => m.Prescriptions)
+                .FirstOrDefaultAsync(a => a.Id == id);
 
-                    Prescriptions = a.MedicalRecord != null
-                        ? a.MedicalRecord.Prescriptions
-                            .Select(p => p.MedicationName)
-                            .ToList()
-                        : new List<string>()
-                })
-                .FirstOrDefaultAsync();
+            if (appointment == null)
+            {
+                return null;
+            }
 
-            return details;
+            return new AppointmentDetailsViewModel
+            {
+                Id = appointment.Id,
+                Date = appointment.Date,
+
+                PatientName = appointment.Patient != null
+                    ? appointment.Patient.FirstName + " " + appointment.Patient.LastName
+                    : "No patient",
+
+                DoctorName = appointment.Doctor != null
+                    ? appointment.Doctor.FullName
+                    : "No doctor",
+
+                Status = appointment.AppointmentStatus,
+                Reason = appointment.Reason,
+
+                HasMedicalRecord = appointment.MedicalRecord != null,
+                Diagnosis = appointment.MedicalRecord?.Diagnosis,
+
+                Prescriptions = appointment.MedicalRecord?.Prescriptions != null
+                    ? appointment.MedicalRecord.Prescriptions
+                        .Select(p => new PrescriptionListViewModel
+                        {
+                            Id = p.Id,
+                            MedicationName = p.MedicationName,
+                            Dosage = p.Dosage,
+                            IssuedOn = p.IssuedOn
+                        })
+                        .ToList()
+                    : new List<PrescriptionListViewModel>()
+            };
+        
         }
 
         public async Task CreateMedicalRecordAsync(CreateMedicalRecordViewModel model)

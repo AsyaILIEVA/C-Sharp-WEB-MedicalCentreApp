@@ -1,4 +1,5 @@
 ﻿@model MedicalCentreApp.ViewModels.Appointments.AppointmentDetailsViewModel
+@* @model MedicalCentreApp.ViewModels.Prescriptions.PrescriptionListViewModel *@
 
 <h2>Appointment Details</h2>
 
@@ -23,7 +24,8 @@ else
 
 @if (!Model.HasMedicalRecord)
 {
-    <a asp-action="CreateMedicalRecord"
+    <a asp-controller="MedicalRecords"
+       asp-action="Create"
        asp-route-appointmentId="@Model.Id"
        class="btn btn-success">
         Create Medical Record
@@ -34,7 +36,26 @@ else
     <div class="card mt-3 shadow-sm">
         <div class="card-body">
             <p><strong>Diagnosis:</strong> @Model.Diagnosis</p>
-            <p><strong>Prescription:</strong> @Model.Prescriptions</p>
+            @if (Model.Prescriptions != null && Model.Prescriptions.Any())
+            {
+                <ul class="list-group mt-2">
+                    @foreach (var prescription in Model.Prescriptions)
+                    {
+                        <li class="list-group-item">
+                            <strong>@prescription.MedicationName</strong> -
+                            @prescription.Dosage
+                            <br />
+                            <small class="text-muted">
+                                Issued on: @prescription.IssuedOn.ToString("dd MMM yyyy")
+                            </small>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No prescriptions available.</p>
+            }
         </div>
     </div>
 }

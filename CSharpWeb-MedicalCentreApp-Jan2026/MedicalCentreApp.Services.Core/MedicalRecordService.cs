@@ -16,7 +16,7 @@ namespace MedicalCentreApp.Services.Core
             this.medicalRecordRepository = medicalRecordRepository;
         }
 
-        public async Task CreateAsync(CreateMedicalRecordViewModel model)
+        public async Task<Guid> CreateAsync(CreateMedicalRecordViewModel model)
         {
             MedicalRecord record = new MedicalRecord
             {
@@ -28,6 +28,8 @@ namespace MedicalCentreApp.Services.Core
 
             await medicalRecordRepository.AddAsync(record);
             await medicalRecordRepository.SaveChangesAsync();
+
+            return record.Id;
         }
 
         public async Task<MedicalRecordDetailsViewModel?> GetDetailsAsync(Guid id)

@@ -4,7 +4,7 @@ namespace MedicalCentreApp.Services.Core.Interfaces
 {
     public interface IMedicalRecordService
     {
-        Task CreateAsync(CreateMedicalRecordViewModel model);
+        Task<Guid> CreateAsync(CreateMedicalRecordViewModel model);
 
         Task<MedicalRecordDetailsViewModel?> GetDetailsAsync(Guid id);
 

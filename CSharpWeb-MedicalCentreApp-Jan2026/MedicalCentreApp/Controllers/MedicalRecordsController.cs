@@ -25,13 +25,23 @@ namespace MedicalCentreApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateMedicalRecordViewModel model)
         {
-            if (!ModelState.IsValid)
-                return View(model);
+            //if (!ModelState.IsValid)
+            //    return View(model);
 
-            await medicalRecordService.CreateAsync(model);
+            //await medicalRecordService.CreateAsync(model);
 
-            return RedirectToAction("Details", "Appointments",
-                new { id = model.AppointmentId });
+            //return RedirectToAction("Details", "Appointments",
+            //    new { id = model.AppointmentId });
+            
+                if (!ModelState.IsValid)
+                    return View(model);
+
+                var medicalRecordId = await medicalRecordService.CreateAsync(model);
+
+                // ✅ Redirect to add prescription AFTER record exists
+                return RedirectToAction("Create", "Prescriptions",
+                    new { medicalRecordId = medicalRecordId });
+            
         }
 
         public async Task<IActionResult> Details(Guid id)
