@@ -130,12 +130,12 @@ namespace MedicalCentreApp.Areas.Identity.Pages.Account
 
                     if (await _userManager.IsInRoleAsync(user, "Doctor"))
                     {
-                        return RedirectToAction("Index", "Patients");
+                        return RedirectToAction("Index", "Patients", new { area = "" });
                     }
 
                     if (await _userManager.IsInRoleAsync(user, "Patient"))
                     {
-                        return RedirectToAction("Profile", "Patients");
+                        return RedirectToAction("Profile", "Patients", new { area = "" });
                     }
 
                     if (await _userManager.IsInRoleAsync(user, "Administrator"))
@@ -143,7 +143,7 @@ namespace MedicalCentreApp.Areas.Identity.Pages.Account
                         return RedirectToAction("Index", "Dashboard", new { area = "Administrator" });
                     }
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home", new { area = "" });
                 }
                 if (result.RequiresTwoFactor)
                 {

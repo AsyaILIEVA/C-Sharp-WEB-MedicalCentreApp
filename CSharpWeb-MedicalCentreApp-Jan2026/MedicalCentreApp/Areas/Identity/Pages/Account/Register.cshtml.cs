@@ -165,7 +165,7 @@ namespace MedicalCentreApp.Areas.Identity.Pages.Account
 
             await _signInManager.SignInAsync(user, isPersistent: false);
 
-            return RedirectToAction("CompleteProfile", "Patients");
+            return RedirectToAction("CompleteProfile", "Patients", new { area = "" });
         }
 
         private ApplicationUser CreateUser()

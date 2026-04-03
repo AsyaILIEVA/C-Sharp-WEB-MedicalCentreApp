@@ -17,7 +17,9 @@
 //                EGN = "8902141234",
 //                DateOfBirth = new DateTime(1989, 2, 14),
 //                PhoneNumber = "0897123456",
-//                Email = "a.krastev@example.com"
+
+//                Email = "alex.krastev@example.com",
+//                Password = Asdfg123@
 //            },
 //            new Patient
 //            {
@@ -28,7 +30,9 @@
 //                EGN = "9406232345",
 //                DateOfBirth = new DateTime(1994, 6, 23),
 //                PhoneNumber = "0897234567",
-//                Email = "zlateva548@example.com"
+
+//                Email = "zlateva548@example.com",
+//                Password = Zxc123@
 //            },
 //            new Patient
 //            {
@@ -39,7 +43,9 @@
 //                EGN = "8609113456",
 //                DateOfBirth = new DateTime(1986, 9, 11),
 //                PhoneNumber = "0897345678",
-//                Email = "angelov.todor@example.com"
+//
+//                Email = "angelov.todor@example.com",
+//                Password = Qwerty123@
 //            },
 //            new Patient
 //            {
@@ -50,7 +56,9 @@
 //                EGN = "9704024567",
 //                DateOfBirth = new DateTime(1997, 4, 2),
 //                PhoneNumber = "0897456789",
+
 //                Email = "radostina97@example.com"
+//                Password = Tina1997!
 //            },
 //            new Patient
 //            {
