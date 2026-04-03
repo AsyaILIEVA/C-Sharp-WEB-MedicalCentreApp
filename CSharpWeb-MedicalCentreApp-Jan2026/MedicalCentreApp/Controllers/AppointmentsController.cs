@@ -2,6 +2,7 @@
 using MedicalCentreApp.ViewModels.Appointments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace MedicalCentreApp.Controllers
 {
@@ -16,12 +17,20 @@ namespace MedicalCentreApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var appointments = await appointmentService.GetAllAsync();
-            return View(appointments);
+            if (User.IsInRole("Administrator") || User.IsInRole("Doctor"))
+            {
+                var all = await appointmentService.GetAllAsync();
+                return View(all);
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var mine = await appointmentService.GetByPatientAsync(userId);
+
+            return View(mine);
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrator,Doctor")]
+        [Authorize(Roles = "Patient,Administrator,Doctor")]
         public async Task<IActionResult> Create()
         {
             var model = await appointmentService.GetCreateModelAsync();

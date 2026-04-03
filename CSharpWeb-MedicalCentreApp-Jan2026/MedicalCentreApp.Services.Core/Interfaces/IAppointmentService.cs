@@ -8,6 +8,8 @@ namespace MedicalCentreApp.Services.Core.Interfaces
     {
         Task<IEnumerable<AppointmentListViewModel>> GetAllAsync();
 
+        public Task<IEnumerable<AppointmentListViewModel>> GetByPatientAsync(string userId);
+
         Task<CreateAppointmentViewModel> GetCreateModelAsync();
 
         Task<CreateAppointmentViewModel?> GetCreateForPatientModelAsync(int patientId);

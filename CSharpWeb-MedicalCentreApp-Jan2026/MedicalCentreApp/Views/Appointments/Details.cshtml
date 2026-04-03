@@ -22,7 +22,8 @@ else
 
 <h4>Medical Record</h4>
 
-@if (!Model.HasMedicalRecord)
+@if (!Model.HasMedicalRecord &&
+     (User.IsInRole("Doctor") || User.IsInRole("Administrator")))
 {
     <a asp-controller="MedicalRecords"
        asp-action="Create"

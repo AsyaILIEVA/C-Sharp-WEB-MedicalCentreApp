@@ -67,6 +67,45 @@ namespace MedicalCentreApp.Services.Core
                 .ToList();
         }
 
+        public async Task<IEnumerable<AppointmentListViewModel>> GetByPatientAsync(string userId)
+        {
+            var appointments = await appointmentRepository
+                .All()
+                .Include(a => a.Patient)
+                .Include(a => a.Doctor)
+                .Where(a => a.Patient.UserId == userId) 
+                .ToListAsync();
+
+            bool hasChanges = false;
+
+            foreach (var appointment in appointments)
+            {
+                if (appointment.Date < DateTime.Now &&
+                    appointment.AppointmentStatus == AppointmentStatus.Scheduled)
+                {
+                    appointment.AppointmentStatus = AppointmentStatus.Completed;
+                    hasChanges = true;
+                }
+            }
+
+            if (hasChanges)
+            {
+                await appointmentRepository.SaveChangesAsync();
+            }
+
+            return appointments
+                .OrderBy(a => a.Date)
+                .Select(a => new AppointmentListViewModel
+                {
+                    Id = a.Id,
+                    Date = a.Date,
+                    PatientName = a.Patient.FirstName + " " + a.Patient.LastName,
+                    DoctorName = a.Doctor.FullName,
+                    Status = a.AppointmentStatus
+                })
+                .ToList();
+        }
+
         public async Task<CreateAppointmentViewModel> GetCreateModelAsync()
         {
             CreateAppointmentViewModel model = new CreateAppointmentViewModel
