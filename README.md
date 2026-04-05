@@ -6,7 +6,7 @@
 
 ###### MedicalCentreApp is an ASP.NET Core MVC web application for managing patients, doctors, appointments, and medical records in a medical centre environment.
 
-###### This project was developed as part of the SoftUni C# Web ASP.NET Fundamentals course - January 2026 and follows modern ASP.NET Core architectural practices, including layered structure and separation of concerns.
+###### This project was developed as part of the SoftUni C# Web ASP.NET Fundamentals course - January 2026 and improved and completed during C# Web ASP.NET Advanced course - February 2026. It follows modern ASP.NET Core architectural practices, including layered structure and separation of concerns.
 
 
 
@@ -33,9 +33,10 @@
 * Appointment scheduling system
 * Automatic appointment status handling
 * Medical record creation per appointment
-* Role-based access (Admin, Doctor, Patient)
+* Role-based access (Admin, Doctor, Patient) was improved to Administrator(new Area), User, Doctor and Patient Roles
 * Server-side validation using Data Annotations
 * Seeded test data for easier demonstration
+* Add Pagination
 
 
 
@@ -49,6 +50,12 @@
 * Patient
 * Appointment
 * MedicalRecord
+
+Added:
+
+* Department
+* Prescription
+* Invoice
 
 
 
@@ -85,9 +92,9 @@ The solution follows a layered architecture pattern:
 
 *MedicalCentreApp*
 
-* Controllers
+* Controllers - Add Controllers
 * Razor Views
-* Areas
+* Areas - Add Area (Administrator and Identity)
 * wwwroot
 * Program.cs
 * appsettings.json
@@ -108,6 +115,14 @@ The solution follows a layered architecture pattern:
 * Migrations
 * MedicalCentreAppDbContext
 
+Add:
+
+* Repositories, so the application flow is:
+
+User Request → Controller → Service → Repository → DbContext → Database
+
+Database Response → Repository → Service → Controller → View → User
+
 
 
 *MedicalCentreApp.Data.Models*
@@ -125,6 +140,13 @@ The solution follows a layered architecture pattern:
 * DoctorService
 * PatientService
 
+Add:
+
+* MedicalRecordService
+* InvoiceService
+* DepartmentService
+* PrescriptionService
+
 
 
 *MedicalCentreApp.Services.Core.Interfaces*
@@ -133,13 +155,27 @@ The solution follows a layered architecture pattern:
 * IDoctorService
 * IPatientService
 
+Add:
+
+* IMedicalRecordService
+* IInvoiceService
+* IDepartmentService
+* IPrescriptionService
+
+
+
+Add:
+
+*MedicalCentreApp.Services.Tests*
+
 
 
 ###### 🔎 **Common Utilities**
 
 *MedicalCentreApp.GCommon*
 
-* EntityValidation
+* EntityValidation - Moved to Common Folder
+* ViewModelValidation - Added in GCommon
 
 
 
@@ -213,8 +249,10 @@ On application startup, the database is seeded with:
 
 
 * 5 sample doctors
-* 10 sample patients
-* Default user roles (Admin, Patient)
+* 10 sample patients - remove seeding and register patients. Then patient can complete his own profile and see only his own details.
+* User roles - Administrator can manage Doctors, Patients, Appointments, Prescriptions and Invoices through Admin Panel/Dashboard. 
+
+&nbsp;	Seeded Administrator - can be logged in with Email = admin@medicalcentre.com, Password = Admin123!
 
 This allows quick testing and demonstration of the system.
 
