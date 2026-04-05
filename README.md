@@ -111,7 +111,7 @@ The solution follows a layered architecture pattern:
 
 *MedicalCentreApp.Data*
 
-* Configuration
+* Configuration - Add Passwords for Registered Patients in PatientEntityTypeConfiguration.cs, so they can easily be tested when logged in
 * Migrations
 * MedicalCentreAppDbContext
 
@@ -250,9 +250,12 @@ On application startup, the database is seeded with:
 
 * 5 sample doctors
 * 10 sample patients - remove seeding and register patients. Then patient can complete his own profile and see only his own details.
-* User roles - Administrator can manage Doctors, Patients, Appointments, Prescriptions and Invoices through Admin Panel/Dashboard. 
 
-&nbsp;	Seeded Administrator - can be logged in with Email = admin@medicalcentre.com, Password = Admin123!
+&nbsp;	Emails and Passwords available at PatientEntityTypeConfiguration.cs. 
+
+* User roles - Administrator can manage Doctors, Patients, Appointments, Prescriptions and Invoices through Admin Panel/Dashboard.
+
+ 	Seeded Administrator - can be logged in with Email = admin@medicalcentre.com, Password = Admin123!
 
 This allows quick testing and demonstration of the system.
 
