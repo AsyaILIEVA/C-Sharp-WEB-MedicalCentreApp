@@ -42,7 +42,7 @@ namespace MedicalCentreApp.Data.Configuration
                 FullName = "Dr. Nikolay Hristov",
                 Specialty = "Neurologist",
                 DepartmentId = 5
-            }
+            }            
         };
 
         public void Configure(EntityTypeBuilder<Doctor> entity)

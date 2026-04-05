@@ -69,7 +69,9 @@
 //                EGN = "8807195678",
 //                DateOfBirth = new DateTime(1988, 7, 19),
 //                PhoneNumber = "0897567890",
+
 //                Email = "parvanov_bn@example.com"
+//                Password = Borko88_
 //            },
 //            new Patient
 //            {
@@ -80,7 +82,9 @@
 //                EGN = "9501286789",
 //                DateOfBirth = new DateTime(1995, 1, 28),
 //                PhoneNumber = "0897678901",
+
 //                Email = "kostova@example.com"
+//                Password = Qwaszx_34
 //            },
 //            new Patient
 //            {
@@ -91,7 +95,10 @@
 //                EGN = "8706107890",
 //                DateOfBirth = new DateTime(1987, 6, 10),
 //                PhoneNumber = "0897789012",
-//                Email = "p_vasilev@example.com"
+//                Address = 23 Hristo Botev Blvd, Sofiya, Bulgaria,
+
+//                Email = "p_vasilev@example.com",
+//                Password = Mnbvc098!
 
 //            },
 //            new Patient
