@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MedicalCentreApp.ViewModels.Patients.PatientListViewModel>
+﻿@model PagedPatientsViewModel
 
 @{
     ViewData["Title"] = "Patients";
@@ -17,14 +17,14 @@
             <th>Middle Name</th>
             <th>Last Name</th>
             <th>EGN</th>
-            @* <th>Phone</th>
-            <th>Email</th> *@
-            @* <th>Address</th> *@
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Address</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var patient in Model)
+        @foreach (var patient in Model.Patients)
         {
             <tr>
                 
@@ -59,3 +59,41 @@
         }
     </tbody>
 </table>
+<nav>
+    <ul class="pagination justify-content-center">
+
+        @if (Model.Page > 1)
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(Model.Page - 1)">
+                    Previous
+                </a>
+            </li>
+        }
+
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.Page ? "active" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@i">
+                    @i
+                </a>
+            </li>
+        }
+
+        @if (Model.Page < Model.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-page="@(Model.Page + 1)">
+                    Next
+                </a>
+            </li>
+        }
+
+    </ul>
+</nav>

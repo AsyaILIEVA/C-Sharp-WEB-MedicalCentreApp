@@ -19,10 +19,11 @@ namespace MedicalCentreApp.Controllers
         }
 
         [Authorize(Roles = "Doctor,Administrator")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
         {
-            var patients = await patientService.GetAllAsync();
-            return View(patients);
+            var result = await patientService.GetPagedAsync(page, pageSize);
+
+            return View(result);
         }
 
         public async Task<IActionResult> Details(int id)

@@ -4,6 +4,7 @@ namespace MedicalCentreApp.Data.Repositories.Interfaces
 {
     public interface IPatientRepository
     {
+        Task<(IEnumerable<Patient> Patients, int TotalCount)> GetPagedAsync(int page, int pageSize);
         IQueryable<Patient> All();
 
         IQueryable<Patient> AllAsNoTracking();

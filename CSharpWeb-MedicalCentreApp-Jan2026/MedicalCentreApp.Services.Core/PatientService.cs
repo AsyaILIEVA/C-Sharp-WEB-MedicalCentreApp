@@ -1,4 +1,5 @@
 ﻿using MedicalCentreApp.Data.Models;
+using MedicalCentreApp.Data.Repositories;
 using MedicalCentreApp.Data.Repositories.Interfaces;
 using MedicalCentreApp.Services.Core.Interfaces;
 using MedicalCentreApp.ViewModels.Appointments;
@@ -17,6 +18,28 @@ namespace MedicalCentreApp.Services.Core
             this.patientRepository = patientRepository;
         }
 
+        public async Task<PagedPatientsViewModel> GetPagedAsync(int page, int pageSize)
+        {
+            var (patients, totalCount) = await patientRepository.GetPagedAsync(page, pageSize);
+
+            return new PagedPatientsViewModel
+            {
+                Patients = patients.Select(p => new PatientListViewModel
+                {
+                    Id = p.Id,
+                    FirstName = p.FirstName,
+                    MiddleName = p.MiddleName,
+                    LastName = p.LastName,
+                    EGN = p.EGN,
+                    PhoneNumber = p.PhoneNumber,
+                    Email = p.Email,
+                    Address = p.Address
+                }),
+                Page = page,
+                PageSize = pageSize,
+                TotalCount = totalCount
+            };
+        }
         public async Task<IEnumerable<PatientListViewModel>> GetAllAsync()
         {
             IEnumerable<PatientListViewModel> patients = await patientRepository

@@ -4,6 +4,8 @@ namespace MedicalCentreApp.Services.Core.Interfaces
 {
     public interface IPatientService
     {
+        Task<PagedPatientsViewModel> GetPagedAsync(int page, int pageSize);
+
         Task<IEnumerable<PatientListViewModel>> GetAllAsync();
 
         Task<PatientDetailsViewModel?> GetDetailsByUserIdAsync(string userId);

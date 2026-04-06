@@ -110,7 +110,9 @@
 //                EGN = "9309248901",
 //                DateOfBirth = new DateTime(1993, 9, 24),
 //                PhoneNumber = "0897890123",
+
 //                Email = "k.marinova@example.com"
+//                Password = Krisim93_
 //            },
 //            new Patient
 //            {
@@ -121,7 +123,9 @@
 //                EGN = "9103179012",
 //                DateOfBirth = new DateTime(1991, 3, 17),
 //                PhoneNumber = "0897901234",
+
 //                Email = "rusev@example.com"
+//                Password = Stani456!
 //            },
 //            new Patient
 //            {
@@ -132,7 +136,35 @@
 //                EGN = "9812050123",
 //                DateOfBirth = new DateTime(1998, 12, 5),
 //                PhoneNumber = "0897012345",
+
 //                Email = "gabi123@example.com"
+//                Password = Poiuy@12
+//            },
+//            new Patient
+//            {
+//                Id = 11,
+//                FirstName = "Ivan",
+//                MiddleName = "Petrov",
+//                LastName = "Georgiev",
+//                EGN = "9003156789",
+//                DateOfBirth = new DateTime(1990, 3, 15),
+//                PhoneNumber = "0888123456",
+
+//                Email = "ivan.georgiev@example.com",
+//                Password = "Ivan@123"
+//            },
+//            new Patient
+//            {
+//                Id = 12,
+//                FirstName = "Maria",
+//                MiddleName = "Ivanova",
+//                LastName = "Dimitrova",
+//                EGN = "9207204567",
+//                DateOfBirth = new DateTime(1992, 7, 20),
+//                PhoneNumber = "0877123456",
+
+//                Email = "maria.dimitrova@example.com",
+//                Password = "Maria@123"
 //            }
 //        };
 //        public void Configure(EntityTypeBuilder<Patient> entity)
