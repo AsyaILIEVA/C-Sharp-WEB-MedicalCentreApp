@@ -4,8 +4,10 @@ using MedicalCentreApp.Data.Repositories;
 using MedicalCentreApp.Data.Repositories.Interfaces;
 using MedicalCentreApp.Services.Core;
 using MedicalCentreApp.Services.Core.Interfaces;
+using MedicalCentreApp.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace MedicalCentreApp
 {
@@ -14,82 +16,20 @@ namespace MedicalCentreApp
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DevConnection");
-
-            builder.Services.AddDbContext<MedicalCentreAppDbContext>(options =>
-                options.UseSqlServer(connectionString));
-
-            //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<MedicalCentreAppDbContext>();
-
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-                {
-                    options.SignIn.RequireConfirmedAccount = false;
-
-                })
-                .AddEntityFrameworkStores<MedicalCentreAppDbContext>()
-                .AddDefaultTokenProviders();
                         
-            builder.Services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/Identity/Account/Login";
-                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-            });
-
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+                        
+            builder.Services.AddApplicationInfrastructure(builder.Configuration);
+            builder.Services.AddApplicationServices();
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
 
-            builder.Services.AddScoped<IDoctorService, DoctorService>();
-            builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
-
-            builder.Services.AddScoped<IPatientService, PatientService>();
-            builder.Services.AddScoped<IPatientRepository, PatientRepository>();
-
-            builder.Services.AddScoped<IAppointmentService, AppointmentService>();
-            builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
-
-            builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
-            builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
-
-            builder.Services.AddScoped<IInvoiceService, InvoiceService>();
-            builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
-
-            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-
-            builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
-            builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordRepository>();
-
-
             var app = builder.Build();
 
-            using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-
-                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-
-                await RoleSeeder.SeedAsync(services);
-                await SeedAdminAsync(userManager);
-            }
-
-            //using (var scope = app.Services.CreateScope())
-            //{
-            //    var services = scope.ServiceProvider;
-
-            //    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-
-            //    var exists = await roleManager.RoleExistsAsync("Patient");
-
-            //    Console.WriteLine($"Patient role exists: {exists}");
-            //}
-
             // Configure the HTTP request pipeline.
+            await app.SeedApplicationAsync();
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();
@@ -97,7 +37,7 @@ namespace MedicalCentreApp
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-
+                app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
                 app.UseHsts();
             }
 
@@ -111,39 +51,15 @@ namespace MedicalCentreApp
 
             app.MapControllerRoute(
                 name: "areas",
-                pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}"
-                );
+                pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
+
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}"
-                );
+                pattern: "{controller=Home}/{action=Index}/{id?}");
                         
-            app.MapRazorPages();
+            app.MapRazorPages();           
 
             app.Run();
-        }
-                
-        static async Task SeedAdminAsync(UserManager<ApplicationUser> userManager)
-        {
-            string adminEmail = "admin@medicalcentre.com";
-            string adminPassword = "Admin123!";
-
-            var adminUser = await userManager.FindByEmailAsync(adminEmail);
-
-            if (adminUser == null)
-            {
-                adminUser = new ApplicationUser
-                {
-                    UserName = adminEmail,
-                    Email = adminEmail,
-                    EmailConfirmed = true
-                };
-
-                await userManager.CreateAsync(adminUser, adminPassword);
-                await userManager.AddToRoleAsync(adminUser, "Administrator");
-            }
-        }
-
-
+        }        
     }
 }
