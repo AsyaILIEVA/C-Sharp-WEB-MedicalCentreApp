@@ -3,16 +3,19 @@ using MedicalCentreApp.Services.Core.Interfaces;
 using MedicalCentreApp.ViewModels.Doctors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MedicalCentreApp.Controllers
 {    
     public class DoctorsController : Controller
     {
         private readonly IDoctorService doctorService;
+        private readonly IDepartmentService departmentService;
 
-        public DoctorsController(IDoctorService doctorService)
+        public DoctorsController(IDoctorService doctorService, IDepartmentService departmentService)
         {
             this.doctorService = doctorService;
+            this.departmentService = departmentService;
         }
 
 
@@ -30,9 +33,20 @@ namespace MedicalCentreApp.Controllers
 
         [Authorize(Roles = "Administrator")]
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var departments = await departmentService.GetAllAsync();
+
+            var model = new CreateDoctorInputModel
+            {
+                Departments = departments.Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.Name
+                })
+            };
+
+            return View(model);
         }
 
         [Authorize(Roles = "Administrator")]
@@ -41,7 +55,17 @@ namespace MedicalCentreApp.Controllers
         public async Task<IActionResult> Create(CreateDoctorInputModel model)
         {
             if (!ModelState.IsValid)
+            {
+                var departments = await departmentService.GetAllAsync();
+
+                model.Departments = departments.Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.Name
+                });
+
                 return View(model);
+            }
 
             await doctorService.CreateAsync(model);
 
@@ -50,12 +74,23 @@ namespace MedicalCentreApp.Controllers
 
         [Authorize(Roles = "Administrator")]
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var model = await doctorService.GetForEditAsync(id);
 
             if (model == null)
                 return NotFound();
+
+            var departments = await departmentService.GetAllAsync();
+
+            model.Departments = departments.Select(d => new SelectListItem
+            {
+                Value = d.Id.ToString(),
+                Text = d.Name,
+                Selected = d.Id == model.DepartmentId
+            });
 
             return View(model);
         }
@@ -66,7 +101,19 @@ namespace MedicalCentreApp.Controllers
         public async Task<IActionResult> Edit(EditDoctorInputModel model)
         {
             if (!ModelState.IsValid)
+            {
+                var departments = await departmentService.GetAllAsync();
+
+                model.Departments = departments.Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.Name,
+                    Selected = d.Id == model.DepartmentId
+                });
+
                 return View(model);
+            }
+
 
             var success = await doctorService.UpdateAsync(model);
 
