@@ -1,5 +1,4 @@
-﻿@* @model MedicalCentreApp.Data.Models.Doctor *@
-@model MedicalCentreApp.ViewModels.Doctors.DoctorDetailsViewModel
+﻿@model MedicalCentreApp.ViewModels.Doctors.DoctorDetailsViewModel
 
 @{
     ViewData["Title"] = "Delete Doctor";
@@ -29,6 +28,10 @@ else
 
 <p>
     <strong>Specialty:</strong> @Model.Specialty
+</p>
+
+<p>
+    <strong>Department:</strong> @Model.DepartmentName
 </p>
 
 <form asp-action="DeleteConfirmed" method="post">

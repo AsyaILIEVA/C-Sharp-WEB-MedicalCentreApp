@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 using static MedicalCentreApp.GCommon.ViewModelValidation.DoctorViewModels;
@@ -18,8 +19,10 @@ namespace MedicalCentreApp.ViewModels.Doctors
 
         public IFormFile? Image { get; set; }
 
+        [Range(1, int.MaxValue, ErrorMessage = "Please select a department")]
         public int DepartmentId { get; set; }
 
-        public IEnumerable<SelectListItem> Departments { get; set; } = null!;
+        [BindNever]
+        public IEnumerable<SelectListItem> Departments { get; set; } = new List<SelectListItem>();
     }
 }

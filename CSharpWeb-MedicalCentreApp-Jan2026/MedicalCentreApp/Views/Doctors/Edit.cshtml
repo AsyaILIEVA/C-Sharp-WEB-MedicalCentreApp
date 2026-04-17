@@ -23,6 +23,12 @@
         <span asp-validation-for="Specialty" class="text-danger"></span>
     </div>
 
+    <select asp-for="DepartmentId" asp-items="Model.Departments" class="form-control">
+        <option value="">-- Select Department --</option>
+    </select>
+
+    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+
     @if (!string.IsNullOrEmpty(Model.ExistingImageUrl))
     {
         <div class="mb-3">

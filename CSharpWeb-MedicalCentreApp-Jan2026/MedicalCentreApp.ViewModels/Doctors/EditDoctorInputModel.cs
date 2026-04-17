@@ -18,7 +18,7 @@ namespace MedicalCentreApp.ViewModels.Doctors
         [MaxLength(DoctorSpecialtyMaxLength)]
         public string Specialty { get; set; } = null!;
 
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Please select a department")]
         public int DepartmentId { get; set; }
         
         public IEnumerable<SelectListItem> Departments { get; set; } = new List<SelectListItem>();

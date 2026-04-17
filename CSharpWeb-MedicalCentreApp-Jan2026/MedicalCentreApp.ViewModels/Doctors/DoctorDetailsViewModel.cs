@@ -18,6 +18,8 @@ namespace MedicalCentreApp.ViewModels.Doctors
 
         public string? ImageUrl { get; set; }
 
+        public string DepartmentName { get; set; } = null!;
+
         public ICollection<AppointmentInfoViewModel> Appointments { get; set; }
             = new List<AppointmentInfoViewModel>();
     }
