@@ -5,6 +5,7 @@ using MedicalCentreApp.Services.Core.Interfaces;
 using MedicalCentreApp.ViewModels.Appointments;
 using MedicalCentreApp.ViewModels.Patients;
 using MedicalCentreApp.ViewModels.Prescriptions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedicalCentreApp.Services.Core
@@ -12,10 +13,12 @@ namespace MedicalCentreApp.Services.Core
     public class PatientService : IPatientService
     {
         private readonly IPatientRepository patientRepository;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public PatientService(IPatientRepository patientRepository)
+        public PatientService(IPatientRepository patientRepository, UserManager<ApplicationUser> userManager)
         {
             this.patientRepository = patientRepository;
+            this.userManager = userManager;
         }
 
         public async Task<PagedPatientsViewModel> GetPagedAsync(int page, int pageSize)
@@ -91,7 +94,23 @@ namespace MedicalCentreApp.Services.Core
 
         public async Task CreateAsync(CreateEditPatientViewModel model)
         {
-            Patient patient = new Patient
+            var user = new ApplicationUser
+            {
+                UserName = model.Email,
+                Email = model.Email
+            };
+
+            var result = await userManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException(
+                    string.Join(", ", result.Errors.Select(e => e.Description)));
+            }
+                        
+            await userManager.AddToRoleAsync(user, "Patient");
+
+            var patient = new Patient
             {
                 FirstName = model.FirstName,
                 MiddleName = model.MiddleName,
@@ -100,7 +119,8 @@ namespace MedicalCentreApp.Services.Core
                 DateOfBirth = model.DateOfBirth,
                 PhoneNumber = model.PhoneNumber,
                 Email = model.Email,
-                Address = model.Address
+                Address = model.Address,
+                UserId = user.Id
             };
 
             await patientRepository.AddAsync(patient);

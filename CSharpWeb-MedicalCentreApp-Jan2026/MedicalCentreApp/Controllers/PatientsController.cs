@@ -111,7 +111,16 @@ namespace MedicalCentreApp.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            await patientService.CreateAsync(model);
+            try
+            {
+                await patientService.CreateAsync(model);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+
             return RedirectToAction(nameof(Index));
         }
 

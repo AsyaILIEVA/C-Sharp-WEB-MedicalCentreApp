@@ -45,7 +45,9 @@ namespace MedicalCentreApp.ViewModels.Patients
         [Display(Name = "Email Address")]
         [MinLength(PatientEmailMinLength)]
         [MaxLength(PatientEmailMaxLength)]
-        public string? Email { get; set; }
+        public string Email { get; set; } = null!;
+                
+        public string Password { get; set; } = null!;
 
         [Display(Name = "Home Address")]
         [MinLength(PatientAddressMinLength)]
