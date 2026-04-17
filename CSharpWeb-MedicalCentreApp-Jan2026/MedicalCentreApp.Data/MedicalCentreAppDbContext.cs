@@ -30,6 +30,10 @@ namespace MedicalCentreApp.Data
             modelBuilder.ApplyConfigurationsFromAssembly
                 (typeof(MedicalCentreAppDbContext).Assembly);
 
+            modelBuilder.Entity<Doctor>()
+                .HasIndex(d => new { d.FullName, d.Specialty, d.DepartmentId })
+                .IsUnique();
+
             modelBuilder.Entity<Patient>()
                 .HasIndex(p => p.EGN)
                 .IsUnique();

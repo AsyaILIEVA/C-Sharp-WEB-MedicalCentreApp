@@ -67,15 +67,29 @@ namespace MedicalCentreApp.Controllers
                 return View(model);
             }
 
-            await doctorService.CreateAsync(model);
+            try
+            {
+                await doctorService.CreateAsync(model);
+            }
+            catch (InvalidOperationException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+
+                var departments = await departmentService.GetAllAsync();
+                model.Departments = departments.Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.Name
+                });
+
+                return View(model);
+            }
 
             return RedirectToAction(nameof(Index));
         }
 
         [Authorize(Roles = "Administrator")]
-        [HttpGet]
-        [Authorize(Roles = "Administrator")]
-        [HttpGet]
+        [HttpGet]        
         public async Task<IActionResult> Edit(int id)
         {
             var model = await doctorService.GetForEditAsync(id);

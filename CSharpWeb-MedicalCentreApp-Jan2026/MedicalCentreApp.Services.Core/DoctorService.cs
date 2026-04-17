@@ -69,10 +69,23 @@ namespace MedicalCentreApp.Services.Core
         {
             string? imageUrl = await SaveImageAsync(model.Image);
 
+            bool exists = await doctorRepository
+                .AllAsNoTracking()
+                .AnyAsync(d =>
+                    d.FullName == model.FullName &&
+                    d.Specialty == model.Specialty &&
+                    d.DepartmentId == model.DepartmentId);
+
+            if (exists)
+            {
+                throw new InvalidOperationException("Doctor already exists.");
+            }
+
             Doctor doctor = new Doctor
             {
                 FullName = model.FullName,
                 Specialty = model.Specialty,
+                DepartmentId = model.DepartmentId,
                 ImageUrl = imageUrl
             };
 
@@ -91,6 +104,7 @@ namespace MedicalCentreApp.Services.Core
                 Id = doctor.Id,
                 FullName = doctor.FullName,
                 Specialty = doctor.Specialty,
+                DepartmentId = doctor.DepartmentId,
                 ExistingImageUrl = doctor.ImageUrl
             };
 
@@ -105,6 +119,7 @@ namespace MedicalCentreApp.Services.Core
 
             doctor.FullName = model.FullName;
             doctor.Specialty = model.Specialty;
+            doctor.DepartmentId = model.DepartmentId;
 
             if (model.Image != null)
             {
@@ -127,7 +142,8 @@ namespace MedicalCentreApp.Services.Core
                     Id = d.Id,
                     FullName = d.FullName,
                     Specialty = d.Specialty,
-                    ImageUrl = d.ImageUrl
+                    ImageUrl = d.ImageUrl,
+                    DepartmentName = d.Department.Name
                 })
                 .FirstOrDefaultAsync();
 
@@ -158,7 +174,8 @@ namespace MedicalCentreApp.Services.Core
                     Id = d.Id,
                     FullName = d.FullName,
                     Specialty = d.Specialty,
-                    ImageUrl = d.ImageUrl
+                    ImageUrl = d.ImageUrl,
+                    DepartmentName = d.Department.Name
                 })
                 .FirstOrDefaultAsync();
 
