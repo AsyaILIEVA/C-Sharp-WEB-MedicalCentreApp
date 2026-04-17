@@ -1,8 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-//using static MedicalCentreApp.Data.Common.EntityValidation.Doctor;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 using static MedicalCentreApp.GCommon.ViewModelValidation.DoctorViewModels;
-
-using Microsoft.AspNetCore.Http;
 
 namespace MedicalCentreApp.ViewModels.Doctors
 {
@@ -12,12 +11,15 @@ namespace MedicalCentreApp.ViewModels.Doctors
         [MaxLength(DoctorFullNameMaxLength)]
         public string FullName { get; set; } = null!;
 
-       
+        [Required]
         [MinLength(DoctorSpecialtyMinLength)]
         [MaxLength(DoctorSpecialtyMaxLength)]
         public string Specialty { get; set; } = null!;
 
-        
         public IFormFile? Image { get; set; }
+
+        public int DepartmentId { get; set; }
+
+        public IEnumerable<SelectListItem> Departments { get; set; } = null!;
     }
 }
