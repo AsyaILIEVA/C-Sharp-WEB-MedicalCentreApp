@@ -38,11 +38,7 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             @if (User.IsInRole("Administrator"))
-                            {
-                                @* <li class="nav-item">
-                                    <a class="nav-link text-dark @(ViewContext.RouteData.Values["Area"]?.ToString() == "Administrator" ? "active" : "")"
-                                       asp-area="Administrator" asp-controller="Dashboard" asp-action="Index">Admin Panel</a>
-                                </li> *@
+                            {                                
                                 <li class="nav-item">
                                     <a class="nav-link text-dark"
                                        asp-area="Administrator"

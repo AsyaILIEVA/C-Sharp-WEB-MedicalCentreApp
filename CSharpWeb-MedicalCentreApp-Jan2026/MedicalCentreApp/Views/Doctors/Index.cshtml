@@ -23,11 +23,12 @@
 
 @if (User.IsInRole("Administrator"))
 {
-    <p>
-        <a asp-action="Create" class="btn btn-primary">
-            Add Doctor
-        </a>
-    </p>
+    <a asp-area="Administrator"
+       asp-controller="DoctorsManagement"
+       asp-action="Create"
+       class="btn btn-primary">
+        Add Doctor
+    </a>
 }
 
 @if (!Model.Any())
@@ -62,13 +63,17 @@ else
 
                         @if (User.IsInRole("Administrator"))
                         {
-                            <a asp-action="Edit"
+                            <a asp-area="Administrator"
+                               asp-controller="DoctorsManagement"
+                               asp-action="Edit"
                                asp-route-id="@doctor.Id"
                                class="btn btn-warning btn-sm">
                                 Edit
                             </a>
 
-                            <a asp-action="Delete"
+                            <a asp-area="Administrator"
+                               asp-controller="DoctorsManagement"
+                               asp-action="Delete"
                                asp-route-id="@doctor.Id"
                                class="btn btn-danger btn-sm">
                                 Delete
