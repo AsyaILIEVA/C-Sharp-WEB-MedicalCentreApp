@@ -6,16 +6,14 @@
 
 <h2>Patients</h2>
 
-@if (User.IsInRole("Administrator"))
-{
+<p>
     <a asp-area="Administrator"
        asp-controller="PatientsManagement"
        asp-action="Create"
        class="btn btn-primary">
         Create New Patient
     </a>
-}
-
+</p>
 
 <table class="table table-striped">
     <thead>
@@ -30,11 +28,11 @@
             <th></th>
         </tr>
     </thead>
+
     <tbody>
         @foreach (var patient in Model.Patients)
         {
             <tr>
-                
                 <td>@patient.FirstName</td>
                 <td>@patient.MiddleName</td>
                 <td>@patient.LastName</td>
@@ -42,37 +40,37 @@
                 <td>@patient.PhoneNumber</td>
                 <td>@patient.Email</td>
                 <td>@patient.Address</td>
-                <td>                    
-                        <a asp-action="Details"
-                           asp-route-id="@patient.Id"
-                           class="btn btn-sm btn-primary">
-                            Details
-                        </a>
 
-                    @if (User.IsInRole("Administrator") || User.IsInRole("Doctor"))
-                    {
-                        <a asp-area="Administrator"
-                           asp-controller="PatientsManagement"
-                           asp-action="Edit"
-                           asp-route-id="@patient.Id"
-                           class="btn btn-sm btn-outline-primary">
-                            Edit
-                        </a>
+                <td>
+                    <a asp-area=""
+                       asp-controller="Patients"
+                       asp-action="Details"
+                       asp-route-id="@patient.Id"
+                       class="btn btn-sm btn-primary">
+                        Details
+                    </a>
 
-                        <a asp-area="Administrator"
-                           asp-controller="PatientsManagement"
-                           asp-action="Delete"
-                           asp-route-id="@patient.Id"
-                           class="btn btn-sm btn-outline-danger">
-                            Delete
-                        </a>
-                    }
+                    <a asp-area="Administrator"
+                       asp-controller="PatientsManagement"
+                       asp-action="Edit"
+                       asp-route-id="@patient.Id"
+                       class="btn btn-sm btn-outline-primary">
+                        Edit
+                    </a>
+
+                    <a asp-area="Administrator"
+                       asp-controller="PatientsManagement"
+                       asp-action="Delete"
+                       asp-route-id="@patient.Id"
+                       class="btn btn-sm btn-outline-danger">
+                        Delete
+                    </a>
                 </td>
-
             </tr>
         }
     </tbody>
 </table>
+
 <nav>
     <ul class="pagination justify-content-center">
 
@@ -80,6 +78,8 @@
         {
             <li class="page-item">
                 <a class="page-link"
+                   asp-area="Administrator"
+                   asp-controller="PatientsManagement"
                    asp-action="Index"
                    asp-route-page="@(Model.Page - 1)">
                     Previous
@@ -91,6 +91,8 @@
         {
             <li class="page-item @(i == Model.Page ? "active" : "")">
                 <a class="page-link"
+                   asp-area="Administrator"
+                   asp-controller="PatientsManagement"
                    asp-action="Index"
                    asp-route-page="@i">
                     @i
@@ -102,6 +104,8 @@
         {
             <li class="page-item">
                 <a class="page-link"
+                   asp-area="Administrator"
+                   asp-controller="PatientsManagement"
                    asp-action="Index"
                    asp-route-page="@(Model.Page + 1)">
                     Next

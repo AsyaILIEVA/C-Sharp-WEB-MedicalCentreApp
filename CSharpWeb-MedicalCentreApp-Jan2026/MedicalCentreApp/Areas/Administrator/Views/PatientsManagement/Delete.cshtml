@@ -23,13 +23,16 @@
 </div>
 
 <form asp-action="DeleteConfirmed" method="post">
-    <input type="hidden" name="id" value="@Model.Id" />
+    <input type="hidden" asp-for="Id" />
 
     <button type="submit" class="btn btn-danger">
         Yes, delete
     </button>
 
-    <a asp-action="Index" class="btn btn-secondary ms-2">
+    <a asp-area="Administrator"
+       asp-controller="PatientsManagement"
+       asp-action="Index"
+       class="btn btn-secondary ms-2">
         Cancel
     </a>
 </form>

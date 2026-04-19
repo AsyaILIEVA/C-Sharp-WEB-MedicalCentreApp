@@ -2,8 +2,6 @@
 using MedicalCentreApp.ViewModels.Patients;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Security.Claims;
 
 namespace MedicalCentreApp.Controllers
@@ -22,17 +20,21 @@ namespace MedicalCentreApp.Controllers
         public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
         {
             var result = await patientService.GetPagedAsync(page, pageSize);
-
             return View(result);
         }
-
         public async Task<IActionResult> Details(int id)
         {
             var patient = await patientService.GetDetailsAsync(id);
             if (patient == null)
                 return NotFound();
 
-            if (!await IsOwnerPatient(id))
+            if (User.IsInRole("Administrator") || User.IsInRole("Doctor"))
+                return View(patient);
+           
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var current = await patientService.GetDetailsByUserIdAsync(userId);
+
+            if (current == null || current.Id != id)
                 return Forbid();
 
             return View(patient);
@@ -93,92 +95,7 @@ namespace MedicalCentreApp.Controllers
             return View("Details", patient);
         }
 
-        [Authorize(Roles = "Administrator")]
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View(new CreateEditPatientViewModel
-            {
-                DateOfBirth = DateTime.Today
-            });
-        }
-
-        [Authorize(Roles = "Administrator")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateEditPatientViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            try
-            {
-                await patientService.CreateAsync(model);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", ex.Message);
-                return View(model);
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        [Authorize(Roles = "Doctor,Patient,Administrator")]
-        [HttpGet]
-        public async Task<IActionResult> Edit(int id)
-        {
-            var model = await patientService.GetForEditAsync(id);
-            if (model == null)
-                return NotFound();
-
-            return View(model);
-        }
-
-        [Authorize(Roles = "Doctor,Patient,Administrator")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, CreateEditPatientViewModel model)
-        {
-            if (id != model.Id)
-                return BadRequest();
-            
-            if (!await CanEditPatient(id))
-                return Forbid();
-
-            if (!ModelState.IsValid)
-                return View(model);
-
-            var success = await patientService.UpdateAsync(id, model);
-            if (!success)
-                return BadRequest();
-
-            return RedirectToAction(nameof(Details), new { id });
-        }
-
-        [Authorize(Roles = "Doctor,Administrator")]
-        [HttpGet]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var patient = await patientService.GetForDeleteAsync(id);
-            if (patient == null)
-                return NotFound();
-
-            return View(patient);
-        }
-
-        [Authorize(Roles = "Doctor,Administrator")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var success = await patientService.DeleteAsync(id);
-            if (!success)
-                return NotFound();
-
-            return RedirectToAction(nameof(Index));
-        }
-
+        
         [Authorize(Roles = "Doctor,Patient,Administrator")]
         public async Task<IActionResult> MedicalRecords(int id)
         {

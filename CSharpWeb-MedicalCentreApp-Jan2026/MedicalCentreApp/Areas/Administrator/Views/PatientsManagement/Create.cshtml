@@ -6,7 +6,11 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-action="Create" method="post">
+<form asp-area="Administrator"
+      asp-controller="PatientsManagement"
+      asp-action="Create"
+      method="post">
+
     <div class="form-group">
         <label asp-for="FirstName"></label>
         <input asp-for="FirstName" class="form-control" />
@@ -48,7 +52,7 @@
         <input asp-for="Email" class="form-control" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
-    
+
     <div class="mb-3">
         <label asp-for="Password"></label>
         <input asp-for="Password" type="password" class="form-control" />
@@ -63,7 +67,14 @@
     <br />
 
     <button type="submit" class="btn btn-success">Save</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+
+    <a asp-area="Administrator"
+       asp-controller="PatientsManagement"
+       asp-action="Index"
+       class="btn btn-secondary">
+        Cancel
+    </a>
+
 </form>
 
 @section Scripts {
