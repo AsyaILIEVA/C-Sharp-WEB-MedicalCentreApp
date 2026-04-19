@@ -1,5 +1,6 @@
 ﻿using MedicalCentreApp.Data.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedicalCentreApp.Extensions
 {
@@ -13,7 +14,7 @@ namespace MedicalCentreApp.Extensions
             var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
             await RoleSeeder.SeedAsync(services);
-            await SeedAdminAsync(userManager);
+            await SeedAdminAsync(userManager);            
         }
 
         private static async Task SeedAdminAsync(UserManager<ApplicationUser> userManager)
