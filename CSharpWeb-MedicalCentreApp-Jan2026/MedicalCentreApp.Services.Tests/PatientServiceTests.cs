@@ -78,7 +78,7 @@ namespace MedicalCentreApp.Services.Tests
             patientRepositoryMock.Setup(r => r.GetByIdAsync(It.IsAny<int>()))
                 .ReturnsAsync((int id) => id == 1 ? samplePatient : null);
 
-            patientService = new PatientService(patientRepositoryMock.Object);
+            //patientService = new PatientService(patientRepositoryMock.Object);
         }
 
         
