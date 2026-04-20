@@ -66,14 +66,21 @@ namespace MedicalCentreApp.Areas.Administrator.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var model = await doctorService.GetForEditAsync(id);
+            try
+            {
+                var model = await doctorService.GetForEditAsync(id);
 
-            if (model == null)
-                return NotFound();
+                if (model == null)
+                    return NotFound();
 
-            await PopulateDepartments(model);
+                await PopulateDepartments(model);
 
-            return View(model);
+                return View(model);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Error500", "Home");
+            }            
         }
 
         [HttpPost]
@@ -86,10 +93,17 @@ namespace MedicalCentreApp.Areas.Administrator.Controllers
                 return View(model);
             }
 
-            var success = await doctorService.UpdateAsync(model);
+            try
+            {
+                var success = await doctorService.UpdateAsync(model);
 
-            if (!success)
-                return NotFound();
+                if (!success)
+                    return NotFound();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Error500", "Home");
+            }
 
             return RedirectToAction("Index", "Doctors", new { area = "" });
         }
@@ -109,10 +123,17 @@ namespace MedicalCentreApp.Areas.Administrator.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var success = await doctorService.DeleteAsync(id);
+            try
+            {
+                var success = await doctorService.DeleteAsync(id);
 
-            if (!success)
-                return BadRequest("Doctor has appointments and cannot be deleted.");
+                if (!success)
+                    return RedirectToAction("Error400", "Home");
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Error500", "Home");
+            }
 
             return RedirectToAction("Index", "Doctors", new { area = "" });
         }
