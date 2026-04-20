@@ -24,5 +24,30 @@ namespace MedicalCentreApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult Error404()
+        {
+            return View("NotFound");
+        }
+
+        public IActionResult Error500()
+        {
+            return View("ServerError");
+        }
+
+        public IActionResult Error400()
+        {
+            return View("BadRequest");
+        }
+
+        public IActionResult HandleError(int statusCode)
+        {
+            return statusCode switch
+            {
+                400 => RedirectToAction("Error400"),
+                404 => RedirectToAction("NotFound"),
+                _ => RedirectToAction("ServerError")
+            };
+        }
     }
 }

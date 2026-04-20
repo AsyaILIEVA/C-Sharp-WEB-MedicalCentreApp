@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "400 Bad Request";
+}
+
+<div class="container text-center py-5">
+    <div class="mb-4">
+        <i class="bi bi-exclamation-triangle display-1 text-warning"></i>
+    </div>
+    <h1 class="display-4 mb-3" style="color: #ff9800;">400 Bad Request</h1>
+    <p class="lead mb-4">
+        Oops! The request could not be understood.<br />
+        Please check the URL or try again.
+    </p>
+    <a href="@(Url.Action("Index", "Home"))" class="btn btn-primary btn-lg">
+        <i class="bi bi-house-door"></i> Back to Home
+    </a>
+</div>

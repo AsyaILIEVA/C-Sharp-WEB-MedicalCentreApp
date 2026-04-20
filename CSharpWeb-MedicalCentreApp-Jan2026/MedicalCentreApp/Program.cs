@@ -30,14 +30,15 @@ namespace MedicalCentreApp
             // Configure the HTTP request pipeline.
             await app.SeedApplicationAsync();
 
+            app.UseExceptionHandler("/Home/ServerError");
+            app.UseStatusCodePagesWithReExecute("/Home/HandleError", "?statusCode={0}");
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();
             }
             else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
+            {  
                 app.UseHsts();
             }
 
