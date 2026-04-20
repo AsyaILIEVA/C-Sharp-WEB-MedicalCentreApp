@@ -156,7 +156,7 @@ namespace MedicalCentreApp.Services.Core
 
             if (doctor == null) return false;
 
-            if (doctor.Appointments.Any()) return false;
+            if (doctor.Appointments.Any()) return false;            
 
             doctorRepository.Delete(doctor);
             await doctorRepository.SaveChangesAsync();

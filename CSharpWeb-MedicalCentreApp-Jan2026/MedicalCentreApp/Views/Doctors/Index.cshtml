@@ -12,7 +12,7 @@
                name="specialty"
                value="@ViewData["CurrentFilter"]"
                class="form-control"
-               placeholder="Search by department..." />
+               placeholder="Search by specialty..." />
 
         <button class="btn btn-outline-primary">
             Search
@@ -34,7 +34,7 @@
 @if (!Model.Any())
 {
     <div class="alert alert-warning">
-        No doctors found for the given department.
+        No doctors found for the given specialty.
     </div>
 }
 else
@@ -43,7 +43,7 @@ else
         <thead>
             <tr>
                 <th>Full Name</th>
-                <th>Department</th>
+                <th>Specialty</th>
                 <th></th>
             </tr>
         </thead>

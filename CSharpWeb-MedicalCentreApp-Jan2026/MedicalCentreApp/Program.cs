@@ -1,12 +1,4 @@
-using MedicalCentreApp.Data;
-using MedicalCentreApp.Data.Models;
-using MedicalCentreApp.Data.Repositories;
-using MedicalCentreApp.Data.Repositories.Interfaces;
-using MedicalCentreApp.Services.Core;
-using MedicalCentreApp.Services.Core.Interfaces;
 using MedicalCentreApp.Extensions;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace MedicalCentreApp
