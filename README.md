@@ -37,6 +37,7 @@
 * Server-side validation using Data Annotations
 * Seeded test data for easier demonstration
 * Add Pagination
+* Custom error pages
 
 
 
@@ -94,7 +95,7 @@ The solution follows a layered architecture pattern:
 
 * Controllers - Add Controllers
 * Razor Views
-* Areas - Add Area (Administrator and Identity)
+* Areas - Add Area (Administrator and Identity) with specific logic from Controllers and Views
 * wwwroot
 * Program.cs
 * appsettings.json
@@ -111,7 +112,7 @@ The solution follows a layered architecture pattern:
 
 *MedicalCentreApp.Data*
 
-* Configuration - Add Passwords for Registered Patients in PatientEntityTypeConfiguration.cs, so they can easily be tested when logged in
+* Configuration - Excluded from project, Use RoleSeeder instead
 * Migrations
 * MedicalCentreAppDbContext
 
@@ -248,11 +249,8 @@ On application startup, the database is seeded with:
 
 
 
-* 5 sample doctors
-* 10 sample patients - remove seeding and register patients. Then patient can complete his own profile and see only his own details.
-
-&nbsp;	Emails and Passwords available at PatientEntityTypeConfiguration.cs. 
-
+* 12 sample doctors
+* 20 sample patients 
 * User roles - Administrator can manage Doctors, Patients, Appointments, Prescriptions and Invoices through Admin Panel/Dashboard.
 
  	Seeded Administrator - can be logged in with Email = admin@medicalcentre.com, Password = Admin123!
