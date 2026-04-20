@@ -3,12 +3,14 @@
 <h2>Invoices</h2>
 
 <p>
-    <a asp-area="Administrator"
-       asp-controller="InvoicesManagement"
-       asp-action="Create"
-       class="btn btn-primary">
-        Create Invoice
-    </a>
+    <a 
+    asp-area="Administrator"
+    asp-controller="InvoicesManagement"
+    asp-action="Create"
+    class="btn btn-primary">
+    Create Invoice
+   </a>
+    
 </p>
 
 <table class="table table-bordered">
@@ -39,7 +41,9 @@
                 </td>
                 <td>@invoice.IssuedOn.ToShortDateString()</td>
                 <td>
-                    <a asp-action="Details"
+                    <a asp-area=""
+                       asp-controller="Invoices"
+                       asp-action="Details"
                        asp-route-id="@invoice.Id"
                        class="btn btn-info btn-sm">
                         Details

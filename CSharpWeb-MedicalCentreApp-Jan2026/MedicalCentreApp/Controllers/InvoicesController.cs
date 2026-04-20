@@ -1,5 +1,4 @@
 ﻿using MedicalCentreApp.Services.Core.Interfaces;
-using MedicalCentreApp.ViewModels.Invoices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,27 +20,7 @@ namespace MedicalCentreApp.Controllers
         {
             var invoices = await invoiceService.GetAllAsync();
             return View(invoices);
-        }
-
-        [HttpGet]
-        [Authorize(Roles = "Administrator")]
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Administrator")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateInvoiceViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            await invoiceService.CreateAsync(model);
-
-            return RedirectToAction(nameof(Index));
-        }
+        }        
 
         [Authorize(Roles = "Administrator,Doctor,Patient")]
         public async Task<IActionResult> Details(int id)
@@ -62,17 +41,6 @@ namespace MedicalCentreApp.Controllers
             }
 
             return View(invoice);
-        }
-            
-
-        [HttpPost]
-        [Authorize(Roles = "Administrator")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Pay(int id)
-        {
-            await invoiceService.MarkAsPaidAsync(id);
-
-            return RedirectToAction(nameof(Details), new { id });
         }
     }
 }
