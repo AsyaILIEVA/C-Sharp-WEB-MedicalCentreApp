@@ -24,10 +24,10 @@ namespace MedicalCentreApp
 
             if (!app.Environment.IsDevelopment())
             {
-                app.UseExceptionHandler("/Home/ServerError");
-
-                app.UseStatusCodePagesWithReExecute("/Home/HandleError", "?statusCode={0}");
+                app.UseExceptionHandler("/Home/ServerError");                
             }
+
+            app.UseStatusCodePagesWithReExecute("/Home/HandleError", "?statusCode={0}");
 
             if (app.Environment.IsDevelopment())
             {

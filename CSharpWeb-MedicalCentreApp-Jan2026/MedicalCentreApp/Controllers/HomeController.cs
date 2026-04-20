@@ -44,9 +44,9 @@ namespace MedicalCentreApp.Controllers
         {
             return statusCode switch
             {
-                400 => RedirectToAction("Error400"),
-                404 => RedirectToAction("NotFound"),
-                _ => RedirectToAction("ServerError")
+                400 => View("BadRequest"),
+                404 => View("NotFound"),
+                _ => View("ServerError")
             };
         }
     }
