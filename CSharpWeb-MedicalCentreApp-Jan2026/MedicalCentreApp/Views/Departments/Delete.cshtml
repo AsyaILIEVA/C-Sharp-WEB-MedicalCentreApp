@@ -1,0 +1,12 @@
+﻿@model MedicalCentreApp.ViewModels.Departments.DeleteDepartmentViewModel
+
+<h2>Delete Department</h2>
+
+<p>Are you sure you want to delete @Model.Name?</p>
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+
+    <button type="submit">Delete</button>
+</form>

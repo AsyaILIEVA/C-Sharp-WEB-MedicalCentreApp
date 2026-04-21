@@ -15,6 +15,7 @@ namespace MedicalCentreApp.Controllers
             this.departmentService = departmentService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var departments = await departmentService.GetAllAsync();
@@ -28,6 +29,7 @@ namespace MedicalCentreApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateDepartmentViewModel model)
         {
             if (!ModelState.IsValid)
@@ -38,7 +40,7 @@ namespace MedicalCentreApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             bool exists = await departmentService.ExistsAsync(id);

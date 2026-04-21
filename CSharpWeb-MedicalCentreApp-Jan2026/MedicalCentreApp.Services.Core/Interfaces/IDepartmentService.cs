@@ -8,7 +8,7 @@ namespace MedicalCentreApp.Services.Core.Interfaces
 
         Task CreateAsync(CreateDepartmentViewModel model);
 
-        Task<DepartmentViewModel?> GetForDeleteAsync(int id);
+        Task<DeleteDepartmentViewModel?> GetForDeleteAsync(int id);
 
         Task DeleteAsync(int id);
 

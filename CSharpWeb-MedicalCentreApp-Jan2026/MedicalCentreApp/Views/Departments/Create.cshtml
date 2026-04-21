@@ -1,0 +1,12 @@
+﻿@model MedicalCentreApp.ViewModels.Departments.CreateDepartmentViewModel
+
+<h2>Create Department</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+
+    <input asp-for="Name" class="form-control" />
+    <span asp-validation-for="Name"></span>
+
+    <button type="submit">Create</button>
+</form>

@@ -1,0 +1,17 @@
+﻿@model IEnumerable<MedicalCentreApp.ViewModels.Departments.DepartmentViewModel>
+
+<h2>Departments</h2>
+
+<a asp-action="Create" class="btn btn-primary">Create</a>
+
+<table class="table">
+    @foreach (var d in Model)
+    {
+        <tr>
+            <td>@d.Name</td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@d.Id">Delete</a>
+            </td>
+        </tr>
+    }
+</table>

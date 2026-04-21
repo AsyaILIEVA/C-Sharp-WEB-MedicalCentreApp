@@ -42,12 +42,12 @@ namespace MedicalCentreApp.Services.Core
             await departmentRepository.SaveChangesAsync();
         }
 
-        public async Task<DepartmentViewModel?> GetForDeleteAsync(int id)
+        public async Task<DeleteDepartmentViewModel?> GetForDeleteAsync(int id)
         {
-            DepartmentViewModel? department = await departmentRepository
+            DeleteDepartmentViewModel? department = await departmentRepository
                 .AllAsNoTracking()
                 .Where(d => d.Id == id)
-                .Select(d => new DepartmentViewModel
+                .Select(d => new DeleteDepartmentViewModel
                 {
                     Id = d.Id,
                     Name = d.Name
