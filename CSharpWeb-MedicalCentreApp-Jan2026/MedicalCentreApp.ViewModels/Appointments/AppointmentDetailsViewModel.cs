@@ -21,9 +21,7 @@ namespace MedicalCentreApp.ViewModels.Appointments
         public Guid? MedicalRecordId { get; set; }
 
         public string? Diagnosis { get; set; }
-
-        //public List<string> Prescriptions { get; set; } = new();
-
+        
         public List<PrescriptionListViewModel> Prescriptions { get; set; } = new();
     }
 }

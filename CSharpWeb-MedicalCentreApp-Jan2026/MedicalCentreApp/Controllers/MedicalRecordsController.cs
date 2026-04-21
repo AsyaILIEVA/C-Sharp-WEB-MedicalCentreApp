@@ -2,39 +2,62 @@
 using MedicalCentreApp.ViewModels.MedicalRecords;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MedicalCentreApp.Controllers
+public class MedicalRecordsController : Controller
 {
-    public class MedicalRecordsController : Controller
+    private readonly IMedicalRecordService medicalRecordService;
+
+    public MedicalRecordsController(IMedicalRecordService medicalRecordService)
     {
-        private readonly IMedicalRecordService medicalRecordService;
+        this.medicalRecordService = medicalRecordService;
+    }
 
-        public MedicalRecordsController(IMedicalRecordService medicalRecordService)
+    [HttpGet]
+    public IActionResult Create(int appointmentId)
+    {
+        return View(new CreateMedicalRecordViewModel
         {
-            this.medicalRecordService = medicalRecordService;
-        }
+            AppointmentId = appointmentId
+        });
+    }
 
-        [HttpGet]
-        public IActionResult Create(int appointmentId)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(CreateMedicalRecordViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return View(model);
+
+        try
         {
-            return View(new CreateMedicalRecordViewModel
+            var medicalRecordId = await medicalRecordService.CreateAsync(model);
+
+            if (medicalRecordId == Guid.Empty)
             {
-                AppointmentId = appointmentId
-            });
+                ModelState.AddModelError("", "Unable to create medical record.");
+                return View(model);
+            }
+
+            return RedirectToAction("Create", "Prescriptions",
+                new { medicalRecordId });
         }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateMedicalRecordViewModel model)
-        {                        
-                if (!ModelState.IsValid)
-                    return View(model);
-
-                var medicalRecordId = await medicalRecordService.CreateAsync(model);
-                            
-                return RedirectToAction("Create", "Prescriptions",
-                    new { medicalRecordId = medicalRecordId });            
+        catch (ArgumentException ex)
+        {            
+            ModelState.AddModelError("", ex.Message);
+            return View(model);
         }
+        catch (Exception)
+        {            
+            return RedirectToAction("Error", "Home");
+        }
+    }
 
-        public async Task<IActionResult> Details(Guid id)
+    [HttpGet]
+    public async Task<IActionResult> Details(Guid id)
+    {
+        if (id == Guid.Empty)
+            return BadRequest();
+
+        try
         {
             var record = await medicalRecordService.GetDetailsAsync(id);
 
@@ -43,7 +66,9 @@ namespace MedicalCentreApp.Controllers
 
             return View(record);
         }
+        catch (Exception)
+        {
+            return RedirectToAction("Error", "Home");
+        }
     }
-
-
 }

@@ -23,19 +23,33 @@ namespace MedicalCentreApp.Controllers
         [HttpGet]
         public IActionResult Create(Guid medicalRecordId)
         {
-            return View(new CreatePrescriptionViewModel
+            if (medicalRecordId == Guid.Empty)
+                return BadRequest();
+
+            var model = new CreatePrescriptionViewModel
             {
                 MedicalRecordId = medicalRecordId
-            });
+            };
+
+            return View(model);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreatePrescriptionViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            await prescriptionService.CreateAsync(model);
+            try
+            {
+                await prescriptionService.CreateAsync(model);
+            }
+            catch (ArgumentException ex)
+            {                
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(model);
+            }
 
             return RedirectToAction("Details", "MedicalRecords",
                 new { id = model.MedicalRecordId });

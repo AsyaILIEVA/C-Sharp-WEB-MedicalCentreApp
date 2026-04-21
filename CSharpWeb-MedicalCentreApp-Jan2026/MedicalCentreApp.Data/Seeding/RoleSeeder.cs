@@ -2,8 +2,6 @@
 using MedicalCentreApp.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Diagnostics.Metrics;
 
 public static class RoleSeeder
 {  
@@ -52,10 +50,7 @@ public static class RoleSeeder
     private static async Task SeedPatients(
     UserManager<ApplicationUser> userManager,
     MedicalCentreAppDbContext dbContext)
-    {
-        //if (dbContext.Patients.Any())
-        //    return;
-
+    {        
         var patients = new List<(string Email, string Password, string FirstName, string MiddleName, string LastName)>
     {
         ("patient1@medical.com", "Test123!", "Ivan", "Petrov", "Petrov"),
@@ -142,10 +137,7 @@ public static class RoleSeeder
     private static async Task SeedDoctors(
     UserManager<ApplicationUser> userManager,
     MedicalCentreAppDbContext dbContext)
-    {
-        //if (dbContext.Doctors.Any())
-        //    return;
-
+    {        
         var departments = dbContext.Departments.ToList();
 
         var doctors = new List<(string Email, string Password, string Name, string Specialty)>

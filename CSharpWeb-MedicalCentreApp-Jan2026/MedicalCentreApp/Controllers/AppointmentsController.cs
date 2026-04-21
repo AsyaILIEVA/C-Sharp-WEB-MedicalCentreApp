@@ -6,6 +6,7 @@ using System.Security.Claims;
 
 namespace MedicalCentreApp.Controllers
 {
+    [Authorize]
     public class AppointmentsController : Controller
     {
         private readonly IAppointmentService appointmentService;
@@ -24,6 +25,9 @@ namespace MedicalCentreApp.Controllers
             }
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return Forbid();
+
             var mine = await appointmentService.GetByPatientAsync(userId);
 
             return View(mine);
@@ -48,8 +52,18 @@ namespace MedicalCentreApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateAppointmentViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                var dropdowns = await appointmentService.GetCreateModelAsync();
+                model.Patients = dropdowns.Patients;
+                model.Doctors = dropdowns.Doctors;
+
+                return View(model);
+            }
+
             var result = await appointmentService.CreateAsync(model);
 
             if (!result.IsSuccess)

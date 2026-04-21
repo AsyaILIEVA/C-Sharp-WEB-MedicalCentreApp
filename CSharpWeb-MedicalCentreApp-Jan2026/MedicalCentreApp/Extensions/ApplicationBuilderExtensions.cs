@@ -1,6 +1,5 @@
 ﻿using MedicalCentreApp.Data.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace MedicalCentreApp.Extensions
 {

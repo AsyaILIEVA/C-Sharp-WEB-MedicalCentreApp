@@ -9,7 +9,5 @@ namespace MedicalCentreApp.ViewModels.MedicalRecords
 
         [Required]
         public string Diagnosis { get; set; } = null!;
-
-        //public List<PrescriptionListViewModel> Prescriptions { get; set; } = new();
     }
 }
